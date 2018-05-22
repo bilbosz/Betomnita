@@ -1,0 +1,16 @@
+/*
+
+!/.clang-format
+!/.gitignore
+!/LICENSE.txt
+!/README.md
+!/CMakeLists.txt
+
+!/cmake/
+!/cmake/**
+
+!/res/
+!/res/**
+
+!/src/
+!/src/**
