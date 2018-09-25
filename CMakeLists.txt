@@ -33,9 +33,9 @@ set_property( GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMake" )
 set_property( DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${MAIN_TARGET}" )
 
 configure_file(
-    "${CMAKE_SOURCE_DIR}/src/ProjectConfig.hpp.in"
-    "${CMAKE_BINARY_DIR}/include/ProjectConfig.hpp"
- )
+    "${CMAKE_SOURCE_DIR}/src/project/Config.hpp.in"
+    "${CMAKE_BINARY_DIR}/include/project/Config.hpp"
+)
 include_directories( "${CMAKE_BINARY_DIR}/include" )
 
 set( RES "${CMAKE_SOURCE_DIR}/res" )
@@ -43,11 +43,12 @@ file( COPY "${CMAKE_SOURCE_DIR}/res" DESTINATION "${CMAKE_BINARY_DIR}" )
 
 set( SRC )
 file(
-    GLOB SRC
+    GLOB_RECURSE SRC
     LIST_DICTIONARIES false
     "${CMAKE_SOURCE_DIR}/src/*.hpp"
     "${CMAKE_SOURCE_DIR}/src/*.cpp"
- )
+)
+include_directories( "${CMAKE_SOURCE_DIR}/src" )
 
 if( ${CMAKE_SYSTEM_NAME} STREQUAL Windows )
     add_executable(
@@ -76,9 +77,19 @@ endif()
 set( BOOST_ROOT ${Betomnita_Boost_ROOT} )
 find_package( Boost ${Boost_REQUIRED_VERSION} REQUIRED )
 if( Boost_FOUND )
-  include_directories( ${Boost_INCLUDE_DIRS} )
-  target_link_libraries( ${MAIN_TARGET} ${Boost_LIBRARIES} )
+    include_directories( ${Boost_INCLUDE_DIRS} )
+    target_link_libraries( ${MAIN_TARGET} ${Boost_LIBRARIES} )
 endif()
+
+add_custom_target( "CMAKE_RELOAD"
+    COMMAND cmake .
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target( "CMAKE_GUI"
+    COMMAND cmake-gui ${CMAKE_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
 
 install( TARGETS "${MAIN_TARGET}" DESTINATION "." )
 install( DIRECTORY "${RES}" DESTINATION "." )

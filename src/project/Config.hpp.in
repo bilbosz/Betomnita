@@ -1,0 +1,21 @@
+﻿#define Betomnita_PROJECT L"@Betomnita_PROJECT@"
+#define Betomnita_VERSION_MAJOR L"@Betomnita_VERSION_MAJOR@"
+#define Betomnita_VERSION_MINOR L"@Betomnita_VERSION_MINOR@"
+#define Betomnita_VERSION_PATCH L"@Betomnita_VERSION_PATCH@"
+
+#cmakedefine Betomnita_DEBUG
+#ifdef Betomnita_DEBUG
+#   define DEBUG
+#endif
+
+#cmakedefine Betomnita_CONSOLE_STOP
+#ifdef Betomnita_CONSOLE_STOP
+#   define CONSOLE_STOP
+#endif
+
+#cmakedefine Betomnita_FULLSCREEN
+#ifdef Betomnita_FULLSCREEN
+#   define FULLSCREEN
+#endif
+
+#define BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE
