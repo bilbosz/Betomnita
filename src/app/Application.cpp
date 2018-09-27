@@ -34,6 +34,7 @@ namespace App
         m_window.create( m_videoMode, m_windowTitle, m_windowStyle, context );
         m_window.setFramerateLimit( m_framerateLimit );
         m_window.setMouseCursorVisible( m_cursorShown );
+        m_window.setMouseCursorGrabbed( m_cursorGrabbed );
         OnVideoSettingsChanged();
     }
 

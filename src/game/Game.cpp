@@ -12,9 +12,10 @@ namespace Game
 
     void Game::Game::OnStart()
     {
-        m_circle.setRadius( 0.03f );
-        m_circle.setOrigin( { 0.03f, 0.03f } );
+        m_circle.setRadius( 0.01f );
+        m_circle.setOrigin( { 0.01f, 0.01f } );
         m_circle.setFillColor( sf::Color::Red );
+        m_text.setPosition( 0.5f, 0.5f );
     }
 
     void Game::Game::OnUpdate( sf::Time dt ) {}
@@ -23,10 +24,13 @@ namespace Game
     {
         m_text.setFont( *Resource::debugFont );
         m_text.setCharacterSize( 17 );
+        auto textOldPos = m_text.getPosition();
+        m_text.setPosition( m_modelToScreen.transformPoint( textOldPos ) );
         m_window.clear( { 50, 50, 50 } );
         m_window.draw( m_text );
         m_window.draw( m_circle, m_modelToScreen );
         m_window.display();
+        m_text.setPosition( textOldPos );
     }
 
     void Game::Game::OnEvent( const sf::Event& e ) {}
@@ -35,7 +39,17 @@ namespace Game
 
     void Game::Game::OnClose() {}
 
-    void Game::Game::OnKeyPressed( const sf::Event::KeyEvent& key ) {}
+    void Game::Game::OnKeyPressed( const sf::Event::KeyEvent& key )
+    {
+        switch( key.code )
+        {
+            case sf::Keyboard::Key::Escape:
+            {
+                RequestShutdown();
+            }
+            break;
+        }
+    }
 
     void Game::Game::OnKeyReleased( const sf::Event::KeyEvent& key ) {}
 
@@ -62,11 +76,8 @@ namespace Game
         auto h = static_cast< float >( m_window.getSize().y );
         ASSERT( w >= h, L"Vertical viewport is not supported" );
 
-        auto modelW = w / h;
-        auto modelH = 1.0f;
-
         m_modelToScreen = sf::Transform::Identity;
-        m_modelToScreen.translate( { -( modelW - modelH ) / 2.0f, 0 } );
+        m_modelToScreen.translate( { ( w - h ) / 2.0f, 0 } );
         m_modelToScreen.scale( { h, h } );
     }
 }
