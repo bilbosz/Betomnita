@@ -1,12 +1,21 @@
 #include "app/Application.hpp"
 
 #include "app/Error.hpp"
+#include "project/Config.hpp"
 
 namespace App
 {
-    App::Application::Application() {}
+    App::Application::Application()
+    {
+        VERIFY( m_stdout = freopen( "stdout.log", "w+", stdout ) );
+        VERIFY( m_stderr = freopen( "stderr.log", "w+", stderr ) );
+    }
 
-    App::Application::~Application() {}
+    App::Application::~Application()
+    {
+        VERIFY( fclose( m_stdout ) == 0 );
+        VERIFY( fclose( m_stderr ) == 0 );
+    }
 
     void App::Application::Run()
     {
@@ -23,6 +32,7 @@ namespace App
             }
             Tick();
         }
+        OnClose();
     }
 
     void App::Application::ApplyVideoMode()
@@ -62,7 +72,6 @@ namespace App
             {
                 case sf::Event::Closed:
                 {
-                    OnClose();
                     m_shutdownRequested = true;
                 }
                 break;

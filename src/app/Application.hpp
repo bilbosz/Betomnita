@@ -3,6 +3,7 @@
 #include "resource/Resource.hpp"
 
 #include <SFML/Graphics.hpp>
+#include <cstdio>
 
 namespace App
 {
@@ -123,5 +124,8 @@ namespace App
         bool m_videoSettingsApplyRequested = false;
 
         sf::Time m_lastTickTime;
+
+        FILE* m_stdout;
+        FILE* m_stderr;
     };
 }

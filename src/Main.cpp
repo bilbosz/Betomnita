@@ -11,8 +11,9 @@ int main( int argc, char* argv[] )
 #ifdef FULLSCREEN
     game.SetFullscreen();
 #else
-    game.SetBorderlessWindow();
-    game.SetVideoMode( sf::VideoMode( 640, 480, 32 ) );
+    game.SetBorderedWindow( false, true );
+    game.ReleaseCursor();
+    game.SetVideoMode( sf::VideoMode( 1024, 768, 32 ) );
 #endif
     game.Run();
     Resource::Dispose();

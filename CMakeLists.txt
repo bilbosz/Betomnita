@@ -1,4 +1,4 @@
-﻿cmake_minimum_required( VERSION 3.7 )
+﻿cmake_minimum_required( VERSION 3.12 )
 
 option( Betomnita_DEBUG "Debug mode" ON )
 option( Betomnita_FULLSCREEN "Fullscreen mode" ON )
@@ -28,6 +28,9 @@ set( MAIN_TARGET "Betomnita" )
 set( CMAKE_CXX_STANDARD 14 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
+add_compile_definitions( BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE )
+add_compile_definitions( _CRT_SECURE_NO_WARNINGS )
+
 set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 set_property( GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMake" )
 set_property( DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${MAIN_TARGET}" )
@@ -53,6 +56,7 @@ include_directories( "${CMAKE_SOURCE_DIR}/src" )
 if( ${CMAKE_SYSTEM_NAME} STREQUAL Windows )
     add_executable(
         ${MAIN_TARGET}
+		WIN32
         ${SRC}
      )
 else()

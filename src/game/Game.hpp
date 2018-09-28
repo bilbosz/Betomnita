@@ -8,6 +8,8 @@ namespace Game
     public:
         Game();
         ~Game();
+
+    private:
         void OnStart() override;
         void OnUpdate( sf::Time dt ) override;
         void OnRender( sf::Time dt ) override;
@@ -20,7 +22,6 @@ namespace Game
         void OnMouseButtonReleased( const sf::Event::MouseButtonEvent& mouseButton ) override;
         void OnMouseMoved( const sf::Event::MouseMoveEvent& mouseMove ) override;
 
-    private:
         void UpdateModelToScreen();
 
         sf::Transform m_modelToScreen;

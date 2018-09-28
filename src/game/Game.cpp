@@ -18,7 +18,15 @@ namespace Game
         m_text.setPosition( 0.5f, 0.5f );
     }
 
-    void Game::Game::OnUpdate( sf::Time dt ) {}
+    void Game::Game::OnUpdate( sf::Time dt )
+    {
+        auto logicalPoint = m_modelToScreen.getInverse().transformPoint(
+            static_cast< float >( sf::Mouse::getPosition( m_window ).x ), static_cast< float >( sf::Mouse::getPosition( m_window ).y ) );
+        m_circle.setPosition( logicalPoint );
+        std::wostringstream out;
+        out << L"(" << logicalPoint.x << L", " << logicalPoint.y << L")";
+        m_text.setString( out.str() );
+    }
 
     void Game::Game::OnRender( sf::Time dt )
     {
@@ -37,7 +45,7 @@ namespace Game
 
     void Game::Game::OnVideoSettingsChanged() { UpdateModelToScreen(); }
 
-    void Game::Game::OnClose() {}
+    void Game::Game::OnClose() { m_window.close(); }
 
     void Game::Game::OnKeyPressed( const sf::Event::KeyEvent& key )
     {
@@ -61,14 +69,7 @@ namespace Game
 
     void Game::Game::OnMouseButtonReleased( const sf::Event::MouseButtonEvent& mouseButton ) {}
 
-    void Game::Game::OnMouseMoved( const sf::Event::MouseMoveEvent& mouseMove )
-    {
-        auto logicalPoint = m_modelToScreen.getInverse().transformPoint( static_cast< float >( mouseMove.x ), static_cast< float >( mouseMove.y ) );
-        m_circle.setPosition( logicalPoint );
-        std::wostringstream out;
-        out << L"(" << logicalPoint.x << L", " << logicalPoint.y << L")";
-        m_text.setString( out.str() );
-    }
+    void Game::Game::OnMouseMoved( const sf::Event::MouseMoveEvent& mouseMove ) {}
 
     void Game::Game::UpdateModelToScreen()
     {
