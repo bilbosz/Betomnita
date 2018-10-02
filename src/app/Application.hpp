@@ -1,5 +1,6 @@
 #pragma once
 #include "app/Clock.hpp"
+#include "project/Config.hpp"
 #include "resource/Resource.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -18,74 +19,34 @@ namespace App
         void RequestShutdown() { m_shutdownRequested = true; }
         void RequestApplyVideoSettings() { m_videoSettingsApplyRequested = true; }
 
-        void SetWindowTitle( const std::wstring& value )
-        {
-            m_windowTitle = value;
-            RequestApplyVideoSettings();
-        }
+        void SetWindowTitle( const std::wstring& value );
         std::wstring GetWindowTitle() const { return m_windowTitle; }
 
-        void SetVideoMode( const sf::VideoMode& value )
-        {
-            m_videoMode = value;
-            RequestApplyVideoSettings();
-        }
+        void SetVideoMode( const sf::VideoMode& value );
         sf::VideoMode GetVideoMode() const { return m_videoMode; }
 
-        void SetFullscreen()
-        {
-            m_windowStyle = sf::Style::Fullscreen;
-            RequestApplyVideoSettings();
-        }
-        void SetBorderlessWindow()
-        {
-            m_windowStyle = sf::Style::None;
-            RequestApplyVideoSettings();
-        }
-        void SetBorderedWindow( bool resizable = true, bool closeButton = true )
-        {
-            m_windowStyle = sf::Style::Titlebar | resizable * sf::Style::Resize | closeButton * sf::Style::Close;
-            RequestApplyVideoSettings();
-        }
-        bool IsFullscreen() { return !!( m_windowStyle & sf::Style::Fullscreen ); }
+        void SetFullscreen();
+        void SetBorderlessWindow();
+        void SetBorderedWindow( bool resizable = true, bool closeButton = true );
+        bool IsFullscreen();
 
-        void ShowCursor()
-        {
-            m_cursorShown = true;
-            RequestApplyVideoSettings();
-        }
-        void HideCursor()
-        {
-            m_cursorShown = false;
-            RequestApplyVideoSettings();
-        };
+        void ShowCursor();
+        void HideCursor();
 
         void SetFramerateLimit( unsigned int value ) { m_framerateLimit = value; }
         unsigned int GetFramerateLimit() const { return m_framerateLimit; }
 
-        void SetAntialiasingLevel( unsigned int value )
-        {
-            m_antialiasingLevel = value;
-            RequestApplyVideoSettings();
-        }
+        void SetAntialiasingLevel( unsigned int value );
         unsigned int GetAntialiasingLevel() { return m_antialiasingLevel; }
 
         void SetTimeSkew( float value ) { m_timeSkew = value; }
         float GetTimeSkew() const { return m_timeSkew; }
 
-        void GrabCursor()
-        {
-            m_cursorGrabbed = true;
-            RequestApplyVideoSettings();
-        }
-        void ReleaseCursor()
-        {
-            m_cursorGrabbed = false;
-            RequestApplyVideoSettings();
-        }
+        void GrabCursor();
+        void ReleaseCursor();
         bool IsCursorGrabbed() const { return m_cursorGrabbed; }
 
-        const Clock& GetClock() const { return m_clock; }
+        sf::Time GetApplicationTime() const { return m_clock.GetElapsedTime(); }
 
     protected:
         virtual void OnStart() = 0;

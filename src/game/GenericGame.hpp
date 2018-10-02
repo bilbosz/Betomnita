@@ -26,10 +26,12 @@ namespace Game
         const sf::Transform& GetTransformation() const { return m_modelToScreen; }
         float GetScale() const { return m_scale; }
         sf::Vector2f GetMousePosition() const;
+		sf::Time GetGameTime() const;
     private:
         void UpdateModelToScreen();
         
         sf::Transform m_modelToScreen;
         float m_scale;
+		sf::Time m_gameTime;
     };
 }

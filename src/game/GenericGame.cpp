@@ -12,7 +12,7 @@ namespace Game
 
     void GenericGame::OnStart() {}
 
-    void GenericGame::OnUpdate( sf::Time dt ) {}
+    void GenericGame::OnUpdate( sf::Time dt ) { m_gameTime += dt; }
 
     void GenericGame::OnRender( sf::Time dt ) {}
 

@@ -1,7 +1,6 @@
 #include "app/Application.hpp"
 
 #include "app/Error.hpp"
-#include "project/Config.hpp"
 
 namespace App
 {
@@ -37,6 +36,68 @@ namespace App
             Tick();
         }
         OnClose();
+    }
+
+    void Application::SetWindowTitle( const std::wstring& value )
+    {
+        m_windowTitle = value;
+        RequestApplyVideoSettings();
+    }
+
+    void Application::SetVideoMode( const sf::VideoMode& value )
+    {
+        m_videoMode = value;
+        RequestApplyVideoSettings();
+    }
+
+    void Application::SetFullscreen()
+    {
+        m_windowStyle = sf::Style::Fullscreen;
+        RequestApplyVideoSettings();
+    }
+
+    void Application::SetBorderlessWindow()
+    {
+        m_windowStyle = sf::Style::None;
+        RequestApplyVideoSettings();
+    }
+
+    void Application::SetBorderedWindow( bool resizable, bool closeButton )
+    {
+        m_windowStyle = sf::Style::Titlebar | resizable * sf::Style::Resize | closeButton * sf::Style::Close;
+        RequestApplyVideoSettings();
+    }
+
+    bool Application::IsFullscreen() { return !!( m_windowStyle & sf::Style::Fullscreen ); }
+
+    void Application::ShowCursor()
+    {
+        m_cursorShown = true;
+        RequestApplyVideoSettings();
+    }
+
+    void Application::HideCursor()
+    {
+        m_cursorShown = false;
+        RequestApplyVideoSettings();
+    }
+
+    void Application::SetAntialiasingLevel( unsigned int value )
+    {
+        m_antialiasingLevel = value;
+        RequestApplyVideoSettings();
+    }
+
+    void Application::GrabCursor()
+    {
+        m_cursorGrabbed = true;
+        RequestApplyVideoSettings();
+    }
+
+    void Application::ReleaseCursor()
+    {
+        m_cursorGrabbed = false;
+        RequestApplyVideoSettings();
     }
 
     void Application::ApplyVideoMode()

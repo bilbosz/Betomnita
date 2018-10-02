@@ -25,8 +25,8 @@ namespace App
         const auto diff = std::chrono::duration_cast< std::chrono::microseconds >( now - s_start );
 
         std::wostringstream out;
-        out << L"[" << std::setw( 10 ) << std::setprecision( 4 ) << std::fixed << diff.count() / 1'000'000.0 << L"] <" << type << L"> " << file.c_str() << L":" << line
-            << L": " << message;
+        out << type << L"[" << std::setw( 10 ) << std::setprecision( 4 ) << std::fixed << diff.count() / 1'000'000.0 << L"] " << file.c_str() << L":" << line << L": "
+            << message;
         std::wcerr << out.str() << std::endl;
 #ifdef _DEBUG
         if( abort )
