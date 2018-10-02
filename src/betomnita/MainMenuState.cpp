@@ -10,9 +10,7 @@ namespace Betomnita
 
     void MainMenuState::OnEnter() {}
 
-    void MainMenuState::OnUpdate( sf::Time dt ) {
-		MESSAGE( "Updated" );
-	}
+    void MainMenuState::OnUpdate( sf::Time dt ) {}
 
     void MainMenuState::OnExit() {}
 }

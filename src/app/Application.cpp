@@ -7,14 +7,18 @@ namespace App
 {
     Application::Application()
     {
-        //VERIFY( m_stdout = freopen( "stdout.log", "w+", stdout ) );
-        //VERIFY( m_stderr = freopen( "stderr.log", "w+", stderr ) );
+#ifdef REDIRECT_CONSOLE_OUT
+        VERIFY( m_stdout = freopen( "stdout.log", "w+", stdout ) );
+        VERIFY( m_stderr = freopen( "stderr.log", "w+", stderr ) );
+#endif
     }
 
     Application::~Application()
     {
-        //VERIFY( fclose( m_stdout ) == 0 );
-        //VERIFY( fclose( m_stderr ) == 0 );
+#ifdef REDIRECT_CONSOLE_OUT
+        VERIFY( fclose( m_stdout ) == 0 );
+        VERIFY( fclose( m_stderr ) == 0 );
+#endif
     }
 
     void Application::Run()
@@ -68,39 +72,6 @@ namespace App
         while( m_window.pollEvent( e ) )
         {
             OnEvent( e );
-            switch( e.type )
-            {
-                case sf::Event::Closed:
-                {
-                    m_shutdownRequested = true;
-                }
-                break;
-                case sf::Event::KeyPressed:
-                {
-                    OnKeyPressed( e.key );
-                }
-                break;
-                case sf::Event::KeyReleased:
-                {
-                    OnKeyPressed( e.key );
-                }
-                break;
-                case sf::Event::MouseButtonPressed:
-                {
-                    OnMouseButtonPressed( e.mouseButton );
-                }
-                break;
-                case sf::Event::MouseButtonReleased:
-                {
-                    OnMouseButtonReleased( e.mouseButton );
-                }
-                break;
-                case sf::Event::MouseMoved:
-                {
-                    OnMouseMoved( e.mouseMove );
-                }
-                break;
-            }
         }
     }
 }

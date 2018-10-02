@@ -11,7 +11,7 @@ namespace Game
 
     class StateMachine
     {
-	public:
+    public:
         using IdType = int;
 
         void RegisterState( IdType id, std::shared_ptr< State > state );

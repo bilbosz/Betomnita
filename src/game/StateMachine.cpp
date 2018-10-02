@@ -24,11 +24,11 @@ namespace Game
     }
 
     void StateMachine::PopState( IdType id )
-	{
-		VERIFY( !IsStackEmpty() );
-		VERIFY( m_stack.back().first == id );
-		m_stack.pop_back();
-	}
+    {
+        VERIFY( !IsStackEmpty() );
+        VERIFY( m_stack.back().first == id );
+        m_stack.pop_back();
+    }
 
     bool StateMachine::IsStateUsed( IdType id ) const
     {
@@ -37,17 +37,17 @@ namespace Game
     }
 
     std::weak_ptr< State > StateMachine::TopState() const
-	{
-		VERIFY( !IsStackEmpty() );
-		return m_stack.back().second;
-	}
-	
-	void StateMachine::OnUpdate( sf::Time dt )
-	{
-		auto currentState = TopState().lock();
-		if( currentState )
-		{
-			currentState->OnUpdate( dt );
-		}
-	}
+    {
+        VERIFY( !IsStackEmpty() );
+        return m_stack.back().second;
+    }
+
+    void StateMachine::OnUpdate( sf::Time dt )
+    {
+        auto currentState = TopState().lock();
+        if( currentState )
+        {
+            currentState->OnUpdate( dt );
+        }
+    }
 }

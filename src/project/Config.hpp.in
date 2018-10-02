@@ -17,3 +17,8 @@
 #ifdef Betomnita_FULLSCREEN
 #   define FULLSCREEN
 #endif
+
+#cmakedefine Betomnita_REDIRECT_CONSOLE_OUT
+#ifdef Betomnita_REDIRECT_CONSOLE_OUT
+#   define REDIRECT_CONSOLE_OUT
+#endif

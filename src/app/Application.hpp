@@ -94,11 +94,6 @@ namespace App
         virtual void OnEvent( const sf::Event& e ) = 0;
         virtual void OnVideoSettingsChanged() = 0;
         virtual void OnClose() = 0;
-        virtual void OnKeyPressed( const sf::Event::KeyEvent& key ) = 0;
-        virtual void OnKeyReleased( const sf::Event::KeyEvent& key ) = 0;
-        virtual void OnMouseButtonPressed( const sf::Event::MouseButtonEvent& mouseButton ) = 0;
-        virtual void OnMouseButtonReleased( const sf::Event::MouseButtonEvent& mouseButton ) = 0;
-        virtual void OnMouseMoved( const sf::Event::MouseMoveEvent& mouseMove ) = 0;
 
         sf::RenderWindow m_window;
 
@@ -125,7 +120,9 @@ namespace App
 
         sf::Time m_lastTickTime;
 
+#ifdef REDIRECT_CONSOLE_OUT
         FILE* m_stdout;
         FILE* m_stderr;
+#endif
     };
 }

@@ -10,66 +10,68 @@ namespace Game
 
     GenericGame::~GenericGame() {}
 
-    void GenericGame::OnStart()
-    {
-        m_circle.setRadius( 0.01f );
-        m_circle.setOrigin( { 0.01f, 0.01f } );
-        m_circle.setFillColor( sf::Color::Red );
-        m_text.setPosition( 0.5f, 0.5f );
-    }
+    void GenericGame::OnStart() {}
 
-    void GenericGame::OnUpdate( sf::Time dt )
-    {
-        auto logicalPoint = m_modelToScreen.getInverse().transformPoint(
-            static_cast< float >( sf::Mouse::getPosition( m_window ).x ), static_cast< float >( sf::Mouse::getPosition( m_window ).y ) );
-        m_circle.setPosition( logicalPoint );
-        std::wostringstream out;
-        out << L"(" << logicalPoint.x << L", " << logicalPoint.y << L")";
-        m_text.setString( out.str() );
-    }
+    void GenericGame::OnUpdate( sf::Time dt ) {}
 
-    void GenericGame::OnRender( sf::Time dt )
-    {
-        m_text.setFont( *Resource::DebugFont );
-        m_text.setCharacterSize( 17 );
-        auto textOldPos = m_text.getPosition();
-        m_text.setPosition( m_modelToScreen.transformPoint( textOldPos ) );
-        m_window.clear( { 50, 50, 50 } );
-        m_window.draw( m_text );
-        m_window.draw( m_circle, m_modelToScreen );
-        m_window.display();
-        m_text.setPosition( textOldPos );
-    }
+    void GenericGame::OnRender( sf::Time dt ) {}
 
-    void GenericGame::OnEvent( const sf::Event& e ) {}
+    void GenericGame::OnEvent( const sf::Event& e )
+    {
+        switch( e.type )
+        {
+            case sf::Event::EventType::Closed:
+            {
+                RequestShutdown();
+            }
+            break;
+            case sf::Event::EventType::KeyPressed:
+            {
+                OnKeyPressed( e.key );
+            }
+            break;
+            case sf::Event::EventType::KeyReleased:
+            {
+                OnKeyReleased( e.key );
+            }
+            case sf::Event::EventType::MouseButtonPressed:
+            {
+                OnMouseButtonPressed(
+                    m_modelToScreen.getInverse().transformPoint( static_cast< float >( e.mouseButton.x ), static_cast< float >( e.mouseButton.y ) ),
+                    e.mouseButton.button );
+            }
+            case sf::Event::EventType::MouseButtonReleased:
+            {
+                OnMouseButtonReleased(
+                    m_modelToScreen.getInverse().transformPoint( static_cast< float >( e.mouseButton.x ), static_cast< float >( e.mouseButton.y ) ),
+                    e.mouseButton.button );
+            }
+            case sf::Event::EventType::MouseMoved:
+            {
+                OnMouseMoved( m_modelToScreen.getInverse().transformPoint( static_cast< float >( e.mouseMove.x ), static_cast< float >( e.mouseMove.y ) ) );
+            }
+        }
+    }
 
     void GenericGame::OnVideoSettingsChanged() { UpdateModelToScreen(); }
 
     void GenericGame::OnClose() { m_window.close(); }
 
-    void GenericGame::OnKeyPressed( const sf::Event::KeyEvent& key )
-    {
-        switch( key.code )
-        {
-            case sf::Keyboard::Key::Escape:
-            {
-                RequestShutdown();
-            }
-            break;
-        }
-    }
+    void GenericGame::OnKeyPressed( const sf::Event::KeyEvent& key ) {}
 
     void GenericGame::OnKeyReleased( const sf::Event::KeyEvent& key ) {}
 
-    void GenericGame::OnMouseButtonPressed( const sf::Event::MouseButtonEvent& mouseButton )
+    void GenericGame::OnMouseButtonPressed( const sf::Vector2f& position, sf::Mouse::Button button ) {}
+
+    void GenericGame::OnMouseButtonReleased( const sf::Vector2f& position, sf::Mouse::Button button ) {}
+
+    void GenericGame::OnMouseMoved( const sf::Vector2f& position ) {}
+
+    sf::Vector2f GenericGame::GetMousePosition() const
     {
-        auto logicalPoint = m_modelToScreen.getInverse().transformPoint( static_cast< float >( mouseButton.x ), static_cast< float >( mouseButton.y ) );
-        MESSAGE( L"(" << logicalPoint.x << L", " << logicalPoint.y << L")" );
+        return GetTransformation().getInverse().transformPoint(
+            static_cast< float >( sf::Mouse::getPosition( m_window ).x ), static_cast< float >( sf::Mouse::getPosition( m_window ).y ) );
     }
-
-    void GenericGame::OnMouseButtonReleased( const sf::Event::MouseButtonEvent& mouseButton ) {}
-
-    void GenericGame::OnMouseMoved( const sf::Event::MouseMoveEvent& mouseMove ) {}
 
     void GenericGame::UpdateModelToScreen()
     {
@@ -80,5 +82,7 @@ namespace Game
         m_modelToScreen = sf::Transform::Identity;
         m_modelToScreen.translate( { ( w - h ) / 2.0f, 0 } );
         m_modelToScreen.scale( { h, h } );
+
+        m_scale = h;
     }
 }

@@ -7,11 +7,12 @@ namespace Game
     {
     public:
         friend class StateMachine;
-		State();
-		virtual ~State();
+        State();
+        virtual ~State();
+
     protected:
         virtual void OnEnter() = 0;
-		virtual void OnUpdate( sf::Time dt ) = 0;
+        virtual void OnUpdate( sf::Time dt ) = 0;
         virtual void OnExit() = 0;
     };
 }

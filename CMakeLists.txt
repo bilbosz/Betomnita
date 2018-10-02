@@ -4,6 +4,7 @@ option( Betomnita_DEBUG "Debug mode" ON )
 option( Betomnita_FULLSCREEN "Fullscreen mode" ON )
 option( Betomnita_CONSOLE "Show console" OFF )
 option( Betomnita_CONSOLE_STOP "Waits for key pressed after program execution" ON )
+option( Betomnita_REDIRECT_CONSOLE_OUT "Redirects console out and error stream to stdout.log and stderr.log files" ON )
 
 set( SFML_REQUIRED_VERSION 2.4.2 )
 set( Boost_REQUIRED_VERSION 1.66 )
@@ -89,6 +90,7 @@ endif()
 add_custom_target( "CMAKE_RELOAD"
     COMMAND cmake .
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    DEPENDS "${CMAKE_SOURCE_DIR}/CMakeLists.txt"
 )
 
 add_custom_target( "CMAKE_GUI"
