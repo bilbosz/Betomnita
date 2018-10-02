@@ -8,5 +8,5 @@ namespace Resource
     void Dispose();
 
     extern const std::wstring WindowTitle;
-    extern sf::Font* debugFont;
+    extern sf::Font* DebugFont;
 }

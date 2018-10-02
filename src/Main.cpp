@@ -1,5 +1,5 @@
 ﻿#include "app/Error.hpp"
-#include "game/Game.hpp"
+#include "betomnita/BetomnitaGame.hpp"
 #include "project/Config.hpp"
 
 #include <iostream>
@@ -7,7 +7,7 @@
 int main( int argc, char* argv[] )
 {
     Resource::Init();
-    Game::Game game;
+    Betomnita::BetomnitaGame game;
 #ifdef FULLSCREEN
     game.SetFullscreen();
 #else

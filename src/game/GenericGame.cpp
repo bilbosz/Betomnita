@@ -1,4 +1,4 @@
-#include "game/Game.hpp"
+#include "game/GenericGame.hpp"
 
 #include "app/Error.hpp"
 
@@ -6,11 +6,11 @@
 
 namespace Game
 {
-    Game::Game::Game() {}
+    GenericGame::GenericGame() {}
 
-    Game::Game::~Game() {}
+    GenericGame::~GenericGame() {}
 
-    void Game::Game::OnStart()
+    void GenericGame::OnStart()
     {
         m_circle.setRadius( 0.01f );
         m_circle.setOrigin( { 0.01f, 0.01f } );
@@ -18,7 +18,7 @@ namespace Game
         m_text.setPosition( 0.5f, 0.5f );
     }
 
-    void Game::Game::OnUpdate( sf::Time dt )
+    void GenericGame::OnUpdate( sf::Time dt )
     {
         auto logicalPoint = m_modelToScreen.getInverse().transformPoint(
             static_cast< float >( sf::Mouse::getPosition( m_window ).x ), static_cast< float >( sf::Mouse::getPosition( m_window ).y ) );
@@ -28,9 +28,9 @@ namespace Game
         m_text.setString( out.str() );
     }
 
-    void Game::Game::OnRender( sf::Time dt )
+    void GenericGame::OnRender( sf::Time dt )
     {
-        m_text.setFont( *Resource::debugFont );
+        m_text.setFont( *Resource::DebugFont );
         m_text.setCharacterSize( 17 );
         auto textOldPos = m_text.getPosition();
         m_text.setPosition( m_modelToScreen.transformPoint( textOldPos ) );
@@ -41,13 +41,13 @@ namespace Game
         m_text.setPosition( textOldPos );
     }
 
-    void Game::Game::OnEvent( const sf::Event& e ) {}
+    void GenericGame::OnEvent( const sf::Event& e ) {}
 
-    void Game::Game::OnVideoSettingsChanged() { UpdateModelToScreen(); }
+    void GenericGame::OnVideoSettingsChanged() { UpdateModelToScreen(); }
 
-    void Game::Game::OnClose() { m_window.close(); }
+    void GenericGame::OnClose() { m_window.close(); }
 
-    void Game::Game::OnKeyPressed( const sf::Event::KeyEvent& key )
+    void GenericGame::OnKeyPressed( const sf::Event::KeyEvent& key )
     {
         switch( key.code )
         {
@@ -59,19 +59,19 @@ namespace Game
         }
     }
 
-    void Game::Game::OnKeyReleased( const sf::Event::KeyEvent& key ) {}
+    void GenericGame::OnKeyReleased( const sf::Event::KeyEvent& key ) {}
 
-    void Game::Game::OnMouseButtonPressed( const sf::Event::MouseButtonEvent& mouseButton )
+    void GenericGame::OnMouseButtonPressed( const sf::Event::MouseButtonEvent& mouseButton )
     {
         auto logicalPoint = m_modelToScreen.getInverse().transformPoint( static_cast< float >( mouseButton.x ), static_cast< float >( mouseButton.y ) );
         MESSAGE( L"(" << logicalPoint.x << L", " << logicalPoint.y << L")" );
     }
 
-    void Game::Game::OnMouseButtonReleased( const sf::Event::MouseButtonEvent& mouseButton ) {}
+    void GenericGame::OnMouseButtonReleased( const sf::Event::MouseButtonEvent& mouseButton ) {}
 
-    void Game::Game::OnMouseMoved( const sf::Event::MouseMoveEvent& mouseMove ) {}
+    void GenericGame::OnMouseMoved( const sf::Event::MouseMoveEvent& mouseMove ) {}
 
-    void Game::Game::UpdateModelToScreen()
+    void GenericGame::UpdateModelToScreen()
     {
         auto w = static_cast< float >( m_window.getSize().x );
         auto h = static_cast< float >( m_window.getSize().y );

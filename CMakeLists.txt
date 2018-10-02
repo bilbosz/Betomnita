@@ -2,6 +2,7 @@
 
 option( Betomnita_DEBUG "Debug mode" ON )
 option( Betomnita_FULLSCREEN "Fullscreen mode" ON )
+option( Betomnita_CONSOLE "Show console" OFF )
 option( Betomnita_CONSOLE_STOP "Waits for key pressed after program execution" ON )
 
 set( SFML_REQUIRED_VERSION 2.4.2 )
@@ -53,17 +54,17 @@ file(
 )
 include_directories( "${CMAKE_SOURCE_DIR}/src" )
 
-if( ${CMAKE_SYSTEM_NAME} STREQUAL Windows )
-    add_executable(
-        ${MAIN_TARGET}
+if( ${CMAKE_SYSTEM_NAME} STREQUAL Windows AND NOT Betomnita_CONSOLE )
+	add_executable(
+		${MAIN_TARGET}
 		WIN32
-        ${SRC}
-     )
+		${SRC}
+	)
 else()
     add_executable(
         ${MAIN_TARGET}
         ${SRC}
-     )
+    )
 endif()
 
 

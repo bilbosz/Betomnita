@@ -5,19 +5,19 @@
 
 namespace App
 {
-    App::Application::Application()
+    Application::Application()
     {
-        VERIFY( m_stdout = freopen( "stdout.log", "w+", stdout ) );
-        VERIFY( m_stderr = freopen( "stderr.log", "w+", stderr ) );
+        //VERIFY( m_stdout = freopen( "stdout.log", "w+", stdout ) );
+        //VERIFY( m_stderr = freopen( "stderr.log", "w+", stderr ) );
     }
 
-    App::Application::~Application()
+    Application::~Application()
     {
-        VERIFY( fclose( m_stdout ) == 0 );
-        VERIFY( fclose( m_stderr ) == 0 );
+        //VERIFY( fclose( m_stdout ) == 0 );
+        //VERIFY( fclose( m_stderr ) == 0 );
     }
 
-    void App::Application::Run()
+    void Application::Run()
     {
         ApplyVideoMode();
         m_clock.Restart();
@@ -35,7 +35,7 @@ namespace App
         OnClose();
     }
 
-    void App::Application::ApplyVideoMode()
+    void Application::ApplyVideoMode()
     {
         ASSERT( m_videoMode.isValid(), L"Mode is not valid." );
         m_videoSettingsApplyRequested = false;
@@ -48,7 +48,7 @@ namespace App
         OnVideoSettingsChanged();
     }
 
-    void App::Application::Tick()
+    void Application::Tick()
     {
         auto now = m_clock.GetElapsedTime();
         auto diff = now - m_lastTickTime;
@@ -62,7 +62,7 @@ namespace App
         m_lastTickTime = now;
     }
 
-    void App::Application::HandleEvents()
+    void Application::HandleEvents()
     {
         sf::Event e;
         while( m_window.pollEvent( e ) )

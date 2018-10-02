@@ -5,15 +5,15 @@
 
 namespace Resource
 {
-    void Resource::Init()
+    void Init()
     {
-        debugFont = new sf::Font();
-        VERIFY( debugFont->loadFromFile( "res/font/Courier New/cour.ttf" ) );
+        DebugFont = new sf::Font();
+        VERIFY( DebugFont->loadFromFile( "res/font/Courier New/cour.ttf" ) );
     }
 
-    void Resource::Dispose() { delete debugFont; }
+    void Dispose() { delete DebugFont; }
 
     const std::wstring WindowTitle = Betomnita_PROJECT L" " Betomnita_VERSION_MAJOR L"." Betomnita_VERSION_MINOR L"." Betomnita_VERSION_PATCH;
 
-    sf::Font* Resource::debugFont;
+    sf::Font* DebugFont;
 }
