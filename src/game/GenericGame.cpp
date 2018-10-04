@@ -14,7 +14,7 @@ namespace Game
 
     void GenericGame::OnUpdate( sf::Time dt ) { m_gameTime += dt; }
 
-    void GenericGame::OnRender( sf::Time dt ) {}
+    void GenericGame::OnRender( sf::RenderTarget& target ) {}
 
     void GenericGame::OnEvent( const sf::Event& e )
     {

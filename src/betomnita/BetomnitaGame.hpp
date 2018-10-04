@@ -1,9 +1,15 @@
 #pragma once
 #include "game/GenericGame.hpp"
-#include "game/StateMachine.hpp"
+
+namespace Game
+{
+    class StateMachine;
+}
 
 namespace Betomnita
 {
+    class Cursor;
+
     class BetomnitaGame final : public Game::GenericGame
     {
     public:
@@ -17,11 +23,11 @@ namespace Betomnita
 
         BetomnitaGame();
         ~BetomnitaGame();
-    
+
     private:
         void OnStart() override;
         void OnUpdate( sf::Time dt ) override;
-        void OnRender( sf::Time dt ) override;
+        void OnRender( sf::RenderTarget& target ) override;
         void OnVideoSettingsChanged() override;
         void OnClose() override;
         void OnKeyPressed( const sf::Event::KeyEvent& key ) override;
@@ -30,7 +36,8 @@ namespace Betomnita
         void OnMouseButtonReleased( const sf::Vector2f& position, sf::Mouse::Button button ) override;
         void OnMouseMoved( const sf::Vector2f& position ) override;
 
-        Game::StateMachine m_flowController;
+        std::unique_ptr< Cursor > m_cursor;
+        std::unique_ptr< Game::StateMachine > m_flowController;
         sf::CircleShape m_circle;
         sf::Text m_text;
         sf::RectangleShape m_rect;

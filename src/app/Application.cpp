@@ -123,7 +123,7 @@ namespace App
             return;
         }
         OnUpdate( m_timeSkew * diff );
-        OnRender( m_timeSkew * diff );
+        OnRender( m_window );
         m_lastTickTime = now;
     }
 

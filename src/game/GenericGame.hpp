@@ -12,7 +12,7 @@ namespace Game
     protected:
         virtual void OnStart() override;
         virtual void OnUpdate( sf::Time dt ) override;
-        virtual void OnRender( sf::Time dt ) override;
+        virtual void OnRender( sf::RenderTarget& target ) override;
         virtual void OnVideoSettingsChanged() override;
         virtual void OnClose() override;
         virtual void OnKeyPressed( const sf::Event::KeyEvent& key );
@@ -26,12 +26,13 @@ namespace Game
         const sf::Transform& GetTransformation() const { return m_modelToScreen; }
         float GetScale() const { return m_scale; }
         sf::Vector2f GetMousePosition() const;
-		sf::Time GetGameTime() const;
+        sf::Time GetGameTime() const { return m_gameTime; };
+
     private:
         void UpdateModelToScreen();
-        
+
         sf::Transform m_modelToScreen;
         float m_scale;
-		sf::Time m_gameTime;
+        sf::Time m_gameTime;
     };
 }

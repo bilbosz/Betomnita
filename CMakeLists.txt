@@ -101,10 +101,10 @@ add_custom_target( "CMAKE_GUI"
 install( TARGETS "${MAIN_TARGET}" DESTINATION "." )
 install( DIRECTORY "${RES}" DESTINATION "." )
 
-include( InstallRequiredSystemLibraries )
 set( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt" )
 set( CPACK_PACKAGE_VERSION_MAJOR "${Betomnita_VERSION_MAJOR}" )
 set( CPACK_PACKAGE_VERSION_MINOR "${Betomnita_VERSION_MINOR}" )
 set( CPACK_PACKAGE_VERSION_PATCH "${Betomnita_VERSION_PATCH}" )
 set( CPACK_MONOLITHIC_INSTALL 1 )
 include( CPack )
+
