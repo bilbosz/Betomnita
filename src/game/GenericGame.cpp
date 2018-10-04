@@ -1,6 +1,6 @@
 #include "game/GenericGame.hpp"
 
-#include "app/Error.hpp"
+#include "app/Debug.hpp"
 
 #include <SFML/Graphics.hpp>
 

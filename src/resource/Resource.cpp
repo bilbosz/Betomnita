@@ -1,6 +1,6 @@
 #include "resource/Resource.hpp"
 
-#include "app/Error.hpp"
+#include "app/Debug.hpp"
 #include "project/Config.hpp"
 
 namespace Resource

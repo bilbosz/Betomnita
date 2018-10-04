@@ -1,4 +1,4 @@
-﻿#include "app/Error.hpp"
+﻿#include "app/Debug.hpp"
 #include "betomnita/BetomnitaGame.hpp"
 #include "project/Config.hpp"
 

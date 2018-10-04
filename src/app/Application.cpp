@@ -1,6 +1,6 @@
 #include "app/Application.hpp"
 
-#include "app/Error.hpp"
+#include "app/Debug.hpp"
 
 namespace App
 {

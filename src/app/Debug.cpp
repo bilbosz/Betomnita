@@ -1,4 +1,4 @@
-#include "app/Error.hpp"
+#include "app/Debug.hpp"
 
 #include "app/Application.hpp"
 
@@ -8,7 +8,7 @@ namespace App
 {
     static const std::chrono::high_resolution_clock::time_point s_start = std::chrono::high_resolution_clock::now();
 
-    void Error::Breakpoint()
+    void Debug::Breakpoint()
     {
 #if defined _WIN32
         __debugbreak();
@@ -19,7 +19,7 @@ namespace App
 #endif
     }
 
-    void Error::Message( const std::wstring& type, const std::string& file, uint32_t line, const std::wstring& message, bool abort )
+    void Debug::Message( const std::wstring& type, const std::string& file, uint32_t line, const std::wstring& message, bool abort )
     {
         const auto now = std::chrono::high_resolution_clock::now();
         const auto diff = std::chrono::duration_cast< std::chrono::microseconds >( now - s_start );

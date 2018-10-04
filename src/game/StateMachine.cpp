@@ -1,6 +1,6 @@
 #include "game/StateMachine.hpp"
 
-#include "app/Error.hpp"
+#include "app/Debug.hpp"
 
 namespace Game
 {

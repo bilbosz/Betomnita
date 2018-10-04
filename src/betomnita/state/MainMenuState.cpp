@@ -1,6 +1,7 @@
-#include "betomnita/MainMenuState.hpp"
+#include "betomnita/state/MainMenuState.hpp"
+#include "betomnita/layout/MainMenuLayout.hpp"
 
-#include "app/Error.hpp"
+#include "app/Debug.hpp"
 
 namespace Betomnita
 {
