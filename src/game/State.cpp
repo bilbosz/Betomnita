@@ -2,7 +2,11 @@
 
 namespace Game
 {
-    State::State() {}
+    State::State()
+    {
+    }
 
-    State::~State() {}
+    State::~State()
+    {
+    }
 }

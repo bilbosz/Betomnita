@@ -9,6 +9,22 @@ namespace Game
         GenericGame();
         ~GenericGame();
 
+        static GenericGame* GetInstance();
+
+        const sf::Transform& GetTransformation() const
+        {
+            return m_modelToScreen;
+        }
+        float GetScale() const
+        {
+            return m_scale;
+        }
+        sf::Vector2f GetMousePosition() const;
+        sf::Time GetGameTime() const
+        {
+            return m_gameTime;
+        };
+
     protected:
         virtual void OnStart() override;
         virtual void OnUpdate( sf::Time dt ) override;
@@ -23,14 +39,10 @@ namespace Game
 
         void OnEvent( const sf::Event& e ) override;
 
-        const sf::Transform& GetTransformation() const { return m_modelToScreen; }
-        float GetScale() const { return m_scale; }
-        sf::Vector2f GetMousePosition() const;
-        sf::Time GetGameTime() const { return m_gameTime; };
-
     private:
         void UpdateModelToScreen();
 
+        static GenericGame* s_instance;
         sf::Transform m_modelToScreen;
         float m_scale;
         sf::Time m_gameTime;

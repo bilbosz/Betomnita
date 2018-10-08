@@ -11,7 +11,12 @@ namespace Betomnita
         m_asset.setTexture( texture, true );
     }
 
-    Cursor::~Cursor() {}
+    Cursor::~Cursor()
+    {
+    }
 
-    void Cursor::OnRender( sf::RenderTarget& target, const sf::Transform& transformation ) { target.draw( m_asset, transformation ); }
+    void Cursor::OnRender( sf::RenderTarget& target, const sf::Transform& transformation )
+    {
+        target.draw( m_asset, transformation );
+    }
 }

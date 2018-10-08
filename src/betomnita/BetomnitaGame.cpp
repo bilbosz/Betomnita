@@ -7,9 +7,25 @@
 
 namespace Betomnita
 {
-    BetomnitaGame::BetomnitaGame() : m_flowController( std::make_unique< Game::StateMachine >() ), m_cursor( std::make_unique< Cursor >() ) {}
+    BetomnitaGame* BetomnitaGame::s_instance = nullptr;
 
-    BetomnitaGame::~BetomnitaGame() {}
+    BetomnitaGame::BetomnitaGame() : m_flowController( std::make_unique< Game::StateMachine >() )
+    {
+        ASSERT( !s_instance, L"There can be only one instance of Betomnita game" );
+        s_instance = this;
+    }
+
+    BetomnitaGame::~BetomnitaGame()
+    {
+        ASSERT( s_instance, L"Betomnita game should exist before calling destructor" );
+        s_instance = nullptr;
+    }
+
+    BetomnitaGame* BetomnitaGame::GetInstance()
+    {
+        ASSERT( s_instance, L"Betomnita game is not created yet" );
+        return s_instance;
+    }
 
     void BetomnitaGame::OnStart()
     {
@@ -26,21 +42,14 @@ namespace Betomnita
         m_rect.setFillColor( sf::Color::Transparent );
         m_rect.setOutlineColor( sf::Color::Blue );
 
-        m_text.setFont( *Resource::DebugFont );
-        m_text.setFillColor( sf::Color::Black );
-        m_text.setCharacterSize( 17 );
-        m_text.setPosition( 0.5f, 0.5f );
-
         GenericGame::OnStart();
     };
 
     void BetomnitaGame::OnUpdate( sf::Time dt )
     {
         const auto& mousePosition = GetMousePosition();
-        m_cursor->SetPosition( mousePosition );
         std::wostringstream out;
         out << L"(" << mousePosition.x << L", " << mousePosition.y << L")";
-        m_text.setString( out.str() );
         m_flowController->OnUpdate( dt );
 
         GenericGame::OnUpdate( dt );
@@ -48,37 +57,55 @@ namespace Betomnita
 
     void BetomnitaGame::OnRender( sf::RenderTarget& target )
     {
-        const auto oldPos = m_text.getPosition();
-        const auto newPos = GetTransformation().transformPoint( oldPos );
-        m_text.setPosition( newPos );
-
-        target.clear( { 225, 225, 225 } );
-        target.draw( m_text );
+        target.clear( { 128, 128, 128 } );
         target.draw( m_rect, GetTransformation() );
         target.draw( m_circle, GetTransformation() );
-        m_cursor->OnRender( target, sf::Transform::Identity );
         m_window.display();
-
-        m_text.setPosition( oldPos );
 
         GenericGame::OnRender( target );
     }
 
-    void BetomnitaGame::OnVideoSettingsChanged() { GenericGame::OnVideoSettingsChanged(); }
+    void BetomnitaGame::OnVideoSettingsChanged()
+    {
+        GenericGame::OnVideoSettingsChanged();
+    }
 
-    void BetomnitaGame::OnClose() { GenericGame::OnClose(); }
+    void BetomnitaGame::OnClose()
+    {
+        GenericGame::OnClose();
+    }
 
-    void BetomnitaGame::OnKeyPressed( const sf::Event::KeyEvent& key ) { GenericGame::OnKeyPressed( key ); }
+    void BetomnitaGame::OnKeyPressed( const sf::Event::KeyEvent& key )
+    {
+        GenericGame::OnKeyPressed( key );
+    }
 
-    void BetomnitaGame::OnKeyReleased( const sf::Event::KeyEvent& key ) { GenericGame::OnKeyReleased( key ); }
+    void BetomnitaGame::OnKeyReleased( const sf::Event::KeyEvent& key )
+    {
+        GenericGame::OnKeyReleased( key );
+    }
 
     void BetomnitaGame::OnMouseButtonPressed( const sf::Vector2f& position, sf::Mouse::Button button )
     {
-        MESSAGE( static_cast< int >( button ) << L"(" << position.x << L", " << position.y << L")" );
+        switch( button )
+        {
+            case sf::Mouse::Button::Left:
+                break;
+            case sf::Mouse::Button::Right:
+                break;
+            case sf::Mouse::Button::Middle:
+                break;
+        }
         GenericGame::OnMouseButtonPressed( position, button );
     }
 
-    void BetomnitaGame::OnMouseButtonReleased( const sf::Vector2f& position, sf::Mouse::Button button ) { GenericGame::OnMouseButtonReleased( position, button ); }
+    void BetomnitaGame::OnMouseButtonReleased( const sf::Vector2f& position, sf::Mouse::Button button )
+    {
+        GenericGame::OnMouseButtonReleased( position, button );
+    }
 
-    void BetomnitaGame::OnMouseMoved( const sf::Vector2f& position ) { GenericGame::OnMouseMoved( position ); }
+    void BetomnitaGame::OnMouseMoved( const sf::Vector2f& position )
+    {
+        GenericGame::OnMouseMoved( position );
+    }
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include "game/GenericGame.hpp"
 
+#include "game/graphics/Text.hpp"
+
 namespace Game
 {
     class StateMachine;
@@ -24,6 +26,8 @@ namespace Betomnita
         BetomnitaGame();
         ~BetomnitaGame();
 
+        static BetomnitaGame* GetInstance();
+
     private:
         void OnStart() override;
         void OnUpdate( sf::Time dt ) override;
@@ -36,10 +40,9 @@ namespace Betomnita
         void OnMouseButtonReleased( const sf::Vector2f& position, sf::Mouse::Button button ) override;
         void OnMouseMoved( const sf::Vector2f& position ) override;
 
-        std::unique_ptr< Cursor > m_cursor;
+        static BetomnitaGame* s_instance;
         std::unique_ptr< Game::StateMachine > m_flowController;
         sf::CircleShape m_circle;
-        sf::Text m_text;
         sf::RectangleShape m_rect;
     };
 }

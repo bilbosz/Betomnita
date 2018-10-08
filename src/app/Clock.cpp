@@ -2,9 +2,14 @@
 
 namespace App
 {
-    Clock::Clock() {}
+    Clock::Clock()
+    {
+    }
 
-    sf::Time Clock::GetElapsedTime() const { return m_clock.getElapsedTime() - m_delay; }
+    sf::Time Clock::GetElapsedTime() const
+    {
+        return m_clock.getElapsedTime() - m_delay;
+    }
 
     sf::Time Clock::Restart()
     {

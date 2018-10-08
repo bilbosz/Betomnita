@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 
 namespace Betomnita
@@ -9,8 +10,14 @@ namespace Betomnita
         ~Cursor();
         void OnRender( sf::RenderTarget& target, const sf::Transform& transformation );
 
-        void SetPosition( sf::Vector2f value ) { m_position = value; };
-        sf::Vector2f GetPosition() const { return m_position; };
+        void SetPosition( sf::Vector2f value )
+        {
+            m_position = value;
+        }
+        sf::Vector2f GetPosition() const
+        {
+            return m_position;
+        }
 
     private:
         sf::Vector2f m_position;

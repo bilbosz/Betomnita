@@ -4,8 +4,12 @@
 
 namespace App
 {
+    Application* Application::s_instance = nullptr;
+
     Application::Application()
     {
+        ASSERT( !s_instance, L"There can be only one instance of the application" );
+        s_instance = this;
 #ifdef REDIRECT_CONSOLE_OUT
         VERIFY( m_stdout = freopen( "stdout.log", "w+", stdout ) );
         VERIFY( m_stderr = freopen( "stderr.log", "w+", stderr ) );
@@ -14,15 +18,23 @@ namespace App
 
     Application::~Application()
     {
+        ASSERT( s_instance, L"Application should exist before calling destructor" );
+        s_instance = nullptr;
 #ifdef REDIRECT_CONSOLE_OUT
         VERIFY( fclose( m_stdout ) == 0 );
         VERIFY( fclose( m_stderr ) == 0 );
 #endif
     }
 
+    Application* Application::GetInstance()
+    {
+        ASSERT( s_instance, L"Application is not created yet" );
+        return s_instance;
+    }
+
     void Application::Run()
     {
-        ApplyVideoMode();
+        ApplyVideoSettings();
         m_clock.Restart();
         OnStart();
         while( !m_shutdownRequested )
@@ -30,7 +42,7 @@ namespace App
             if( m_videoSettingsApplyRequested )
             {
                 sf::Time start = m_clock.Pause();
-                ApplyVideoMode();
+                ApplyVideoSettings();
                 sf::Time finish = m_clock.Unpause();
             }
             Tick();
@@ -68,7 +80,10 @@ namespace App
         RequestApplyVideoSettings();
     }
 
-    bool Application::IsFullscreen() { return !!( m_windowStyle & sf::Style::Fullscreen ); }
+    bool Application::IsFullscreen()
+    {
+        return !!( m_windowStyle & sf::Style::Fullscreen );
+    }
 
     void Application::ShowCursor()
     {
@@ -100,9 +115,9 @@ namespace App
         RequestApplyVideoSettings();
     }
 
-    void Application::ApplyVideoMode()
+    void Application::ApplyVideoSettings()
     {
-        ASSERT( m_videoMode.isValid(), L"Mode is not valid." );
+        ASSERT( m_videoMode.isValid(), L"Mode is not valid" );
         m_videoSettingsApplyRequested = false;
         auto context = sf::ContextSettings();
         context.antialiasingLevel = m_antialiasingLevel;
