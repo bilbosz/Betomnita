@@ -36,15 +36,20 @@ namespace Graphics
         Primitive::OnSizeChange( newSize );
     }
 
-	void Text::OnStringChange( const std::wstring& newString )
+    void Text::OnStringChange( const std::wstring& newString )
     {
         PrepareRender();
     }
 
-	void Text::OnFontChange( const sf::Font& newFont )
-	{
-		PrepareRender();
-	}
+    void Text::OnFontChange( const sf::Font& newFont )
+    {
+        PrepareRender();
+    }
+
+    void Text::OnCharacterSizeChange( unsigned int newCharacterSize )
+    {
+
+    }
 
     void Text::PrepareRender()
     {
