@@ -98,6 +98,11 @@ add_custom_target( "CMAKE_GUI"
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
+add_custom_target( "OPEN_EXPLORER"
+	COMMAND explorer .
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+
 install( TARGETS "${MAIN_TARGET}" DESTINATION "." )
 install( DIRECTORY "${RES}" DESTINATION "." )
 
