@@ -1,6 +1,7 @@
 #include "game/graphics/Text.hpp"
 
 #include "app/Debug.hpp"
+#include "game/GenericGame.hpp"
 
 namespace Graphics
 {
@@ -22,37 +23,45 @@ namespace Graphics
 
     void Text::Render( sf::RenderTarget& target )
     {
+        target.draw( m_text );
         Primitive::Render( target );
     }
 
     void Text::OnPositionChange( const sf::Vector2f& newPosition )
     {
+		Update();
         Primitive::OnPositionChange( newPosition );
     }
 
     void Text::OnSizeChange( const sf::Vector2f& newSize )
     {
-        PrepareRender();
+        Update();
         Primitive::OnSizeChange( newSize );
     }
 
     void Text::OnStringChange( const std::wstring& newString )
     {
-        PrepareRender();
+        Update();
     }
 
     void Text::OnFontChange( const sf::Font& newFont )
     {
-        PrepareRender();
+        Update();
     }
 
     void Text::OnCharacterSizeChange( unsigned int newCharacterSize )
     {
-
+        Update();
     }
 
-    void Text::PrepareRender()
+    void Text::Update()
     {
-
+        auto size = Size.Get();
+        const auto& game = Game::GenericGame::GetInstance();
+        auto transformation = game->GetTransformation();
+        m_text.setPosition( transformation.transformPoint( Position.Get() ) );
+        m_text.setCharacterSize( CharacterSize.Get() );
+        m_text.setFont( Font.Get() );
+        m_text.setString( String.Get() );
     }
 }

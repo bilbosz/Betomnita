@@ -26,6 +26,22 @@ namespace Game
         return s_instance;
     }
 
+    sf::Vector2f GenericGame::GetScale() const
+    {
+        const auto& matrix = m_modelToScreen.getMatrix();
+        for( size_t y = 0; y < 4; ++y )
+        {
+            for( size_t x = 0; x < 4; ++x )
+            {
+                ASSERT(
+                    y == 0 && x == 0 || y == 1 && x == 1 || y == 2 && x == 2 || y == 3 && x == 0 || matrix[ y * 4 + x ] == 1.0f || matrix[ y * 4 + x ] == 0.0f,
+                    L"Only transformations available in model to pixel are x translation and x and y scaling" );
+            }
+        }
+        ASSERT( matrix[ 0 * 4 + 0 ] == matrix[ 1 * 4 + 1 ], L"x and y scale factors should be equal" );
+        return sf::Vector2f( matrix[ 0 * 4 + 0 ], matrix[ 1 * 4 + 1 ] );
+    }
+
     sf::Vector2f GenericGame::GetMousePosition() const
     {
         return GetTransformation().getInverse().transformPoint(
@@ -125,7 +141,5 @@ namespace Game
         m_modelToScreen = sf::Transform::Identity;
         m_modelToScreen.translate( { ( w - h ) / 2.0f, 0 } );
         m_modelToScreen.scale( { h, h } );
-
-        m_scale = h;
     }
 }

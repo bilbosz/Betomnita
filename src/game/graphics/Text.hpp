@@ -24,7 +24,7 @@ namespace Graphics
         void OnFontChange( const sf::Font& newFont );
 		void OnCharacterSizeChange( unsigned int newCharacterSize );
 
-        void PrepareRender();
+        void Update();
 
 		sf::Text m_text;
     };

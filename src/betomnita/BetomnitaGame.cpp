@@ -42,6 +42,10 @@ namespace Betomnita
         m_rect.setFillColor( sf::Color::Transparent );
         m_rect.setOutlineColor( sf::Color::Blue );
 
+		m_text.CharacterSize.Set( 36 );
+		m_text.Font.Set( *Resource::DebugFont );
+		m_text.Position.Set( sf::Vector2f( 0.1f, 0.1f ) );
+
         GenericGame::OnStart();
     };
 
@@ -50,6 +54,7 @@ namespace Betomnita
         const auto& mousePosition = GetMousePosition();
         std::wostringstream out;
         out << L"(" << mousePosition.x << L", " << mousePosition.y << L")";
+		m_text.String.Set( out.str() );
         m_flowController->OnUpdate( dt );
 
         GenericGame::OnUpdate( dt );
@@ -57,9 +62,9 @@ namespace Betomnita
 
     void BetomnitaGame::OnRender( sf::RenderTarget& target )
     {
-        target.clear( { 128, 128, 128 } );
+        target.clear( { 0, 0, 0 } );
         target.draw( m_rect, GetTransformation() );
-        target.draw( m_circle, GetTransformation() );
+		m_text.Render( target );
         m_window.display();
 
         GenericGame::OnRender( target );
