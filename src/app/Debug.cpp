@@ -28,7 +28,7 @@ namespace App
         out << type << L"[" << std::setw( 10 ) << std::setprecision( 4 ) << std::fixed << diff.count() / 1'000'000.0 << L"] " << file.c_str() << L":" << line << L": "
             << message;
         std::wcerr << out.str() << std::endl;
-#ifdef _DEBUG
+#ifdef DEBUG
         if( abort )
         {
             Breakpoint();

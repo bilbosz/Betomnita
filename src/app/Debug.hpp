@@ -18,7 +18,7 @@ namespace App
 }
 
 // clang-format off
-#ifdef _DEBUG
+#ifdef DEBUG
 #	define ASSERT(test,message) { if( !( test ) ) { std::wostringstream out; out << message; App::Debug::Message( L"A", __FILE__, __LINE__, out.str(), true ); } }
 #else
 #	define ASSERT(test,message)
@@ -26,7 +26,7 @@ namespace App
 // clang-format on
 
 // clang-format off
-#ifdef _DEBUG
+#ifdef DEBUG
 #	define MESSAGE(message) { std::wostringstream out; out << message; App::Debug::Message( L"M", __FILE__, __LINE__, out.str(), false ); }
 #else
 #	define MESSAGE(message)
@@ -34,7 +34,7 @@ namespace App
 // clang-format on
 
 // clang-format off
-#ifdef _DEBUG
+#ifdef DEBUG
 #	define VERIFY(test) { if( !( test ) ) App::Debug::Breakpoint(); }
 #else
 #	define VERIFY(test) { ( test ); }

@@ -11,11 +11,16 @@ namespace Game
 
         static GenericGame* GetInstance();
 
-        const sf::Transform& GetTransformation() const
+        const sf::Transform& GetToScreenTransform() const
         {
             return m_modelToScreen;
         }
-        sf::Vector2f GetScale() const;
+        const sf::Transform& GetToModelTransform() const
+        {
+            return m_screenToModel;
+        }
+        sf::Vector2f GetToScreenScale() const;
+        sf::Vector2f GetToModelScale() const;
         sf::Vector2f GetMousePosition() const;
         sf::Time GetGameTime() const
         {
@@ -41,6 +46,7 @@ namespace Game
 
         static GenericGame* s_instance;
         sf::Transform m_modelToScreen;
+        sf::Transform m_screenToModel;
         sf::Time m_gameTime;
     };
 }

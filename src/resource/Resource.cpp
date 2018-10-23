@@ -19,4 +19,6 @@ namespace Resource
     const std::wstring WindowTitle = Betomnita_PROJECT L" " Betomnita_VERSION_MAJOR L"." Betomnita_VERSION_MINOR L"." Betomnita_VERSION_PATCH;
 
     sf::Font* DebugFont;
+
+    unsigned int DefaultCharacterSize = 17;
 }

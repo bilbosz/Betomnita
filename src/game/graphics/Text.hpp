@@ -15,16 +15,16 @@ namespace Graphics
 
         Utils::Property< std::wstring > String;
         Utils::Property< sf::Font > Font;
-		Utils::Property< unsigned int > CharacterSize;
+		Utils::Property< float > LineHeight;
 
     private:
         void OnPositionChange( const sf::Vector2f& newPosition ) override;
         void OnSizeChange( const sf::Vector2f& newSize ) override;
         void OnStringChange( const std::wstring& newString );
         void OnFontChange( const sf::Font& newFont );
-		void OnCharacterSizeChange( unsigned int newCharacterSize );
+		void OnLineHeightChange( float newLineHeight );
 
-        void Update();
+        void UpdateGeometry();
 
 		sf::Text m_text;
     };

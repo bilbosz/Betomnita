@@ -9,4 +9,5 @@ namespace Resource
 
     extern const std::wstring WindowTitle;
     extern sf::Font* DebugFont;
+    extern unsigned int DefaultCharacterSize;
 }

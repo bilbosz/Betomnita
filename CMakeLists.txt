@@ -32,6 +32,9 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 add_compile_definitions( BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE )
 add_compile_definitions( _CRT_SECURE_NO_WARNINGS )
+if ( Betomnita_DEBUG )
+    add_compile_definitions( DEBUG )
+endif()
 
 set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 set_property( GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMake" )
