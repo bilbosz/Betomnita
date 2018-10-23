@@ -10,6 +10,7 @@ int main( int argc, char* argv[] )
     Betomnita::BetomnitaGame game;
 #ifdef FULLSCREEN
     game.SetFullscreen();
+	game.ShowCursor();
 #else
     game.SetBorderedWindow( false, true );
     game.ReleaseCursor();

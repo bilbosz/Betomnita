@@ -25,6 +25,10 @@ namespace Graphics
     void Primitive::Init()
     {
         m_debugRect.setFillColor( sf::Color( 255, 0, 0, 128 ) );
+
+		Position.Set( { 0.0f, 0.0f } );
+		Size.Set( { 0.0f, 0.0f } );
+
         Position.AddCallback( [this]( const sf::Vector2f& newPosition ) { OnPositionChange( newPosition ); } );
         Size.AddCallback( [this]( const sf::Vector2f& newSize ) { OnSizeChange( newSize ); } );
     }

@@ -17,7 +17,13 @@ namespace Graphics
     void Text::Init()
     {
         Primitive::Init();
-        m_text.setCharacterSize( Resource::DefaultCharacterSize );
+
+        String.Set( L"" );
+        Font.Set( *Resource::DefaultFont );
+        LineHeight.Set( 0.0f );
+
+		Size.Lock();
+
         String.AddCallback( [this]( const std::wstring& newString ) { OnStringChange( newString ); } );
         Font.AddCallback( [this]( const sf::Font& newFont ) { OnFontChange( newFont ); } );
         LineHeight.AddCallback( [this]( float newLineHeight ) { OnLineHeightChange( newLineHeight ); } );
@@ -25,6 +31,7 @@ namespace Graphics
 
     void Text::Render( sf::RenderTarget& target )
     {
+        VERIFY( LineHeight.Get() >= 0.0f );
         Primitive::Render( target );
         target.draw( m_text );
     }
@@ -43,27 +50,44 @@ namespace Graphics
     void Text::OnStringChange( const std::wstring& newString )
     {
         m_text.setString( newString );
+        UpdateSize();
     }
 
     void Text::OnFontChange( const sf::Font& newFont )
     {
         m_text.setFont( newFont );
+        UpdateCharacterSize();
+        UpdateSize();
     }
 
     void Text::OnLineHeightChange( float newLineHeight )
     {
-        const auto game = Game::GenericGame::GetInstance();
-        auto toModelScale = game->GetToModelScale().x;
+        UpdateCharacterSize();
+        UpdateSize();
+    }
+
+    void Text::UpdateCharacterSize()
+    {
+        auto toModelScale = Game::GenericGame::GetInstance()->GetToModelScale().x;
         const auto& font = Font.Get();
 
         auto initialFontLineSpacing = font.getLineSpacing( Resource::DefaultCharacterSize ) * toModelScale;
-        auto initialRatio = newLineHeight / initialFontLineSpacing;
+        auto initialRatio = LineHeight.Get() / initialFontLineSpacing;
 
         auto characterSize = static_cast< unsigned int >( Resource::DefaultCharacterSize * initialRatio );
-        auto fontLineSpacing = font.getLineSpacing( characterSize ) * toModelScale;
 
+        m_fontLineSpacing = font.getLineSpacing( characterSize ) * toModelScale;
         m_text.setCharacterSize( characterSize );
+    }
 
-        Size.Set( { m_text.getGlobalBounds().width * toModelScale, fontLineSpacing } );
+    void Text::UpdateSize()
+    {
+		const auto game = Game::GenericGame::GetInstance();
+        auto toModelScale = game->GetToModelScale().x;
+		auto toModelTransform = game->GetToModelTransform();
+		auto left = toModelTransform.transformPoint( { m_text.getGlobalBounds().left, 0 } );
+		Size.Unlock();
+        Size.Set( { left.x - Position.Get().x + m_text.getGlobalBounds().width * toModelScale, LineHeight.Get() } );
+		Size.Lock();
     }
 }

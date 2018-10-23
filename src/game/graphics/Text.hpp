@@ -24,8 +24,10 @@ namespace Graphics
         void OnFontChange( const sf::Font& newFont );
 		void OnLineHeightChange( float newLineHeight );
 
-        void UpdateGeometry();
+        void UpdateCharacterSize();
+		void UpdateSize();
 
 		sf::Text m_text;
+		float m_fontLineSpacing = 0;
     };
 }
