@@ -22,6 +22,7 @@ namespace Graphics
         Font.Set( *Resource::DefaultFont );
         LineHeight.Set( 0.0f );
 
+		LineHeight.AddConstrain( std::make_pair( []( float lineHeight ){ return lineHeight > 0.0f; }, L"Line height has to be greater than zero" ) );
 		Size.Lock();
 
         String.AddCallback( [this]( const std::wstring& newString ) { OnStringChange( newString ); } );

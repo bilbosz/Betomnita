@@ -5,6 +5,7 @@
 
 namespace Graphics
 {
+	// Close polygon which is described by points ordered clockwise
     class Polygon final : public Primitive
     {
     public:
@@ -13,7 +14,7 @@ namespace Graphics
         Polygon();
         ~Polygon();
 
-        void Render( sf::RenderTarget& target );
+        void Render( sf::RenderTarget& target ) override;
 
         Utils::Property< PointsVector > Points;
 
@@ -22,5 +23,8 @@ namespace Graphics
 
         void OnPositionChange( const sf::Vector2f& newPosition );
         void OnSizeChange( const sf::Vector2f& newSize );
+		void OnPointsChange( const PointsVector& newPoints );
+
+		sf::VertexArray m_vertexArray;
     };
 }

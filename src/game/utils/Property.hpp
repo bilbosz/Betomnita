@@ -11,14 +11,16 @@ namespace Utils
     {
     public:
         using ValueType = Type;
+        using ReferenceType = Type&;
         using ConstRefType = const Type&;
         using Callback = std::function< void( ConstRefType ) >;
+        using Constrain = std::pair< std::function< bool( ConstRefType ) >, std::wstring >;
 
         Property()
         {
         }
 
-        Property( const ValueType& value ) : m_value( value ), m_initialized( true )
+        Property( ConstRefType value ) : m_value( value ), m_initialized( true )
         {
         }
 
@@ -29,18 +31,21 @@ namespace Utils
         template< class ReturnType = ConstRefType >
         ReturnType Get() const
         {
-			ASSERT( m_initialized, "Reading uninitialized property" );
+            ASSERT( m_initialized, "Reading uninitialized property" );
             return m_value;
         }
-        void Set( const ValueType& value )
+        void Set( ConstRefType value )
         {
             ASSERT( !m_locked, "Cannot change locked property" );
-            m_value = value;
-			m_initialized = true;
-            for( auto callback : m_callbacks )
+#ifdef DEBUG
+            for( auto constrain : m_constrains )
             {
-                callback( m_value );
+                ASSERT( constrain.first( value ), constrain.second );
             }
+#endif
+            m_value = value;
+            m_initialized = true;
+            std::for_each( m_callbacks.begin(), m_callbacks.end(), [this]( auto callback ) { callback( m_value ); } );
         }
 
         void Lock()
@@ -62,10 +67,20 @@ namespace Utils
             m_callbacks.push_back( callback );
         }
 
+        void AddConstrain( Constrain constrain )
+        {
+#ifdef DEBUG
+            m_constrains.push_back( constrain );
+#endif
+        }
+
     private:
         bool m_initialized = false;
         bool m_locked = false;
         ValueType m_value;
         std::vector< Callback > m_callbacks;
+#ifdef DEBUG
+        std::vector< Constrain > m_constrains;
+#endif
     };
 }

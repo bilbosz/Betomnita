@@ -85,9 +85,10 @@ namespace Betomnita
         switch( button )
         {
             case sf::Mouse::Button::Left:
-                m_text.LineHeight.Set( position.y );
+                m_text.LineHeight.Set( position.y - m_text.Position.Get().y );
                 break;
             case sf::Mouse::Button::Right:
+				m_text.Position.Set( position );
                 break;
             case sf::Mouse::Button::Middle:
                 break;
