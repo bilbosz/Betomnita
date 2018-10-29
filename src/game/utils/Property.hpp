@@ -36,8 +36,8 @@ namespace Utils
         }
         void Set( ConstRefType value )
         {
-            ASSERT( !m_locked, "Cannot change locked property" );
 #ifdef DEBUG
+            ASSERT( !m_locked, "Cannot change locked property" );
             for( auto constrain : m_constrains )
             {
                 ASSERT( constrain.first( value ), constrain.second );

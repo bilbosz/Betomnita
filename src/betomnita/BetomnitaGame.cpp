@@ -32,9 +32,9 @@ namespace Betomnita
         m_flowController->RegisterState( 0, std::make_shared< MainMenuState >() );
         m_flowController->PushState( 0 );
 
-        m_text.Font.Set( *Resource::DefaultFont );
+        m_text.SetFont( *Resource::DefaultFont );
         m_text.Position.Set( { 0.0f, 0.0f } );
-        m_text.LineHeight.Set( 0.1f );
+        m_text.SetLineHeight( 0.1f );
         m_text.SetHightlight( true );
 
         GenericGame::OnStart();
@@ -45,7 +45,7 @@ namespace Betomnita
         const auto& mousePosition = GetMousePosition();
         std::wostringstream out;
         out << L"(" << mousePosition.x << L", " << mousePosition.y << L")";
-        m_text.String.Set( out.str() );
+        m_text.SetString( out.str() );
         m_flowController->OnUpdate( dt );
 
         GenericGame::OnUpdate( dt );
@@ -85,7 +85,7 @@ namespace Betomnita
         switch( button )
         {
             case sf::Mouse::Button::Left:
-                m_text.LineHeight.Set( position.y - m_text.Position.Get().y );
+                m_text.SetLineHeight( position.y - m_text.Position.Get().y );
                 break;
             case sf::Mouse::Button::Right:
 				m_text.Position.Set( position );

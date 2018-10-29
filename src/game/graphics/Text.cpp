@@ -18,22 +18,18 @@ namespace Graphics
     {
         Primitive::Init();
 
-        String.Set( L"" );
-        Font.Set( *Resource::DefaultFont );
-        LineHeight.Set( 0.0f );
-
-		LineHeight.AddConstrain( std::make_pair( []( float lineHeight ){ return lineHeight > 0.0f; }, L"Line height has to be greater than zero" ) );
-		Size.Lock();
-
-        String.AddCallback( [this]( const std::wstring& newString ) { OnStringChange( newString ); } );
-        Font.AddCallback( [this]( const sf::Font& newFont ) { OnFontChange( newFont ); } );
-        LineHeight.AddCallback( [this]( float newLineHeight ) { OnLineHeightChange( newLineHeight ); } );
+		m_font = *Resource::DefaultFont;
     }
 
     void Text::Render( sf::RenderTarget& target )
     {
-        VERIFY( LineHeight.Get() >= 0.0f );
-        Primitive::Render( target );
+        VERIFY( m_lineHeight >= 0.0f );
+		if( m_lineHeight == 0.0f )
+		{
+			Primitive::Render( target );
+			return;
+		}
+		Primitive::Render( target );
         target.draw( m_text );
     }
 
@@ -45,6 +41,7 @@ namespace Graphics
 
     void Text::OnSizeChange( const sf::Vector2f& newSize )
     {
+		//TODO uncomment ASSERT( false, L"Text should not be changed by changing size but by line height." );
         Primitive::OnSizeChange( newSize );
     }
 
@@ -63,6 +60,7 @@ namespace Graphics
 
     void Text::OnLineHeightChange( float newLineHeight )
     {
+		ASSERT( newLineHeight > 0.0f, L"Line height has to be greater than zero" );
         UpdateCharacterSize();
         UpdateSize();
     }
@@ -70,14 +68,13 @@ namespace Graphics
     void Text::UpdateCharacterSize()
     {
         auto toModelScale = Game::GenericGame::GetInstance()->GetToModelScale().x;
-        const auto& font = Font.Get();
 
-        auto initialFontLineSpacing = font.getLineSpacing( Resource::DefaultCharacterSize ) * toModelScale;
-        auto initialRatio = LineHeight.Get() / initialFontLineSpacing;
+        auto initialFontLineSpacing = m_font.getLineSpacing( Resource::DefaultCharacterSize ) * toModelScale;
+        auto initialRatio = m_lineHeight / initialFontLineSpacing;
 
         auto characterSize = static_cast< unsigned int >( Resource::DefaultCharacterSize * initialRatio );
 
-        m_fontLineSpacing = font.getLineSpacing( characterSize ) * toModelScale;
+        m_fontLineSpacing = m_font.getLineSpacing( characterSize ) * toModelScale;
         m_text.setCharacterSize( characterSize );
     }
 
@@ -87,8 +84,6 @@ namespace Graphics
         auto toModelScale = game->GetToModelScale().x;
 		auto toModelTransform = game->GetToModelTransform();
 		auto left = toModelTransform.transformPoint( { m_text.getGlobalBounds().left, 0 } );
-		Size.Unlock();
-        Size.Set( { left.x - Position.Get().x + m_text.getGlobalBounds().width * toModelScale, LineHeight.Get() } );
-		Size.Lock();
+        Size.Set( { left.x - Position.Get().x + m_text.getGlobalBounds().width * toModelScale, m_lineHeight } );
     }
 }
