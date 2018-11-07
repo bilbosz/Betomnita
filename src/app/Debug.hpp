@@ -1,11 +1,13 @@
 #pragma once
-#include "project/Config.hpp"
+#ifdef DEBUG
 
-#include <boost/lexical_cast.hpp>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
-#include <string>
+#	include "project/Config.hpp"
+
+#	include <boost/lexical_cast.hpp>
+#	include <iomanip>
+#	include <iostream>
+#	include <sstream>
+#	include <string>
 
 namespace App
 {
@@ -16,6 +18,8 @@ namespace App
         static void Message( const std::wstring& type, const std::string& file, uint32_t line, const std::wstring& message, bool abort );
     };
 }
+
+#endif
 
 // clang-format off
 #ifdef DEBUG

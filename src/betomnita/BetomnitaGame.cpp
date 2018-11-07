@@ -5,6 +5,8 @@
 #include "betomnita/state/MainMenuState.hpp"
 #include "game/StateMachine.hpp"
 
+#include <sstream>
+
 namespace Betomnita
 {
     BetomnitaGame* BetomnitaGame::s_instance = nullptr;
@@ -33,7 +35,7 @@ namespace Betomnita
         m_flowController->PushState( 0 );
 
         m_text.SetFont( *Resource::DefaultFont );
-        m_text.Position.Set( { 0.0f, 0.0f } );
+        m_text.SetPosition( { 0.0f, 0.0f } );
         m_text.SetLineHeight( 0.1f );
         m_text.SetHightlight( true );
 
@@ -85,10 +87,10 @@ namespace Betomnita
         switch( button )
         {
             case sf::Mouse::Button::Left:
-                m_text.SetLineHeight( position.y - m_text.Position.Get().y );
+                m_text.SetLineHeight( position.y - m_text.GetPosition().y );
                 break;
             case sf::Mouse::Button::Right:
-				m_text.Position.Set( position );
+				m_text.SetPosition( position );
                 break;
             case sf::Mouse::Button::Middle:
                 break;

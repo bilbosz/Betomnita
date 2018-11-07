@@ -18,18 +18,18 @@ namespace Graphics
     {
         Primitive::Init();
 
-		m_font = *Resource::DefaultFont;
+        m_font = *Resource::DefaultFont;
     }
 
     void Text::Render( sf::RenderTarget& target )
     {
         VERIFY( m_lineHeight >= 0.0f );
-		if( m_lineHeight == 0.0f )
-		{
-			Primitive::Render( target );
-			return;
-		}
-		Primitive::Render( target );
+        if( m_lineHeight == 0.0f )
+        {
+            Primitive::Render( target );
+            return;
+        }
+        Primitive::Render( target );
         target.draw( m_text );
     }
 
@@ -41,7 +41,7 @@ namespace Graphics
 
     void Text::OnSizeChange( const sf::Vector2f& newSize )
     {
-		//TODO uncomment ASSERT( false, L"Text should not be changed by changing size but by line height." );
+        ASSERT( false, L"Text should not be changed by changing size but by line height." );
         Primitive::OnSizeChange( newSize );
     }
 
@@ -60,7 +60,7 @@ namespace Graphics
 
     void Text::OnLineHeightChange( float newLineHeight )
     {
-		ASSERT( newLineHeight > 0.0f, L"Line height has to be greater than zero" );
+        ASSERT( newLineHeight > 0.0f, L"Line height has to be greater than zero" );
         UpdateCharacterSize();
         UpdateSize();
     }
@@ -80,10 +80,11 @@ namespace Graphics
 
     void Text::UpdateSize()
     {
-		const auto game = Game::GenericGame::GetInstance();
+        const auto game = Game::GenericGame::GetInstance();
         auto toModelScale = game->GetToModelScale().x;
-		auto toModelTransform = game->GetToModelTransform();
-		auto left = toModelTransform.transformPoint( { m_text.getGlobalBounds().left, 0 } );
-        Size.Set( { left.x - Position.Get().x + m_text.getGlobalBounds().width * toModelScale, m_lineHeight } );
+        auto toModelTransform = game->GetToModelTransform();
+        auto left = toModelTransform.transformPoint( { m_text.getGlobalBounds().left, 0 } );
+        m_size = { left.x - GetPosition().x + m_text.getGlobalBounds().width * toModelScale, m_lineHeight };
+        Primitive::OnSizeChange( m_size );
     }
 }

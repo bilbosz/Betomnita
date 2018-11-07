@@ -16,6 +16,7 @@ namespace Graphics
 
     void Polygon::Init()
     {
+		Primitive::Init();
     }
 
     void Polygon::OnPositionChange( const sf::Vector2f& newPosition )

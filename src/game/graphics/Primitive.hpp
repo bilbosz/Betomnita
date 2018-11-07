@@ -19,16 +19,37 @@ namespace Graphics
 
         virtual void Render( sf::RenderTarget& target );
 
-        Utils::Property< sf::Vector2f > Position;
-        Utils::Property< sf::Vector2f > Size;
+        void SetPosition( const sf::Vector2f value )
+        {
+            m_position = value;
+            OnPositionChange( m_position );
+        }
+        const sf::Vector2f& GetPosition() const
+        {
+            return m_position;
+        }
+
+        void SetSize( const sf::Vector2f value )
+        {
+            m_size = value;
+            OnSizeChange( m_size );
+        }
+        const sf::Vector2f& GetSize() const
+        {
+            return m_size;
+        }
 
         void SetHightlight( bool value )
         {
+#ifdef DEBUG
             m_highlight = value;
+#endif
         }
         bool GetHightlight() const
         {
-            return m_highlight;
+#ifdef DEBUG
+			return m_highlight;
+#endif
         }
 
     protected:
@@ -37,8 +58,13 @@ namespace Graphics
         virtual void OnPositionChange( const sf::Vector2f& newPosition );
         virtual void OnSizeChange( const sf::Vector2f& newSize );
 
+        sf::Vector2f m_position;
+        sf::Vector2f m_size;
+
     private:
+#ifdef DEBUG
         bool m_highlight = false;
         sf::RectangleShape m_debugRect;
+#endif
     };
 }
