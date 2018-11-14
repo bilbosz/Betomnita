@@ -39,7 +39,7 @@ namespace Betomnita
         m_text.SetLineHeight( 0.1f );
         m_text.SetHightlight( false );
 
-        m_polygon.SetPoints( {
+        /*m_polygon.SetPoints( {
             { 0.0f, 0.1f },
             { 0.9f, 0.1f },
             { 0.9f, 0.9f },
@@ -48,7 +48,7 @@ namespace Betomnita
             { 0.3f, 0.5f },
             { 0.3f, 0.9f },
             { 0.0f, 0.9f },
-        } );
+        } );*/
 
         GenericGame::OnStart();
     };
@@ -99,10 +99,15 @@ namespace Betomnita
         switch( button )
         {
             case sf::Mouse::Button::Left:
-                m_text.SetLineHeight( position.y - m_text.GetPosition().y );
-                break;
+            {
+                m_points.emplace_back( position );
+                if( m_points.size() >= 3 )
+                {
+                    m_polygon.SetPoints( m_points );
+                }
+            }
+            break;
             case sf::Mouse::Button::Right:
-                m_text.SetPosition( position );
                 break;
             case sf::Mouse::Button::Middle:
                 break;
