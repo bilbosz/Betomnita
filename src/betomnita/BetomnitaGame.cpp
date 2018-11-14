@@ -37,7 +37,18 @@ namespace Betomnita
         m_text.SetFont( *Resource::DefaultFont );
         m_text.SetPosition( { 0.0f, 0.0f } );
         m_text.SetLineHeight( 0.1f );
-        m_text.SetHightlight( true );
+        m_text.SetHightlight( false );
+
+        m_polygon.SetPoints( {
+            { 0.0f, 0.1f },
+            { 0.9f, 0.1f },
+            { 0.9f, 0.9f },
+            { 0.6f, 0.9f },
+            { 0.6f, 0.5f },
+            { 0.3f, 0.5f },
+            { 0.3f, 0.9f },
+            { 0.0f, 0.9f },
+        } );
 
         GenericGame::OnStart();
     };
@@ -56,6 +67,7 @@ namespace Betomnita
     void BetomnitaGame::OnRender( sf::RenderTarget& target )
     {
         target.clear( { 128, 180, 180 } );
+        m_polygon.Render( target );
         m_text.Render( target );
         m_window.display();
 
@@ -90,7 +102,7 @@ namespace Betomnita
                 m_text.SetLineHeight( position.y - m_text.GetPosition().y );
                 break;
             case sf::Mouse::Button::Right:
-				m_text.SetPosition( position );
+                m_text.SetPosition( position );
                 break;
             case sf::Mouse::Button::Middle:
                 break;
