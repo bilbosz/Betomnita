@@ -39,16 +39,7 @@ namespace Betomnita
         m_text.SetLineHeight( 0.1f );
         m_text.SetHightlight( false );
 
-        /*m_polygon.SetPoints( {
-            { 0.0f, 0.1f },
-            { 0.9f, 0.1f },
-            { 0.9f, 0.9f },
-            { 0.6f, 0.9f },
-            { 0.6f, 0.5f },
-            { 0.3f, 0.5f },
-            { 0.3f, 0.9f },
-            { 0.0f, 0.9f },
-        } );*/
+        m_path.setPrimitiveType( sf::LineStrip );
 
         GenericGame::OnStart();
     };
@@ -68,6 +59,7 @@ namespace Betomnita
     {
         target.clear( { 128, 180, 180 } );
         m_polygon.Render( target );
+        target.draw( m_path, GetToScreenTransform() );
         m_text.Render( target );
         m_window.display();
 
@@ -86,6 +78,16 @@ namespace Betomnita
 
     void BetomnitaGame::OnKeyPressed( const sf::Event::KeyEvent& key )
     {
+        switch( key.code )
+        {
+            case sf::Keyboard::Key::Delete:
+            {
+                m_points.clear();
+                m_polygon.SetPoints( m_points );
+                m_path.clear();
+            }
+            break;
+        }
         GenericGame::OnKeyPressed( key );
     }
 
@@ -101,7 +103,9 @@ namespace Betomnita
             case sf::Mouse::Button::Left:
             {
                 m_points.emplace_back( position );
-                if( m_points.size() >= 3 )
+                m_path.append( { position, sf::Color::White } );
+                auto error = Graphics::Polygon::GetPointsErrors( m_points );
+                if( !error.has_value() )
                 {
                     m_polygon.SetPoints( m_points );
                 }

@@ -27,7 +27,7 @@ set( Betomnita_VERSION_PATCH 0 )
 
 set( MAIN_TARGET "Betomnita" )
 
-set( CMAKE_CXX_STANDARD 14 )
+set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 add_compile_definitions( BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE )

@@ -2,6 +2,7 @@
 #include "game/graphics/Primitive.hpp"
 
 #include <list>
+#include <optional>
 #include <vector>
 
 namespace Graphics
@@ -30,7 +31,12 @@ namespace Graphics
         }
         void SetPoints( const PointsVector& value );
 
+        static std::optional< std::wstring > GetPointsErrors( const PointsVector& value );
+
     private:
+        static float GetAngle( const Point& previousVertex, const Point& currentVertex, const Point& nextVertex );
+        static bool AreLinesOverlapped( const std::pair< const Point&, const Point& >& lineA, const std::pair< const Point&, const Point& >& lineB );
+
         void Init() override;
 
         void OnPositionChange( const sf::Vector2f& newPosition );
@@ -39,7 +45,6 @@ namespace Graphics
 
         void Triangulate();
         bool IsEar( const PointsList& polygonVerticies, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex ) const;
-        float GetAngle( const Point& previousVertex, const Point& currentVertex, const Point& nextVertex ) const;
         bool IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const;
 
         PointsVector m_points;

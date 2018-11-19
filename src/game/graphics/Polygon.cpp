@@ -23,9 +23,69 @@ namespace Graphics
 
     void Polygon::SetPoints( const PointsVector& value )
     {
-        ASSERT( value.size() >= 3, L"Polygon has to have at least 3 verticies" );
+#ifdef DEBUG
+        if( App::Debug::IsExpensive() )
+        {
+            auto error = GetPointsErrors( value );
+            ASSERT( !error.has_value(), error.value() );
+        }
+#endif
         m_points = value;
+		OnPointsChange( m_points );
         Triangulate();
+    }
+
+    std::optional< std::wstring > Polygon::GetPointsErrors( const PointsVector& points )
+    {
+        auto pointsN = points.size();
+        if( pointsN == 0 )
+        {
+            return std::nullopt;
+        }
+        if( pointsN < 3 )
+        {
+            return L"Polygon has to have at least 3 verticies";
+        }
+
+        for( auto i = 0; i < pointsN; ++i )
+        {
+            for( auto j = i + 1; j < pointsN; ++j )
+            {
+                if( points[ i ] == points[ j ] )
+                {
+                    return L"Points in path defining polygon have to be unique";
+                }
+            }
+        }
+
+        for( auto i = 0; i < pointsN; ++i )
+        {
+            std::pair< const Point&, const Point& > lineA = { points[ i ], points[ ( i + 1 ) % pointsN ] };
+            for( auto j = 0; j < pointsN; ++j )
+            {
+                if( j == i || j == ( i + 1 ) % pointsN || ( j + 1 ) % pointsN == i || ( j + 1 ) % pointsN == ( i + 1 ) % pointsN )
+                {
+                    continue;
+                }
+                std::pair< const Point&, const Point& > lineB = { points[ j ], points[ ( j + 1 ) % pointsN ] };
+                if( AreLinesOverlapped( lineA, lineB ) )
+                {
+                    return L"Lines on perimeter cannot cross with itself in polygon";
+                }
+            }
+        }
+
+        auto angleSum = 0.0f;
+        for( auto i = 0; i < pointsN; ++i )
+        {
+            angleSum += GetAngle( points[ i ], points[ ( i + 1 ) % pointsN ], points[ ( i + 2 ) % pointsN ] );
+        }
+        if( angleSum >= pointsN * Resource::Pi )
+        {
+            return L"Points have to be defined in clockwise direction";
+        }
+
+        return std::nullopt;
     }
 
     void Polygon::Init()
@@ -41,8 +101,18 @@ namespace Graphics
     {
     }
 
+    void Polygon::OnPointsChange( const PointsVector& newPoints )
+    {
+    }
+
     void Polygon::Triangulate()
     {
+		m_triangles.clear();
+        m_vertexArray.clear();
+        if( m_points.empty() )
+        {
+            return;
+        }
         auto polygonVerticies = PointsList( m_points.cbegin(), m_points.cend() );
         auto adv = [&polygonVerticies]( PointsListIter& iter ) {
             std::advance( iter, 1 );
@@ -52,8 +122,6 @@ namespace Graphics
             }
         };
 
-        m_triangles.clear();
-        m_vertexArray.clear();
         auto prev = polygonVerticies.cbegin();
         auto curr = std::next( prev );
         auto next = std::next( curr );
@@ -76,9 +144,9 @@ namespace Graphics
 
         for( const auto& triangle : m_triangles )
         {
-            m_vertexArray.append( sf::Vertex( std::get< 0 >( triangle ), sf::Color::Red ) );
-            m_vertexArray.append( sf::Vertex( std::get< 1 >( triangle ), sf::Color::Green ) );
-            m_vertexArray.append( sf::Vertex( std::get< 2 >( triangle ), sf::Color::Blue ) );
+            m_vertexArray.append( sf::Vertex( std::get< 0 >( triangle ), sf::Color( 0xFFC31EFF ) ) );
+            m_vertexArray.append( sf::Vertex( std::get< 1 >( triangle ), sf::Color( 0xFFC31EFF ) ) );
+            m_vertexArray.append( sf::Vertex( std::get< 2 >( triangle ), sf::Color( 0xFFC31EFF ) ) );
         }
     }
 
@@ -105,7 +173,7 @@ namespace Graphics
         return true;
     }
 
-    float Polygon::GetAngle( const Point& previousVertex, const Point& currentVertex, const Point& nextVertex ) const
+    float Polygon::GetAngle( const Point& previousVertex, const Point& currentVertex, const Point& nextVertex )
     {
         auto prev = previousVertex - currentVertex;
         auto next = nextVertex - currentVertex;
@@ -115,5 +183,11 @@ namespace Graphics
     bool Polygon::IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const
     {
         return GetAngle( examinedPoint, a, b ) < Resource::Pi && GetAngle( examinedPoint, b, c ) < Resource::Pi && GetAngle( examinedPoint, c, a ) < Resource::Pi;
+    }
+
+    bool Polygon::AreLinesOverlapped( const std::pair< const Point&, const Point& >& lineA, const std::pair< const Point&, const Point& >& lineB )
+    {
+        return ( ( GetAngle( lineA.first, lineA.second, lineB.first ) < Resource::Pi ) != ( GetAngle( lineA.first, lineA.second, lineB.second ) < Resource::Pi ) ) &&
+               ( ( GetAngle( lineB.first, lineB.second, lineA.first ) < Resource::Pi ) != ( GetAngle( lineB.first, lineB.second, lineA.second ) < Resource::Pi ) );
     }
 }
