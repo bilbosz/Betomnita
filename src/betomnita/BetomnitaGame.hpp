@@ -1,6 +1,7 @@
 #pragma once
 #include "game/GenericGame.hpp"
 
+#include "betomnita/Cursor.hpp"
 #include "game/graphics/Polygon.hpp"
 #include "game/graphics/Text.hpp"
 
@@ -49,5 +50,6 @@ namespace Betomnita
         Graphics::Text m_text;
         Graphics::Polygon m_polygon;
         Graphics::Polygon::PointsVector m_points;
+        Cursor m_cursor;
     };
 }

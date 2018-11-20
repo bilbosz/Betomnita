@@ -8,7 +8,7 @@
 namespace App
 {
     static const std::chrono::high_resolution_clock::time_point s_start = std::chrono::high_resolution_clock::now();
-    bool Debug::s_expensive = false;
+    bool Debug::s_expensive = true;
 
     void Debug::Breakpoint()
     {

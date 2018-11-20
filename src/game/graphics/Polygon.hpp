@@ -48,7 +48,6 @@ namespace Graphics
         bool IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const;
 
         PointsVector m_points;
-        TriangleVector m_triangles;
 
         sf::VertexArray m_vertexArray;
     };

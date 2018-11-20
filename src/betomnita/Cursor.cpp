@@ -6,17 +6,17 @@ namespace Betomnita
 {
     Cursor::Cursor()
     {
-        auto texture = sf::Texture();
-        VERIFY( texture.loadFromFile( "res/cursor/regular.png" ) );
-        m_asset.setTexture( texture, true );
+        m_top.SetPoints( { { 0.0f, 0.0f }, { 0.01f, 0.0f }, { 0.01f, 0.01f } } );
+        //m_bottom.SetPoints( { { 0.0f, -0.005f }, { 0.0f, 0.0f }, { 0.0044378496f, 0.01f } } );
     }
 
     Cursor::~Cursor()
     {
     }
 
-    void Cursor::OnRender( sf::RenderTarget& target, const sf::Transform& transformation )
+    void Cursor::Render( sf::RenderTarget& target )
     {
-        target.draw( m_asset, transformation );
+        m_top.Render( target );
+        m_bottom.Render( target );
     }
 }

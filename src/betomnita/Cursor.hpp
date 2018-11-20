@@ -1,4 +1,6 @@
 #pragma once
+#include "game/graphics/Polygon.hpp"
+
 #include <SFML/Graphics.hpp>
 
 namespace Betomnita
@@ -8,11 +10,13 @@ namespace Betomnita
     public:
         Cursor();
         ~Cursor();
-        void OnRender( sf::RenderTarget& target, const sf::Transform& transformation );
+        void Render( sf::RenderTarget& target );
 
-        void SetPosition( sf::Vector2f value )
+        void SetPosition( const sf::Vector2f& value )
         {
             m_position = value;
+            m_top.SetPosition( m_position );
+            m_bottom.SetPosition( m_position );
         }
         sf::Vector2f GetPosition() const
         {
@@ -21,6 +25,6 @@ namespace Betomnita
 
     private:
         sf::Vector2f m_position;
-        sf::Sprite m_asset;
+        Graphics::Polygon m_bottom, m_top;
     };
 }

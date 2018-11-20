@@ -31,7 +31,7 @@ namespace Graphics
         }
 #endif
         m_points = value;
-		OnPointsChange( m_points );
+        OnPointsChange( m_points );
         Triangulate();
     }
 
@@ -95,6 +95,16 @@ namespace Graphics
 
     void Polygon::OnPositionChange( const sf::Vector2f& newPosition )
     {
+        auto offset = newPosition - m_position;
+        for( auto& point : m_points )
+        {
+            point += offset;
+        }
+        for( auto i = 0; i < m_vertexArray.getVertexCount(); ++i )
+        {
+            m_vertexArray[ i ].position += offset;
+        }
+        Primitive::OnPositionChange( newPosition );
     }
 
     void Polygon::OnSizeChange( const sf::Vector2f& newSize )
@@ -107,12 +117,12 @@ namespace Graphics
 
     void Polygon::Triangulate()
     {
-		m_triangles.clear();
         m_vertexArray.clear();
         if( m_points.empty() )
         {
             return;
         }
+        auto triangles = TriangleVector();
         auto polygonVerticies = PointsList( m_points.cbegin(), m_points.cend() );
         auto adv = [&polygonVerticies]( PointsListIter& iter ) {
             std::advance( iter, 1 );
@@ -129,7 +139,7 @@ namespace Graphics
         {
             if( IsEar( polygonVerticies, prev, curr, next ) )
             {
-                m_triangles.emplace_back( *prev, *curr, *next );
+                triangles.emplace_back( *prev, *curr, *next );
                 polygonVerticies.erase( curr );
                 curr = next;
                 adv( next );
@@ -142,7 +152,7 @@ namespace Graphics
             }
         }
 
-        for( const auto& triangle : m_triangles )
+        for( const auto& triangle : triangles )
         {
             m_vertexArray.append( sf::Vertex( std::get< 0 >( triangle ), sf::Color( sf::Color::Red ) ) );
             m_vertexArray.append( sf::Vertex( std::get< 1 >( triangle ), sf::Color( sf::Color::Blue ) ) );
