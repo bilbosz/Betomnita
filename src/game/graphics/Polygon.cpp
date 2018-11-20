@@ -144,9 +144,9 @@ namespace Graphics
 
         for( const auto& triangle : m_triangles )
         {
-            m_vertexArray.append( sf::Vertex( std::get< 0 >( triangle ), sf::Color( 0xFFC31EFF ) ) );
-            m_vertexArray.append( sf::Vertex( std::get< 1 >( triangle ), sf::Color( 0xFFC31EFF ) ) );
-            m_vertexArray.append( sf::Vertex( std::get< 2 >( triangle ), sf::Color( 0xFFC31EFF ) ) );
+            m_vertexArray.append( sf::Vertex( std::get< 0 >( triangle ), sf::Color( sf::Color::Red ) ) );
+            m_vertexArray.append( sf::Vertex( std::get< 1 >( triangle ), sf::Color( sf::Color::Blue ) ) );
+            m_vertexArray.append( sf::Vertex( std::get< 2 >( triangle ), sf::Color( sf::Color::Blue ) ) );
         }
     }
 

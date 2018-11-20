@@ -87,6 +87,20 @@ namespace Betomnita
                 m_path.clear();
             }
             break;
+            case sf::Keyboard::Key::Enter:
+            {
+                auto error = Graphics::Polygon::GetPointsErrors( m_points );
+                if( !error.has_value() )
+                {
+                    m_polygon.SetPoints( m_points );
+                }
+            }
+            break;
+            case sf::Keyboard::Key::Escape:
+            {
+                RequestShutdown();
+            }
+            break;
         }
         GenericGame::OnKeyPressed( key );
     }
@@ -101,16 +115,12 @@ namespace Betomnita
         switch( button )
         {
             case sf::Mouse::Button::Left:
-            {
-                m_points.emplace_back( position );
-                m_path.append( { position, sf::Color::White } );
-                auto error = Graphics::Polygon::GetPointsErrors( m_points );
-                if( !error.has_value() )
+                if( m_points.empty() || !m_points.empty() && m_points.back() != position )
                 {
-                    m_polygon.SetPoints( m_points );
+                    m_points.emplace_back( position );
+                    m_path.append( { position, sf::Color::White } );
                 }
-            }
-            break;
+                break;
             case sf::Mouse::Button::Right:
                 break;
             case sf::Mouse::Button::Middle:
@@ -126,6 +136,14 @@ namespace Betomnita
 
     void BetomnitaGame::OnMouseMoved( const sf::Vector2f& position )
     {
+        if( sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) )
+        {
+            if( m_points.empty() || !m_points.empty() && m_points.back() != position )
+            {
+                m_points.emplace_back( position );
+                m_path.append( { position, sf::Color::White } );
+            }
+        }
         GenericGame::OnMouseMoved( position );
     }
 }
