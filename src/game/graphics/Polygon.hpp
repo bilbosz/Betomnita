@@ -44,11 +44,12 @@ namespace Graphics
         void OnPointsChange( const PointsVector& newPoints );
 
         void Triangulate();
-        bool IsEar( const PointsList& polygonVerticies, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex ) const;
+        bool IsEar( const PointsList& polygonVertices, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex ) const;
         bool IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const;
 
         PointsVector m_points;
 
+        sf::Vector2f m_appliedMove;
         sf::VertexArray m_vertexArray;
     };
 }

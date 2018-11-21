@@ -47,7 +47,6 @@ namespace Betomnita
         sf::CircleShape m_circle;
         sf::RectangleShape m_rect;
         sf::VertexArray m_path;
-        Graphics::Text m_text;
         Graphics::Polygon m_polygon;
         Graphics::Polygon::PointsVector m_points;
         Cursor m_cursor;

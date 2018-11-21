@@ -44,7 +44,7 @@ namespace Graphics
         }
         if( pointsN < 3 )
         {
-            return L"Polygon has to have at least 3 verticies";
+            return L"Polygon has to have at least 3 vertices";
         }
 
         for( auto i = 0; i < pointsN; ++i )
@@ -95,15 +95,12 @@ namespace Graphics
 
     void Polygon::OnPositionChange( const sf::Vector2f& newPosition )
     {
-        auto offset = newPosition - m_position;
-        for( auto& point : m_points )
+        auto verticesN = m_vertexArray.getVertexCount();
+        for( auto i = 0U; i < verticesN; ++i )
         {
-            point += offset;
+            m_vertexArray[ i ].position = m_vertexArray[ i ].position - m_appliedMove + m_position;
         }
-        for( auto i = 0; i < m_vertexArray.getVertexCount(); ++i )
-        {
-            m_vertexArray[ i ].position += offset;
-        }
+        m_appliedMove = m_position;
         Primitive::OnPositionChange( newPosition );
     }
 
@@ -123,24 +120,24 @@ namespace Graphics
             return;
         }
         auto triangles = TriangleVector();
-        auto polygonVerticies = PointsList( m_points.cbegin(), m_points.cend() );
-        auto adv = [&polygonVerticies]( PointsListIter& iter ) {
+        auto polygonVertices = PointsList( m_points.cbegin(), m_points.cend() );
+        auto adv = [&polygonVertices]( PointsListIter& iter ) {
             std::advance( iter, 1 );
-            if( iter == polygonVerticies.cend() )
+            if( iter == polygonVertices.cend() )
             {
-                iter = polygonVerticies.cbegin();
+                iter = polygonVertices.cbegin();
             }
         };
 
-        auto prev = polygonVerticies.cbegin();
+        auto prev = polygonVertices.cbegin();
         auto curr = std::next( prev );
         auto next = std::next( curr );
-        for( ; polygonVerticies.size() != 2; )
+        for( ; polygonVertices.size() != 2; )
         {
-            if( IsEar( polygonVerticies, prev, curr, next ) )
+            if( IsEar( polygonVertices, prev, curr, next ) )
             {
                 triangles.emplace_back( *prev, *curr, *next );
-                polygonVerticies.erase( curr );
+                polygonVertices.erase( curr );
                 curr = next;
                 adv( next );
             }
@@ -152,15 +149,41 @@ namespace Graphics
             }
         }
 
+        auto n = triangles.size();
+        auto i = 0U;
         for( const auto& triangle : triangles )
         {
-            m_vertexArray.append( sf::Vertex( std::get< 0 >( triangle ), sf::Color( sf::Color::Red ) ) );
-            m_vertexArray.append( sf::Vertex( std::get< 1 >( triangle ), sf::Color( sf::Color::Blue ) ) );
-            m_vertexArray.append( sf::Vertex( std::get< 2 >( triangle ), sf::Color( sf::Color::Blue ) ) );
+            auto f = []( float p ) {
+                p = fmod( p, 1.0f );
+                if( p <= 1.0f / 6.0f )
+                {
+                    return p * 6.0f;
+                }
+                else if( p > 1.0f / 6.0f && p <= 3.0f / 6.0f )
+                {
+                    return 1.0f;
+                }
+                else if( p > 3.0f / 6.0f && p < 4.0f / 6.0f )
+                {
+                    return 4.0f + ( -p ) * 6.0f;
+                }
+                else
+                {
+                    return 0.0f;
+                }
+            };
+            auto p = float( i ) / n;
+            auto r = 255U * f( p - 4.0f / 6.0f + 1.0f );
+            auto g = 255U * f( p );
+            auto b = 255U * f( p - 2.0f / 6.0f + 1.0f );
+            m_vertexArray.append( sf::Vertex( std::get< 0 >( triangle ), sf::Color( sf::Color( r, g, b ) ) ) );
+            m_vertexArray.append( sf::Vertex( std::get< 1 >( triangle ), sf::Color( sf::Color::Transparent ) ) );
+            m_vertexArray.append( sf::Vertex( std::get< 2 >( triangle ), sf::Color( sf::Color::Transparent ) ) );
+            ++i;
         }
     }
 
-    bool Polygon::IsEar( const PointsList& polygonVerticies, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex ) const
+    bool Polygon::IsEar( const PointsList& polygonVertices, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex ) const
     {
         auto angle = GetAngle( *previousVertex, *currentVertex, *nextVertex );
         if( angle >= Resource::Pi )
@@ -168,8 +191,8 @@ namespace Graphics
             return false;
         }
 
-        auto it = polygonVerticies.cbegin();
-        for( ; it != polygonVerticies.cend(); ++it )
+        auto it = polygonVertices.cbegin();
+        for( ; it != polygonVertices.cend(); ++it )
         {
             if( it == previousVertex || it == currentVertex || it == nextVertex )
             {

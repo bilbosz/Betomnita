@@ -34,11 +34,6 @@ namespace Betomnita
         m_flowController->RegisterState( 0, std::make_shared< MainMenuState >() );
         m_flowController->PushState( 0 );
 
-        m_text.SetFont( *Resource::DefaultFont );
-        m_text.SetPosition( { 0.0f, 0.0f } );
-        m_text.SetLineHeight( 0.1f );
-        m_text.SetHightlight( false );
-
         m_path.setPrimitiveType( sf::LineStrip );
 
         GenericGame::OnStart();
@@ -47,10 +42,9 @@ namespace Betomnita
     void BetomnitaGame::OnUpdate( sf::Time dt )
     {
         const auto& mousePosition = GetMousePosition();
-        m_cursor.SetPosition( mousePosition );
+        //m_cursor.SetPosition( mousePosition );
         std::wostringstream out;
         out << L"(" << mousePosition.x << L", " << mousePosition.y << L")";
-        m_text.SetString( out.str() );
         m_flowController->OnUpdate( dt );
 
         GenericGame::OnUpdate( dt );
@@ -58,10 +52,10 @@ namespace Betomnita
 
     void BetomnitaGame::OnRender( sf::RenderTarget& target )
     {
-        target.clear( { 128, 180, 180 } );
+        target.clear( sf::Color::White );
         m_polygon.Render( target );
         target.draw( m_path, GetToScreenTransform() );
-        m_text.Render( target );
+        //m_cursor.Render( target );
         m_window.display();
 
         GenericGame::OnRender( target );
@@ -102,6 +96,16 @@ namespace Betomnita
                 RequestShutdown();
             }
             break;
+            case sf::Keyboard::Key::H:
+            {
+                m_path.clear();
+            }
+            break;
+            case sf::Keyboard::Key::P:
+            {
+               m_window.capture().saveToFile("screenshot.png");
+            }
+            break;
         }
         GenericGame::OnKeyPressed( key );
     }
@@ -119,7 +123,7 @@ namespace Betomnita
                 if( m_points.empty() || !m_points.empty() && m_points.back() != position )
                 {
                     m_points.emplace_back( position );
-                    m_path.append( { position, sf::Color::White } );
+                    m_path.append( { position, sf::Color::Black } );
                 }
                 break;
             case sf::Mouse::Button::Right:
@@ -142,7 +146,7 @@ namespace Betomnita
             if( m_points.empty() || !m_points.empty() && m_points.back() != position )
             {
                 m_points.emplace_back( position );
-                m_path.append( { position, sf::Color::White } );
+                m_path.append( { position, sf::Color::Black } );
             }
         }
         GenericGame::OnMouseMoved( position );
