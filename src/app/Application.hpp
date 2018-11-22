@@ -83,6 +83,11 @@ namespace App
             return m_clock.GetElapsedTime();
         }
 
+        void RequestScreenshot( const std::string& path )
+        {
+            m_screenshotRequest = path;
+        }
+
     protected:
         virtual void OnStart() = 0;
         virtual void OnUpdate( sf::Time dt ) = 0;
@@ -90,6 +95,7 @@ namespace App
         virtual void OnEvent( const sf::Event& e ) = 0;
         virtual void OnVideoSettingsChanged() = 0;
         virtual void OnClose() = 0;
+        virtual void OnScreenshotTaken( const std::string& path ) = 0;
 
         sf::RenderWindow m_window;
 
@@ -97,6 +103,7 @@ namespace App
         void Tick();
         void ApplyVideoSettings();
         void HandleEvents();
+        void TakeScreenshot();
 
         static Application* s_instance;
 
@@ -115,6 +122,7 @@ namespace App
 
         bool m_shutdownRequested = false;
         bool m_videoSettingsApplyRequested = false;
+        std::string m_screenshotRequest;
 
         sf::Time m_lastTickTime;
 

@@ -32,6 +32,7 @@ namespace Game
         virtual void OnUpdate( sf::Time dt ) override;
         virtual void OnRender( sf::RenderTarget& target ) override;
         virtual void OnVideoSettingsChanged() override;
+        virtual void OnScreenshotTaken( const std::string& path ) override;
         virtual void OnClose() override;
         virtual void OnKeyPressed( const sf::Event::KeyEvent& key );
         virtual void OnKeyReleased( const sf::Event::KeyEvent& key );

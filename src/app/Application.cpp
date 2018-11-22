@@ -139,6 +139,11 @@ namespace App
         }
         OnUpdate( m_timeSkew * diff );
         OnRender( m_window );
+        if( !m_screenshotRequest.empty() )
+        {
+            TakeScreenshot();
+            m_screenshotRequest.clear();
+        }
         m_lastTickTime = now;
     }
 
@@ -149,5 +154,15 @@ namespace App
         {
             OnEvent( e );
         }
+    }
+
+    void Application::TakeScreenshot()
+    {
+        sf::Vector2u windowSize = m_window.getSize();
+        sf::Texture texture;
+        texture.create(windowSize.x, windowSize.y);
+        texture.update( m_window );
+        texture.copyToImage().saveToFile( m_screenshotRequest );
+        OnScreenshotTaken( m_screenshotRequest );
     }
 }

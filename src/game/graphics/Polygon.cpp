@@ -149,37 +149,11 @@ namespace Graphics
             }
         }
 
-        auto n = triangles.size();
-        auto i = 0U;
         for( const auto& triangle : triangles )
         {
-            auto f = []( float p ) {
-                p = fmod( p, 1.0f );
-                if( p <= 1.0f / 6.0f )
-                {
-                    return p * 6.0f;
-                }
-                else if( p > 1.0f / 6.0f && p <= 3.0f / 6.0f )
-                {
-                    return 1.0f;
-                }
-                else if( p > 3.0f / 6.0f && p < 4.0f / 6.0f )
-                {
-                    return 4.0f + ( -p ) * 6.0f;
-                }
-                else
-                {
-                    return 0.0f;
-                }
-            };
-            auto p = float( i ) / n;
-            auto r = 255U * f( p - 4.0f / 6.0f + 1.0f );
-            auto g = 255U * f( p );
-            auto b = 255U * f( p - 2.0f / 6.0f + 1.0f );
-            m_vertexArray.append( sf::Vertex( std::get< 0 >( triangle ), sf::Color( sf::Color( r, g, b ) ) ) );
+            m_vertexArray.append( sf::Vertex( std::get< 0 >( triangle ), sf::Color( sf::Color::Black ) ) );
             m_vertexArray.append( sf::Vertex( std::get< 1 >( triangle ), sf::Color( sf::Color::Transparent ) ) );
             m_vertexArray.append( sf::Vertex( std::get< 2 >( triangle ), sf::Color( sf::Color::Transparent ) ) );
-            ++i;
         }
     }
 

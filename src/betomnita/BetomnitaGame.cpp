@@ -103,7 +103,7 @@ namespace Betomnita
             break;
             case sf::Keyboard::Key::P:
             {
-               m_window.capture().saveToFile("screenshot.png");
+                RequestScreenshot( "screenshot.png" );
             }
             break;
         }

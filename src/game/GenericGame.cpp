@@ -123,6 +123,10 @@ namespace Game
         UpdateModelToScreen();
     }
 
+    void GenericGame::OnScreenshotTaken( const std::string& path )
+    {
+    }
+
     void GenericGame::OnClose()
     {
         m_window.close();
