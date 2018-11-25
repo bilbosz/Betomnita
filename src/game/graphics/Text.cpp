@@ -33,34 +33,34 @@ namespace Graphics
         target.draw( m_text );
     }
 
-    void Text::OnPositionChange( const sf::Vector2f& newPosition )
+    void Text::OnPositionChange()
     {
-        m_text.setPosition( Game::GenericGame::GetInstance()->GetToScreenTransform().transformPoint( newPosition ) );
-        Primitive::OnPositionChange( newPosition );
+        m_text.setPosition( Game::GenericGame::GetInstance()->GetToScreenTransform().transformPoint( m_position ) );
+        Primitive::OnPositionChange();
     }
 
-    void Text::OnSizeChange( const sf::Vector2f& newSize )
+    void Text::OnSizeChange()
     {
         ASSERT( false, L"Text should not be changed by changing size but by line height." );
-        Primitive::OnSizeChange( newSize );
+        Primitive::OnSizeChange();
     }
 
-    void Text::OnStringChange( const std::wstring& newString )
+    void Text::OnStringChange()
     {
-        m_text.setString( newString );
+        m_text.setString( m_string );
         UpdateSize();
     }
 
-    void Text::OnFontChange( const sf::Font& newFont )
+    void Text::OnFontChange()
     {
-        m_text.setFont( newFont );
+        m_text.setFont( m_font );
         UpdateCharacterSize();
         UpdateSize();
     }
 
-    void Text::OnLineHeightChange( float newLineHeight )
+    void Text::OnLineHeightChange()
     {
-        ASSERT( newLineHeight > 0.0f, L"Line height has to be greater than zero" );
+        ASSERT( m_lineHeight > 0.0f, L"Line height has to be greater than zero" );
         UpdateCharacterSize();
         UpdateSize();
     }
@@ -85,6 +85,6 @@ namespace Graphics
         auto toModelTransform = game->GetToModelTransform();
         auto left = toModelTransform.transformPoint( { m_text.getGlobalBounds().left, 0 } );
         m_size = { left.x - GetPosition().x + m_text.getGlobalBounds().width * toModelScale, m_lineHeight };
-        Primitive::OnSizeChange( m_size );
+        Primitive::OnSizeChange();
     }
 }

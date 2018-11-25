@@ -19,20 +19,20 @@ namespace Graphics
 
         virtual void Render( sf::RenderTarget& target );
 
-        void SetPosition( const sf::Vector2f value )
+        void SetPosition( const sf::Vector2f& value )
         {
             m_position = value;
-            OnPositionChange( m_position );
+            OnPositionChange();
         }
         const sf::Vector2f& GetPosition() const
         {
             return m_position;
         }
 
-        void SetSize( const sf::Vector2f value )
+        void SetSize( const sf::Vector2f& value )
         {
             m_size = value;
-            OnSizeChange( m_size );
+            OnSizeChange();
         }
         const sf::Vector2f& GetSize() const
         {
@@ -55,8 +55,8 @@ namespace Graphics
     protected:
         virtual void Init();
 
-        virtual void OnPositionChange( const sf::Vector2f& newPosition );
-        virtual void OnSizeChange( const sf::Vector2f& newSize );
+        virtual void OnPositionChange();
+        virtual void OnSizeChange();
 
         sf::Vector2f m_position;
         sf::Vector2f m_size;

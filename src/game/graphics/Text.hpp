@@ -20,7 +20,7 @@ namespace Graphics
         void SetString( const std::wstring& value )
         {
             m_string = value;
-            OnStringChange( m_string );
+            OnStringChange();
         }
 
         const sf::Font& GetFont() const
@@ -30,7 +30,7 @@ namespace Graphics
         void SetFont( const sf::Font& value )
         {
             m_font = value;
-            OnFontChange( m_font );
+            OnFontChange();
         }
 
         float GetLineHeight() const
@@ -40,15 +40,15 @@ namespace Graphics
         void SetLineHeight( float value )
         {
             m_lineHeight = value;
-            OnLineHeightChange( m_lineHeight );
+            OnLineHeightChange();
         }
 
     private:
-        void OnPositionChange( const sf::Vector2f& newPosition ) override;
-        void OnSizeChange( const sf::Vector2f& newSize ) override;
-        void OnStringChange( const std::wstring& newString );
-        void OnFontChange( const sf::Font& newFont );
-        void OnLineHeightChange( float newLineHeight );
+        void OnPositionChange() override;
+        void OnSizeChange() override;
+        void OnStringChange();
+        void OnFontChange();
+        void OnLineHeightChange();
 
         void UpdateCharacterSize();
         void UpdateSize();

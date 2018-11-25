@@ -31,17 +31,17 @@ namespace Graphics
 #endif
     }
 
-    void Primitive::OnPositionChange( const sf::Vector2f& newPosition )
+    void Primitive::OnPositionChange()
     {
 #ifdef DEBUG
-        m_debugRect.setPosition( newPosition );
+        m_debugRect.setPosition( m_position );
 #endif
     }
 
-    void Primitive::OnSizeChange( const sf::Vector2f& newSize )
+    void Primitive::OnSizeChange()
     {
 #ifdef DEBUG
-        m_debugRect.setSize( newSize );
+        m_debugRect.setSize( m_size );
 #endif
     }
 }

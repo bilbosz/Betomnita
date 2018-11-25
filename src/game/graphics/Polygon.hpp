@@ -39,9 +39,9 @@ namespace Graphics
 
         void Init() override;
 
-        void OnPositionChange( const sf::Vector2f& newPosition );
-        void OnSizeChange( const sf::Vector2f& newSize );
-        void OnPointsChange( const PointsVector& newPoints );
+        void OnPositionChange();
+        void OnSizeChange();
+        void OnPointsChange();
 
         void Triangulate();
         bool IsEar( const PointsList& polygonVertices, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex ) const;

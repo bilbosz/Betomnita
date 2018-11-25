@@ -31,7 +31,7 @@ namespace Graphics
         }
 #endif
         m_points = value;
-        OnPointsChange( m_points );
+        OnPointsChange();
         Triangulate();
     }
 
@@ -93,7 +93,7 @@ namespace Graphics
         Primitive::Init();
     }
 
-    void Polygon::OnPositionChange( const sf::Vector2f& newPosition )
+    void Polygon::OnPositionChange()
     {
         auto verticesN = m_vertexArray.getVertexCount();
         for( auto i = 0U; i < verticesN; ++i )
@@ -101,14 +101,14 @@ namespace Graphics
             m_vertexArray[ i ].position = m_vertexArray[ i ].position - m_appliedMove + m_position;
         }
         m_appliedMove = m_position;
-        Primitive::OnPositionChange( newPosition );
+        Primitive::OnPositionChange();
     }
 
-    void Polygon::OnSizeChange( const sf::Vector2f& newSize )
+    void Polygon::OnSizeChange()
     {
     }
 
-    void Polygon::OnPointsChange( const PointsVector& newPoints )
+    void Polygon::OnPointsChange()
     {
     }
 
