@@ -90,7 +90,7 @@ namespace App
 
     protected:
         virtual void OnStart() = 0;
-        virtual void OnUpdate( sf::Time dt ) = 0;
+        virtual void OnUpdate( const sf::Time& dt ) = 0;
         virtual void OnRender( sf::RenderTarget& target ) = 0;
         virtual void OnEvent( const sf::Event& e ) = 0;
         virtual void OnVideoSettingsChanged() = 0;

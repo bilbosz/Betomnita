@@ -29,7 +29,7 @@ namespace Game
 
     protected:
         virtual void OnStart() override;
-        virtual void OnUpdate( sf::Time dt ) override;
+        virtual void OnUpdate( const sf::Time& dt ) override;
         virtual void OnRender( sf::RenderTarget& target ) override;
         virtual void OnVideoSettingsChanged() override;
         virtual void OnScreenshotTaken( const std::string& path ) override;

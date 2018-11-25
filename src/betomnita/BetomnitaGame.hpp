@@ -7,6 +7,7 @@
 
 namespace Game
 {
+    template< class StateId >
     class StateMachine;
 }
 
@@ -17,14 +18,6 @@ namespace Betomnita
     class BetomnitaGame final : public Game::GenericGame
     {
     public:
-        enum class States
-        {
-            Undefined = -1,
-            MainMenu,
-            Gameplay,
-            Pause,
-        };
-
         BetomnitaGame();
         ~BetomnitaGame();
 
@@ -32,7 +25,7 @@ namespace Betomnita
 
     private:
         void OnStart() override;
-        void OnUpdate( sf::Time dt ) override;
+        void OnUpdate( const sf::Time& dt ) override;
         void OnRender( sf::RenderTarget& target ) override;
         void OnVideoSettingsChanged() override;
         void OnClose() override;
@@ -43,7 +36,7 @@ namespace Betomnita
         void OnMouseMoved( const sf::Vector2f& position ) override;
 
         static BetomnitaGame* s_instance;
-        std::unique_ptr< Game::StateMachine > m_flowController;
+        std::unique_ptr< Game::StateMachine< Resource::StateId > > m_stateMachine;
         sf::CircleShape m_circle;
         sf::RectangleShape m_rect;
         sf::VertexArray m_path;

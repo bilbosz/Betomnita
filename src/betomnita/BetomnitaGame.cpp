@@ -11,7 +11,7 @@ namespace Betomnita
 {
     BetomnitaGame* BetomnitaGame::s_instance = nullptr;
 
-    BetomnitaGame::BetomnitaGame() : m_flowController( std::make_unique< Game::StateMachine >() )
+    BetomnitaGame::BetomnitaGame() : m_stateMachine( std::make_unique< Game::StateMachine< Resource::StateId > >() )
     {
         ASSERT( !s_instance, L"There can be only one instance of Betomnita game" );
         s_instance = this;
@@ -31,21 +31,21 @@ namespace Betomnita
 
     void BetomnitaGame::OnStart()
     {
-        m_flowController->RegisterState( 0, std::make_shared< MainMenuState >() );
-        m_flowController->PushState( 0 );
+        m_stateMachine->RegisterState( Resource::StateId::MainMenu, std::make_shared< MainMenuState >() );
+        m_stateMachine->PushState( Resource::StateId::MainMenu );
 
         m_path.setPrimitiveType( sf::LineStrip );
 
         GenericGame::OnStart();
     };
 
-    void BetomnitaGame::OnUpdate( sf::Time dt )
+    void BetomnitaGame::OnUpdate( const sf::Time& dt )
     {
         const auto& mousePosition = GetMousePosition();
-        //m_cursor.SetPosition( mousePosition );
+        m_cursor.SetPosition( mousePosition );
         std::wostringstream out;
         out << L"(" << mousePosition.x << L", " << mousePosition.y << L")";
-        m_flowController->OnUpdate( dt );
+        m_stateMachine->OnUpdate( dt );
 
         GenericGame::OnUpdate( dt );
     }
@@ -55,7 +55,7 @@ namespace Betomnita
         target.clear( sf::Color::White );
         m_polygon.Render( target );
         target.draw( m_path, GetToScreenTransform() );
-        //m_cursor.Render( target );
+        m_cursor.Render( target );
         m_window.display();
 
         GenericGame::OnRender( target );

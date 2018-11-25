@@ -5,7 +5,7 @@
 
 namespace Betomnita
 {
-    MainMenuState::MainMenuState()
+    MainMenuState::MainMenuState() : State( Resource::StateId::MainMenu )
     {
     }
 
@@ -13,15 +13,38 @@ namespace Betomnita
     {
     }
 
-    void MainMenuState::OnEnter()
+    void MainMenuState::OnRegister()
     {
+        State::OnRegister();
     }
 
-    void MainMenuState::OnUpdate( sf::Time dt )
+    void MainMenuState::OnUnregister()
     {
+        State::OnUnregister();
     }
 
-    void MainMenuState::OnExit()
+    void MainMenuState::OnActivate()
     {
+        State::OnActivate();
+    }
+
+    void MainMenuState::OnDeactivate()
+    {
+        State::OnDeactivate();
+    }
+
+    void MainMenuState::OnForeground()
+    {
+        State::OnForeground();
+    }
+
+    void MainMenuState::OnBackground()
+    {
+        State::OnBackground();
+    }
+
+    void MainMenuState::OnUpdate( const sf::Time& dt )
+    {
+        State::OnUpdate( dt );
     }
 }

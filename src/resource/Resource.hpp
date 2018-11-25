@@ -7,6 +7,15 @@ namespace Resource
     void Init();
     void Dispose();
 
+    enum class StateId
+    {
+        Undefined = -1,
+        MainMenu,
+        Gameplay,
+        Pause,
+        Size,
+    };
+
     extern const std::wstring WindowTitle;
     extern sf::Font* DebugFont;
     extern sf::Font* DefaultFont;

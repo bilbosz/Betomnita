@@ -68,7 +68,7 @@ namespace Game
     {
     }
 
-    void GenericGame::OnUpdate( sf::Time dt )
+    void GenericGame::OnUpdate( const sf::Time& dt )
     {
         m_gameTime += dt;
     }
