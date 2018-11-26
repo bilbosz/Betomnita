@@ -6,8 +6,12 @@ namespace Betomnita
 {
     Cursor::Cursor()
     {
-        m_top.SetPoints( { { 0.0f, 0.0f }, { 0.024749499f * 1.3f, 0.01f * 1.3f }, { 0.012481449f * 1.3f, 0.01f * 1.3f } } );
-        m_bottom.SetPoints( { { 0.0f, 0.0f }, { 0.011094624f * 1.3f, 0.0125f * 1.3f }, { 0.011094624f * 1.3f, 0.025f * 1.3f } } );
+        m_shape.SetPoints( {
+            { 0.0f, 0.0f },
+            { 0.02f, 0.012f },
+            { 0.012f, 0.02f },
+        } );
+        m_shape.SetColor( sf::Color( 100, 100, 100, 255 ) );
     }
 
     Cursor::~Cursor()
@@ -16,7 +20,6 @@ namespace Betomnita
 
     void Cursor::Render( sf::RenderTarget& target )
     {
-        m_top.Render( target );
-        m_bottom.Render( target );
+        m_shape.Render( target );
     }
 }

@@ -17,9 +17,7 @@ namespace Betomnita
         ASSERT( !s_instance, L"There can be only one instance of Betomnita game" );
         s_instance = this;
 
-        m_stateMachine->RegisterState( Resource::StateId::MainMenu, std::make_shared< MainMenuState >() );
-        m_stateMachine->RegisterState( Resource::StateId::Gameplay, std::make_shared< MainMenuState >() );
-        m_stateMachine->RegisterState( Resource::StateId::Pause, std::make_shared< MainMenuState >() );
+        m_stateMachine->RegisterState( std::make_shared< MainMenuState >() );
     }
 
     BetomnitaGame::~BetomnitaGame()
@@ -56,7 +54,7 @@ namespace Betomnita
 
     void BetomnitaGame::OnRender( sf::RenderTarget& target )
     {
-        target.clear( sf::Color::White );
+        target.clear( sf::Color( 200, 230, 255, 255 ) );
         m_polygon.Render( target );
         target.draw( m_path, GetToScreenTransform() );
         m_cursor.Render( target );

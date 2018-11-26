@@ -17,7 +17,7 @@ namespace Game
         using StatePtr = std::shared_ptr< StateType >;
         using StateWeakPtr = std::weak_ptr< StateType >;
 
-        void RegisterState( StateId id, StatePtr state );
+        void RegisterState( StatePtr state );
         void UnregisterState( StateId id );
         bool IsStateRegistered( StateId id ) const
         {
@@ -42,11 +42,11 @@ namespace Game
     };
 
     template< class StateId >
-    void StateMachine< StateId >::RegisterState( StateId id, StatePtr state )
+    void StateMachine< StateId >::RegisterState( StatePtr state )
     {
-        VERIFY( !IsStateRegistered( id ) );
+        VERIFY( !IsStateRegistered( state->GetId() ) );
         
-        m_registeredStates[ static_cast< size_t >( id ) ] = state;
+        m_registeredStates[ static_cast< size_t >( state->GetId() ) ] = state;
         state->m_isRegistered = true;
         state->OnRegister();
     }

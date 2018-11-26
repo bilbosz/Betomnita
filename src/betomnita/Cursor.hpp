@@ -10,13 +10,13 @@ namespace Betomnita
     public:
         Cursor();
         ~Cursor();
+
         void Render( sf::RenderTarget& target );
 
         void SetPosition( const sf::Vector2f& value )
         {
             m_position = value;
-            m_top.SetPosition( m_position );
-            m_bottom.SetPosition( m_position );
+            m_shape.SetPosition( m_position );
         }
         sf::Vector2f GetPosition() const
         {
@@ -25,6 +25,6 @@ namespace Betomnita
 
     private:
         sf::Vector2f m_position;
-        Graphics::Polygon m_bottom, m_top;
+        Graphics::Polygon m_shape;
     };
 }
