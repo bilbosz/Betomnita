@@ -21,4 +21,5 @@ namespace Resource
     extern sf::Font* DefaultFont;
     extern unsigned int DefaultCharacterSize;
     extern float Pi;
+    extern const std::string ScreenshotPath;
 }

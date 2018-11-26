@@ -35,6 +35,16 @@ namespace Graphics
         Triangulate();
     }
 
+    void Polygon::SetColor( const sf::Color& value )
+    {
+        m_color = value;
+        auto verticesN = m_vertexArray.getVertexCount();
+        for( auto i = 0U; i < verticesN; ++i )
+        {
+            m_vertexArray[ i ].color = m_color;
+        }
+    }
+
     std::optional< std::wstring > Polygon::GetPointsErrors( const PointsVector& points )
     {
         auto pointsN = points.size();
@@ -151,9 +161,9 @@ namespace Graphics
 
         for( const auto& triangle : triangles )
         {
-            m_vertexArray.append( sf::Vertex( std::get< 0 >( triangle ), sf::Color( sf::Color::Black ) ) );
-            m_vertexArray.append( sf::Vertex( std::get< 1 >( triangle ), sf::Color( sf::Color::Transparent ) ) );
-            m_vertexArray.append( sf::Vertex( std::get< 2 >( triangle ), sf::Color( sf::Color::Transparent ) ) );
+            m_vertexArray.append( sf::Vertex( std::get< 0 >( triangle ), m_color ) );
+            m_vertexArray.append( sf::Vertex( std::get< 1 >( triangle ), m_color ) );
+            m_vertexArray.append( sf::Vertex( std::get< 2 >( triangle ), m_color ) );
         }
     }
 

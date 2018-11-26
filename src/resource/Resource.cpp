@@ -28,4 +28,6 @@ namespace Resource
     unsigned int DefaultCharacterSize = 30;
 
     float Pi = 2.0f * asinf( 1.0f );
+
+    const std::string ScreenshotPath = "screenshot.png";
 }

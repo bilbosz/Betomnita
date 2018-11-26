@@ -5,6 +5,7 @@
 #include "betomnita/state/MainMenuState.hpp"
 #include "game/StateMachine.hpp"
 
+#include <random>
 #include <sstream>
 
 namespace Betomnita
@@ -15,6 +16,10 @@ namespace Betomnita
     {
         ASSERT( !s_instance, L"There can be only one instance of Betomnita game" );
         s_instance = this;
+
+        m_stateMachine->RegisterState( Resource::StateId::MainMenu, std::make_shared< MainMenuState >() );
+        m_stateMachine->RegisterState( Resource::StateId::Gameplay, std::make_shared< MainMenuState >() );
+        m_stateMachine->RegisterState( Resource::StateId::Pause, std::make_shared< MainMenuState >() );
     }
 
     BetomnitaGame::~BetomnitaGame()
@@ -31,7 +36,6 @@ namespace Betomnita
 
     void BetomnitaGame::OnStart()
     {
-        m_stateMachine->RegisterState( Resource::StateId::MainMenu, std::make_shared< MainMenuState >() );
         m_stateMachine->PushState( Resource::StateId::MainMenu );
 
         m_path.setPrimitiveType( sf::LineStrip );
@@ -75,35 +79,14 @@ namespace Betomnita
     {
         switch( key.code )
         {
-            case sf::Keyboard::Key::Delete:
-            {
-                m_points.clear();
-                m_polygon.SetPoints( m_points );
-                m_path.clear();
-            }
-            break;
-            case sf::Keyboard::Key::Enter:
-            {
-                auto error = Graphics::Polygon::GetPointsErrors( m_points );
-                if( !error.has_value() )
-                {
-                    m_polygon.SetPoints( m_points );
-                }
-            }
-            break;
             case sf::Keyboard::Key::Escape:
             {
                 RequestShutdown();
             }
             break;
-            case sf::Keyboard::Key::H:
+            case sf::Keyboard::Key::F12:
             {
-                m_path.clear();
-            }
-            break;
-            case sf::Keyboard::Key::P:
-            {
-                RequestScreenshot( "screenshot.png" );
+                RequestScreenshot( Resource::ScreenshotPath );
             }
             break;
         }
@@ -120,11 +103,6 @@ namespace Betomnita
         switch( button )
         {
             case sf::Mouse::Button::Left:
-                if( m_points.empty() || !m_points.empty() && m_points.back() != position )
-                {
-                    m_points.emplace_back( position );
-                    m_path.append( { position, sf::Color::Black } );
-                }
                 break;
             case sf::Mouse::Button::Right:
                 break;
@@ -141,14 +119,6 @@ namespace Betomnita
 
     void BetomnitaGame::OnMouseMoved( const sf::Vector2f& position )
     {
-        if( sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) )
-        {
-            if( m_points.empty() || !m_points.empty() && m_points.back() != position )
-            {
-                m_points.emplace_back( position );
-                m_path.append( { position, sf::Color::Black } );
-            }
-        }
         GenericGame::OnMouseMoved( position );
     }
 }

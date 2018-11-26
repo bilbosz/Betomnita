@@ -6,8 +6,8 @@ namespace Betomnita
 {
     Cursor::Cursor()
     {
-        m_top.SetPoints( { { 0.0f, 0.0f }, { 0.098997996f, 0.04f }, { 0.049925796f, 0.04f } } );
-        m_bottom.SetPoints( { { 0.0f, 0.0f }, { 0.044378496f, 0.05f }, { 0.044378496f, 0.1f } } );
+        m_top.SetPoints( { { 0.0f, 0.0f }, { 0.024749499f * 1.3f, 0.01f * 1.3f }, { 0.012481449f * 1.3f, 0.01f * 1.3f } } );
+        m_bottom.SetPoints( { { 0.0f, 0.0f }, { 0.011094624f * 1.3f, 0.0125f * 1.3f }, { 0.011094624f * 1.3f, 0.025f * 1.3f } } );
     }
 
     Cursor::~Cursor()

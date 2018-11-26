@@ -31,6 +31,12 @@ namespace Graphics
         }
         void SetPoints( const PointsVector& value );
 
+        const sf::Color& GetColor() const
+        {
+            return m_color;
+        }
+        void SetColor( const sf::Color& value );
+
         static std::optional< std::wstring > GetPointsErrors( const PointsVector& value );
 
     private:
@@ -48,6 +54,7 @@ namespace Graphics
         bool IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const;
 
         PointsVector m_points;
+        sf::Color m_color;
 
         sf::Vector2f m_appliedMove;
         sf::VertexArray m_vertexArray;
