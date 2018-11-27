@@ -5,7 +5,7 @@
 
 namespace Betomnita
 {
-    MainMenuState::MainMenuState() : State( Resource::StateId::MainMenu )
+    MainMenuState::MainMenuState() : State( Resource::StateId::MainMenu ), m_layout()
     {
     }
 
@@ -25,6 +25,7 @@ namespace Betomnita
 
     void MainMenuState::OnActivate()
     {
+        m_layout.Show();
         State::OnActivate();
     }
 
@@ -46,5 +47,11 @@ namespace Betomnita
     void MainMenuState::OnUpdate( const sf::Time& dt )
     {
         State::OnUpdate( dt );
+    }
+
+    void MainMenuState::OnRender( sf::RenderTarget& target )
+    {
+        m_layout.OnRender( target );
+        State::OnRender( target );
     }
 }

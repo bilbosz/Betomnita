@@ -35,6 +35,7 @@ namespace Game
         }
 
         void OnUpdate( const sf::Time& dt );
+        void OnRender( sf::RenderTarget& target );
 
     private:
         std::array< StatePtr, static_cast< size_t >( StateId::Size ) > m_registeredStates;
@@ -45,7 +46,7 @@ namespace Game
     void StateMachine< StateId >::RegisterState( StatePtr state )
     {
         VERIFY( !IsStateRegistered( state->GetId() ) );
-        
+
         m_registeredStates[ static_cast< size_t >( state->GetId() ) ] = state;
         state->m_isRegistered = true;
         state->OnRegister();
@@ -56,7 +57,7 @@ namespace Game
     {
         VERIFY( IsStateRegistered( id ) );
         VERIFY( !IsStateActive( id ) )
-        
+
         auto& toUnregister = m_registeredStates[ static_cast< size_t >( id ) ];
         toUnregister->m_isRegistered = false;
         toUnregister->OnUnregister();
@@ -68,7 +69,7 @@ namespace Game
     {
         VERIFY( IsStateRegistered( id ) );
         VERIFY( !IsStateActive( id ) );
-        
+
         if( !IsStackEmpty() )
         {
             auto& fg = m_activeStates.back();
@@ -96,7 +97,7 @@ namespace Game
         fg->m_isActive = false;
         fg->OnDeactivate();
         m_activeStates.pop_back();
-        
+
         if( !IsStackEmpty() )
         {
             auto& fg = m_activeStates.back();
@@ -125,6 +126,15 @@ namespace Game
         for( auto& state : m_activeStates )
         {
             state->OnUpdate( dt );
+        }
+    }
+
+    template< class StateId >
+    inline void StateMachine< StateId >::OnRender( sf::RenderTarget& target )
+    {
+        for( auto& state : m_activeStates )
+        {
+            state->OnRender( target );
         }
     }
 }

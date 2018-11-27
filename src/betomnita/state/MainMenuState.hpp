@@ -1,4 +1,5 @@
 #pragma once
+#include "betomnita/layout/MainMenuLayout.hpp"
 #include "game/State.hpp"
 #include "resource/Resource.hpp"
 
@@ -19,5 +20,9 @@ namespace Betomnita
         void OnForeground() override;
         void OnBackground() override;
         void OnUpdate( const sf::Time& dt ) override;
+        void OnRender( sf::RenderTarget& target ) override;
+
+    private:
+        Layout::MainMenuLayout m_layout;
     };
 }

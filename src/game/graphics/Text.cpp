@@ -65,6 +65,11 @@ namespace Graphics
         UpdateSize();
     }
 
+    void Text::OnColorChange()
+    {
+        m_text.setFillColor( m_color );
+    }
+
     void Text::UpdateCharacterSize()
     {
         auto toModelScale = Game::GenericGame::GetInstance()->GetToModelScale().x;

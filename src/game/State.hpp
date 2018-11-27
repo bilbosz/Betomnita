@@ -3,7 +3,6 @@
 
 #include <SFML/System.hpp>
 
-
 namespace Game
 {
     template< class Id >
@@ -79,9 +78,10 @@ namespace Game
         }
         virtual void OnUpdate( const sf::Time& dt )
         {
-#ifdef DEBUG
-            //MESSAGE( L"STATE updated: " << static_cast< int >( GetId() ) );
-#endif
+        }
+
+        virtual void OnRender( sf::RenderTarget& target )
+        {
         }
 
     private:

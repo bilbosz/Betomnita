@@ -43,12 +43,23 @@ namespace Graphics
             OnLineHeightChange();
         }
 
+        void SetColor( const sf::Color value )
+        {
+            m_color = value;
+            OnColorChange();
+        }
+        const sf::Color& GetColor()
+        {
+            return m_color;
+        }
+
     private:
         void OnPositionChange() override;
         void OnSizeChange() override;
         void OnStringChange();
         void OnFontChange();
         void OnLineHeightChange();
+        void OnColorChange();
 
         void UpdateCharacterSize();
         void UpdateSize();
@@ -57,6 +68,7 @@ namespace Graphics
         sf::Font m_font;
         float m_lineHeight = 0.0f;
         sf::Text m_text;
+        sf::Color m_color;
 
         float m_fontLineSpacing = 0;
     };

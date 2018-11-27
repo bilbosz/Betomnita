@@ -1,10 +1,6 @@
 #pragma once
 #include "game/GenericGame.hpp"
 
-#include "betomnita/Cursor.hpp"
-#include "game/graphics/Polygon.hpp"
-#include "game/graphics/Text.hpp"
-
 namespace Game
 {
     template< class StateId >
@@ -37,11 +33,6 @@ namespace Betomnita
 
         static BetomnitaGame* s_instance;
         std::unique_ptr< Game::StateMachine< Resource::StateId > > m_stateMachine;
-        sf::CircleShape m_circle;
-        sf::RectangleShape m_rect;
-        sf::VertexArray m_path;
-        Graphics::Polygon m_polygon;
-        Graphics::Polygon::PointsVector m_points;
-        Cursor m_cursor;
+        std::unique_ptr< Cursor > m_cursor;
     };
 }
