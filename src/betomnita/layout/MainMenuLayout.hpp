@@ -14,19 +14,15 @@ namespace Betomnita::Layout
 {
     class MainMenuLayout
     {
-    public:
+    private:
         enum class EntryId
         {
             NewGame,
             Exit,
         };
-        struct Option
-        {
-            EntryId Entry;
-            std::wstring Text;
-            std::function< void() > OnEnter;
-        };
+        struct Option;
         using OptionList = std::vector< Option >;
+    public:
 
         MainMenuLayout();
         ~MainMenuLayout();
@@ -36,6 +32,13 @@ namespace Betomnita::Layout
         void OnRender( sf::RenderTarget& target );
 
     private:
+        struct Option
+        {
+            EntryId Entry;
+            std::wstring Text;
+            std::unique_ptr< Graphics::Text > Control;
+            std::function< void() > OnEnter;
+        };
         std::unique_ptr< Graphics::Text > m_title;
         OptionList m_options;
     };

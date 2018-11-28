@@ -11,7 +11,7 @@ namespace Betomnita
             { 0.02f, 0.012f },
             { 0.012f, 0.02f },
         } );
-        m_shape.SetColor( sf::Color( 100, 100, 100, 255 ) );
+        m_shape.SetColor( sf::Color::Black );
     }
 
     Cursor::~Cursor()

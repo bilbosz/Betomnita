@@ -4,6 +4,7 @@
 #include "betomnita/Cursor.hpp"
 #include "betomnita/state/MainMenuState.hpp"
 #include "game/StateMachine.hpp"
+#include "game/graphics/Text.hpp"
 
 #include <random>
 #include <sstream>
@@ -16,8 +17,6 @@ namespace Betomnita
     {
         ASSERT( !s_instance, L"There can be only one instance of Betomnita game" );
         s_instance = this;
-
-        m_stateMachine->RegisterState( std::make_shared< MainMenuState >() );
     }
 
     BetomnitaGame::~BetomnitaGame()
@@ -34,6 +33,7 @@ namespace Betomnita
 
     void BetomnitaGame::OnStart()
     {
+        m_stateMachine->RegisterState( std::make_shared< MainMenuState >() );
         m_stateMachine->PushState( Resource::StateId::MainMenu );
 
         GenericGame::OnStart();

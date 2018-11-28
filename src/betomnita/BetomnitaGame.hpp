@@ -7,6 +7,11 @@ namespace Game
     class StateMachine;
 }
 
+namespace Graphics
+{
+    class Text;
+}
+
 namespace Betomnita
 {
     class Cursor;

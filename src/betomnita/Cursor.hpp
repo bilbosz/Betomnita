@@ -18,7 +18,7 @@ namespace Betomnita
             m_position = value;
             m_shape.SetPosition( m_position );
         }
-        sf::Vector2f GetPosition() const
+        const sf::Vector2f& GetPosition() const
         {
             return m_position;
         }

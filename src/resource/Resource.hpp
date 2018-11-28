@@ -16,6 +16,7 @@ namespace Resource
         Size,
     };
 
+    extern const std::wstring GameName;
     extern const std::wstring WindowTitle;
     extern sf::Font* DebugFont;
     extern sf::Font* DefaultFont;

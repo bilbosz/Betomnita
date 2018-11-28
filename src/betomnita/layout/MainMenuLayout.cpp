@@ -8,14 +8,25 @@ namespace Betomnita::Layout
 {
     MainMenuLayout::MainMenuLayout() : m_title( std::make_unique< Graphics::Text >() )
     {
-        m_title->SetString( Resource::WindowTitle );
+        m_title->SetColor( sf::Color( 100, 100, 100, 255 ) );
+        m_title->SetString( Resource::GameName );
         m_title->SetFont( *Resource::DefaultFont );
-        m_title->SetPosition( { 0.0f, 0.1f } );
+        m_title->SetPosition( { 0.1f, 0.1f } );
         m_title->SetLineHeight( 0.1f );
-        m_title->SetColor( sf::Color::White );
 
-        m_options.push_back( { EntryId::NewGame, L"New Game", []() { MESSAGE( L"New Game Requested" ); } } );
-        m_options.push_back( { EntryId::Exit, L"Quit Game", []() { App::Application::GetInstance()->RequestShutdown(); } } );
+        m_options.push_back( { EntryId::NewGame, L"New Game", std::make_unique< Graphics::Text >(), []() { MESSAGE( L"New Game Requested" ); } } );
+        m_options.push_back( { EntryId::Exit, L"Quit Game", std::make_unique< Graphics::Text >(), []() { App::Application::GetInstance()->RequestShutdown(); } } );
+        auto y = 0.25f; 
+        auto x = 0.1f;
+        for( auto& option : m_options )
+        {
+            option.Control->SetColor( sf::Color( 150, 150, 150, 255 ) );
+            option.Control->SetString( option.Text );
+            option.Control->SetFont( *Resource::DefaultFont );
+            option.Control->SetLineHeight( 0.05f );
+            option.Control->SetPosition( { x, y } );
+            y += 2.0f * option.Control->GetLineHeight();
+        }
     }
 
     MainMenuLayout::~MainMenuLayout()
@@ -24,11 +35,18 @@ namespace Betomnita::Layout
 
     void MainMenuLayout::Show()
     {
-        
+    }
+
+    void MainMenuLayout::Hide()
+    {
     }
 
     void MainMenuLayout::OnRender( sf::RenderTarget& target )
     {
         m_title->Render( target );
+        for( const auto& option : m_options )
+        {
+            option.Control->Render( target );
+        }
     }
 }

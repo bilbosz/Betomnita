@@ -20,6 +20,8 @@ namespace Resource
         delete DefaultFont;
     }
 
+    const std::wstring GameName = Betomnita_PROJECT;
+
     const std::wstring WindowTitle = Betomnita_PROJECT L" " Betomnita_VERSION_MAJOR L"." Betomnita_VERSION_MINOR L"." Betomnita_VERSION_PATCH;
 
     sf::Font* DebugFont;

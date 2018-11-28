@@ -3,6 +3,7 @@
 
 #include "app/Debug.hpp"
 
+#include <SFML/Graphics.hpp>
 #include <map>
 #include <memory>
 #include <vector>
