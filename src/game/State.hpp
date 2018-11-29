@@ -1,7 +1,7 @@
 #pragma once
 #include "app/Debug.hpp"
 
-#include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
 
 namespace Game
 {

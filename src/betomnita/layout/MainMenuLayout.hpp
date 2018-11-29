@@ -30,6 +30,7 @@ namespace Betomnita::Layout
         void Show();
         void Hide();
         void OnRender( sf::RenderTarget& target );
+        void OnUpdate( const sf::Time& dt );
 
     private:
         struct Option

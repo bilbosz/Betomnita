@@ -16,7 +16,7 @@ namespace Betomnita::Layout
 
         m_options.push_back( { EntryId::NewGame, L"New Game", std::make_unique< Graphics::Text >(), []() { MESSAGE( L"New Game Requested" ); } } );
         m_options.push_back( { EntryId::Exit, L"Quit Game", std::make_unique< Graphics::Text >(), []() { App::Application::GetInstance()->RequestShutdown(); } } );
-        auto y = 0.25f; 
+        auto y = 0.25f;
         auto x = 0.1f;
         for( auto& option : m_options )
         {
@@ -25,7 +25,7 @@ namespace Betomnita::Layout
             option.Control->SetFont( *Resource::DefaultFont );
             option.Control->SetLineHeight( 0.05f );
             option.Control->SetPosition( { x, y } );
-            y += 2.0f * option.Control->GetLineHeight();
+            y += 1.25f * option.Control->GetLineHeight();
         }
     }
 
@@ -48,5 +48,9 @@ namespace Betomnita::Layout
         {
             option.Control->Render( target );
         }
+    }
+
+    void MainMenuLayout::OnUpdate( const sf::Time& dt )
+    {
     }
 }
