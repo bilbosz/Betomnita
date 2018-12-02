@@ -4,9 +4,11 @@
 #include "game/graphics/Text.hpp"
 #include "resource/Resource.hpp"
 
+#include <functional>
+
 namespace Betomnita::Layout
 {
-    MainMenuLayout::MainMenuLayout() : m_title( std::make_unique< Graphics::Text >() )
+    MainMenuLayout::MainMenuLayout() : m_title( std::make_unique< Game::Graphics::Text >() )
     {
         m_title->SetColor( sf::Color( 100, 100, 100, 255 ) );
         m_title->SetString( Resource::GameName );
@@ -14,8 +16,8 @@ namespace Betomnita::Layout
         m_title->SetPosition( { 0.1f, 0.1f } );
         m_title->SetLineHeight( 0.1f );
 
-        m_options.push_back( { EntryId::NewGame, L"New Game", std::make_unique< Graphics::Text >(), []() { MESSAGE( L"New Game Requested" ); } } );
-        m_options.push_back( { EntryId::Exit, L"Quit Game", std::make_unique< Graphics::Text >(), []() { App::Application::GetInstance()->RequestShutdown(); } } );
+        m_options.push_back( { EntryId::NewGame, L"New Game", std::make_unique< Game::Graphics::Text >(), []() { MESSAGE( L"New Game Requested" ); } } );
+        m_options.push_back( { EntryId::Exit, L"Quit Game", std::make_unique< Game::Graphics::Text >(), []() { App::Application::GetInstance()->RequestShutdown(); } } );
         auto y = 0.25f;
         auto x = 0.1f;
         for( auto& option : m_options )

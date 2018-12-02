@@ -16,6 +16,30 @@ namespace Resource
         Size,
     };
 
+    enum class EventId
+    {
+        Undefined = -1,
+        OnStart,
+        OnUpdate,
+        OnRender,
+        OnVideoSettingChanged,
+        OnClose,
+        OnKeyPressed,
+        OnKeyReleased,
+        OnMouseButtonPressed,
+        OnMouseButtonReleased,
+        OnMouseMoved,
+        Size,
+    };
+
+    enum class ListenerId
+    {
+        Undefined  = -1,
+        Default,
+        MainMenuState,
+        Size,
+    };
+
     extern const std::wstring GameName;
     extern const std::wstring WindowTitle;
     extern sf::Font* DebugFont;

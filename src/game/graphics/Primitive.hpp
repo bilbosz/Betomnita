@@ -9,7 +9,7 @@ namespace Utils
     class Property;
 }
 
-namespace Graphics
+namespace Game::Graphics
 {
     class Primitive
     {

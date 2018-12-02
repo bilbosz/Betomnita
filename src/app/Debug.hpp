@@ -42,6 +42,14 @@ namespace App
 
 // clang-format off
 #ifdef DEBUG
+#	define CHECK(test) { if( !( test ) ) App::Debug::Breakpoint(); }
+#else
+#	define CHECK(test)
+#endif
+// clang-format on
+
+// clang-format off
+#ifdef DEBUG
 #	define MESSAGE(message) { std::wostringstream out; out << message; App::Debug::Message( L"M", __FILE__, __LINE__, out.str(), false ); }
 #else
 #	define MESSAGE(message)

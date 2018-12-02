@@ -2,6 +2,7 @@
 
 #include "app/Debug.hpp"
 #include "betomnita/Cursor.hpp"
+#include "betomnita/event/EventRegistration.hpp"
 #include "betomnita/state/MainMenuState.hpp"
 #include "game/StateMachine.hpp"
 #include "game/graphics/Text.hpp"
@@ -35,6 +36,21 @@ namespace Betomnita
     {
         m_stateMachine->RegisterState( std::make_shared< MainMenuState >() );
         m_stateMachine->PushState( Resource::StateId::MainMenu );
+        Event< Resource::EventId::OnKeyPressed >::AddListener( { Resource::ListenerId::Default, true, []( const sf::Event::KeyEvent& e ) {
+                                                                    if( e.code == sf::Keyboard::Key::Delete )
+                                                                    {
+                                                                        Event< Resource::EventId::OnKeyPressed >::RemoveListener( Resource::ListenerId::Default );
+                                                                    }
+                                                                    else if( e.code == sf::Keyboard::Key::Space )
+                                                                    {
+                                                                        Event< Resource::EventId::OnKeyPressed >::GetListener( Resource::ListenerId::Default ).IsEnabled =
+                                                                            false;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        MESSAGE( L"Pressed " << e.code );
+                                                                    }
+                                                                } } );
 
         GenericGame::OnStart();
     };
@@ -85,6 +101,7 @@ namespace Betomnita
             }
             break;
         }
+        Event< Resource::EventId::OnKeyPressed >::Dispatch( key );
         GenericGame::OnKeyPressed( key );
     }
 

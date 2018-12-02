@@ -11,7 +11,6 @@ int main( int argc, char* argv[] )
 #ifdef FULLSCREEN
     game.SetFullscreen();
 	game.HideCursor();
-    game.SetAntialiasingLevel( 16 );
 #else
     game.SetBorderedWindow( false, true );
     game.ReleaseCursor();

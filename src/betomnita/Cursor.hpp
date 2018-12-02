@@ -25,6 +25,6 @@ namespace Betomnita
 
     private:
         sf::Vector2f m_position;
-        Graphics::Polygon m_shape;
+        Game::Graphics::Polygon m_shape;
     };
 }

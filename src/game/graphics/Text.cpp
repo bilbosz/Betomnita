@@ -3,7 +3,7 @@
 #include "app/Debug.hpp"
 #include "game/GenericGame.hpp"
 
-namespace Graphics
+namespace Game::Graphics
 {
     Text::Text()
     {

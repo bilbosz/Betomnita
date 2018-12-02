@@ -3,7 +3,7 @@
 #include "game/GenericGame.hpp"
 #include "resource/Resource.hpp"
 
-namespace Graphics
+namespace Game::Graphics
 {
     Polygon::Polygon() : m_vertexArray( sf::PrimitiveType::Triangles )
     {

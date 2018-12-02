@@ -4,7 +4,7 @@
 
 #include <functional>
 
-namespace Graphics
+namespace Game::Graphics
 {
     Primitive::Primitive()
     {

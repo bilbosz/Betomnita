@@ -5,7 +5,7 @@
 #include <optional>
 #include <vector>
 
-namespace Graphics
+namespace Game::Graphics
 {
     /* Filled closed path which is described by points ordered clockwise. It is implied in this description that there is no holes. Before rendering polygon has to be
        divided into triangles. This class uses simple ear clipping algorithm for triangulation (based on two ears theorem) which runs in O( n ^ 3 ), where n is number of

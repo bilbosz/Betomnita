@@ -7,9 +7,15 @@ namespace Game
     class StateMachine;
 }
 
-namespace Graphics
+namespace Game::Graphics
 {
     class Text;
+}
+
+namespace Game::EventSystem
+{
+    template< class Id, Id id >
+    class Event;
 }
 
 namespace Betomnita
@@ -19,6 +25,9 @@ namespace Betomnita
     class BetomnitaGame final : public Game::GenericGame
     {
     public:
+        template< Resource::EventId eventId >
+        using Event = Game::EventSystem::Event< Resource::EventId, eventId >;
+
         BetomnitaGame();
         ~BetomnitaGame();
 

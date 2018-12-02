@@ -22,7 +22,7 @@ namespace Game
         void UnregisterState( StateId id );
         bool IsStateRegistered( StateId id ) const
         {
-            VERIFY( static_cast< size_t >( id ) < static_cast< size_t >( StateId::Size ) );
+            CHECK( static_cast< size_t >( id ) < static_cast< size_t >( StateId::Size ) );
             return m_registeredStates[ static_cast< size_t >( id ) ] != nullptr;
         }
 
@@ -46,7 +46,7 @@ namespace Game
     template< class StateId >
     void StateMachine< StateId >::RegisterState( StatePtr state )
     {
-        VERIFY( !IsStateRegistered( state->GetId() ) );
+        CHECK( !IsStateRegistered( state->GetId() ) );
 
         m_registeredStates[ static_cast< size_t >( state->GetId() ) ] = state;
         state->m_isRegistered = true;
@@ -56,8 +56,8 @@ namespace Game
     template< class StateId >
     void StateMachine< StateId >::UnregisterState( StateId id )
     {
-        VERIFY( IsStateRegistered( id ) );
-        VERIFY( !IsStateActive( id ) )
+        CHECK( IsStateRegistered( id ) );
+        CHECK( !IsStateActive( id ) );
 
         auto& toUnregister = m_registeredStates[ static_cast< size_t >( id ) ];
         toUnregister->m_isRegistered = false;
@@ -68,8 +68,8 @@ namespace Game
     template< class StateId >
     void StateMachine< StateId >::PushState( StateId id )
     {
-        VERIFY( IsStateRegistered( id ) );
-        VERIFY( !IsStateActive( id ) );
+        CHECK( IsStateRegistered( id ) );
+        CHECK( !IsStateActive( id ) );
 
         if( !IsStackEmpty() )
         {
@@ -89,8 +89,8 @@ namespace Game
     template< class StateId >
     void StateMachine< StateId >::PopState( StateId id )
     {
-        VERIFY( !IsStackEmpty() );
-        VERIFY( m_activeStates.back()->GetId() == id );
+        CHECK( !IsStackEmpty() );
+        CHECK( m_activeStates.back()->GetId() == id );
 
         auto& fg = m_activeStates.back();
         fg->m_isForeground = false;
@@ -110,14 +110,14 @@ namespace Game
     template< class StateId >
     bool StateMachine< StateId >::IsStateActive( StateId id ) const
     {
-        VERIFY( IsStateRegistered( id ) );
+        CHECK( IsStateRegistered( id ) );
         return m_registeredStates[ static_cast< size_t >( id ) ]->IsActive();
     }
 
     template< class StateId >
     typename StateMachine< StateId >::StateWeakPtr StateMachine< StateId >::GetForeground() const
     {
-        VERIFY( !IsStackEmpty() );
+        CHECK( !IsStackEmpty() );
         return m_activeStates.back();
     }
 

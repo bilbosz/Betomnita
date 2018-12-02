@@ -1,7 +1,7 @@
 #pragma once
 #include "game/graphics/Primitive.hpp"
 
-namespace Graphics
+namespace Game::Graphics
 {
     class Text final : public Primitive
     {

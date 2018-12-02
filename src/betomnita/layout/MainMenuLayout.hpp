@@ -5,7 +5,7 @@
 #include <tuple>
 #include <vector>
 
-namespace Graphics
+namespace Game::Graphics
 {
     class Text;
 }
@@ -37,10 +37,10 @@ namespace Betomnita::Layout
         {
             EntryId Entry;
             std::wstring Text;
-            std::unique_ptr< Graphics::Text > Control;
+            std::unique_ptr< Game::Graphics::Text > Control;
             std::function< void() > OnEnter;
         };
-        std::unique_ptr< Graphics::Text > m_title;
+        std::unique_ptr< Game::Graphics::Text > m_title;
         OptionList m_options;
     };
 }
