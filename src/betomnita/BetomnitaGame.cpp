@@ -36,7 +36,8 @@ namespace Betomnita
     {
         m_stateMachine->RegisterState( std::make_shared< MainMenuState >() );
         m_stateMachine->PushState( Resource::StateId::MainMenu );
-        Event< Resource::EventId::OnStart >::Dispatch( std::make_tuple<>() );
+
+        Event< Resource::EventId::OnStart >::Dispatch();
         GenericGame::OnStart();
     };
 
@@ -47,7 +48,7 @@ namespace Betomnita
         std::wostringstream out;
         out << L"(" << mousePosition.x << L", " << mousePosition.y << L")";
         m_stateMachine->OnUpdate( dt );
-        Event< Resource::EventId::OnUpdate >::Dispatch( std::make_tuple< const sf::Time& >( dt ) );
+        Event< Resource::EventId::OnUpdate >::Dispatch( &dt );
         GenericGame::OnUpdate( dt );
     }
 
@@ -58,19 +59,19 @@ namespace Betomnita
         m_cursor->Render( target );
         m_window.display();
 
-        // Event< Resource::EventId::OnRender >::Dispatch( std::make_tuple< sf::RenderTarget& >( target ) );
+        Event< Resource::EventId::OnRender >::Dispatch( &target );
         GenericGame::OnRender( target );
     }
 
     void BetomnitaGame::OnVideoSettingsChanged()
     {
-        Event< Resource::EventId::OnVideoSettingChanged >::Dispatch( std::make_tuple<>() );
+        Event< Resource::EventId::OnVideoSettingChanged >::Dispatch();
         GenericGame::OnVideoSettingsChanged();
     }
 
     void BetomnitaGame::OnClose()
     {
-        Event< Resource::EventId::OnClose >::Dispatch( std::make_tuple<>() );
+        Event< Resource::EventId::OnClose >::Dispatch();
         GenericGame::OnClose();
     }
 
@@ -89,39 +90,31 @@ namespace Betomnita
             }
             break;
         }
-        Event< Resource::EventId::OnKeyPressed >::Dispatch( std::make_tuple< const sf::Event::KeyEvent& >( key ) );
+        Event< Resource::EventId::OnKeyPressed >::Dispatch( &key );
         GenericGame::OnKeyPressed( key );
     }
 
     void BetomnitaGame::OnKeyReleased( const sf::Event::KeyEvent& key )
     {
-        Event< Resource::EventId::OnKeyReleased >::Dispatch( std::make_tuple< const sf::Event::KeyEvent& >( key ) );
+        Event< Resource::EventId::OnKeyReleased >::Dispatch( &key );
         GenericGame::OnKeyReleased( key );
     }
 
     void BetomnitaGame::OnMouseButtonPressed( const sf::Vector2f& position, sf::Mouse::Button button )
     {
-        switch( button )
-        {
-            case sf::Mouse::Button::Left:
-                break;
-            case sf::Mouse::Button::Right:
-                break;
-            case sf::Mouse::Button::Middle:
-                break;
-        }
-        // Event< Resource::EventId::OnMouseButtonPressed >::Dispatch( std::make_tuple< const sf::Vector2f&, sf::Mouse::Button >( position, button ) );
+        Event< Resource::EventId::OnMouseButtonPressed >::Dispatch( &position, &button );
         GenericGame::OnMouseButtonPressed( position, button );
     }
 
     void BetomnitaGame::OnMouseButtonReleased( const sf::Vector2f& position, sf::Mouse::Button button )
     {
+        Event< Resource::EventId::OnMouseButtonReleased >::Dispatch( &position, &button );
         GenericGame::OnMouseButtonReleased( position, button );
     }
 
     void BetomnitaGame::OnMouseMoved( const sf::Vector2f& position )
     {
+        Event< Resource::EventId::OnMouseMoved >::Dispatch( &position );
         GenericGame::OnMouseMoved( position );
-        Event< Resource::EventId::OnMouseMoved >::Dispatch( std::make_tuple< const sf::Vector2f& >( position ) );
     }
 }

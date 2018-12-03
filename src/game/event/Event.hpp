@@ -20,15 +20,17 @@ namespace Game::EventSystem
             return id;
         }
 
-        static void Dispatch( Data data )
+        template< class... DataUnpacked >
+        static void Dispatch( DataUnpacked... data )
         {
+            static_assert( std::is_same< Pack< DataUnpacked... >, Data >::value, "Event and listener data does not match in function " __FUNCTION__ );
             for( auto& listener : m_listeners )
             {
                 CHECK( listener.Id != ListenerId::Undefined );
                 if( listener.IsEnabled )
                 {
                     CHECK( listener.Callback != nullptr );
-                    std::apply( listener.Callback, data );
+                    listener.Callback( data... );
                 }
             }
         }

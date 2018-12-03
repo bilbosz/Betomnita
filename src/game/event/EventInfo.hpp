@@ -9,10 +9,15 @@ namespace Game::EventSystem
     template< class EventId, EventId id >
     struct EventInfo;
 
+    template< class... Args >
+    struct Pack
+    {
+    };
+
     template< class ListenerId_, class... EventData >
     struct EventInfoHelper
     {
-        using Data = std::tuple< EventData... >;
+        using Data = Pack< EventData... >;
         using Listener = typename Listener< ListenerId_, EventData... >;
         using ListenerId = typename Listener::ListenerId;
     };
