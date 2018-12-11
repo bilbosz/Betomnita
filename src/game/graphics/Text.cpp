@@ -87,9 +87,7 @@ namespace Game::Graphics
     {
         const auto game = Game::GenericGame::GetInstance();
         auto toModelScale = game->GetToModelScale().x;
-        auto toModelTransform = game->GetToModelTransform();
-        auto left = toModelTransform.transformPoint( { m_text.getGlobalBounds().left, 0 } );
-        m_size = { left.x - GetPosition().x + m_text.getGlobalBounds().width * toModelScale, m_lineHeight };
+        m_size = { m_text.getGlobalBounds().width * toModelScale, m_lineHeight };
         Primitive::OnSizeChange();
     }
 }

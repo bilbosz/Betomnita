@@ -36,7 +36,7 @@ namespace Resource
     {
         Undefined  = -1,
         Default,
-        MainMenuState,
+        MainMenuClick,
         Size,
     };
 

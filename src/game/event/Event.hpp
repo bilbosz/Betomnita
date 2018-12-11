@@ -1,4 +1,5 @@
 #pragma once
+#include "app/Debug.hpp"
 #include "game/event/EventInfo.hpp"
 
 #include <vector>

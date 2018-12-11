@@ -30,6 +30,32 @@ namespace Betomnita::Layout
             option.Control->SetPosition( { x, y } );
             y += 1.25f * option.Control->GetLineHeight();
         }
+
+        Game::EventSystem::Event< Resource::EventId::OnMouseButtonPressed >::AddListener(
+            { Resource::ListenerId::MainMenuClick, true, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
+                 if( btn == sf::Mouse::Button::Left )
+                 {
+                     for( auto& option : m_options )
+                     {
+                         auto& ctrl = option.Control;
+                         auto aabb = sf::FloatRect( ctrl->GetPosition(), ctrl->GetSize() );
+                         if( aabb.contains( pos ) )
+                         {
+                             option.OnEnter();
+                         }
+                     }
+                 }
+             } } );
+
+        Game::EventSystem::Event< Resource::EventId::OnMouseMoved >::AddListener(
+            { Resource::ListenerId::MainMenuClick, true, [this]( const sf::Vector2f& pos ) {
+                 for( auto& option : m_options )
+                 {
+                     auto& ctrl = option.Control;
+                     auto aabb = sf::FloatRect( ctrl->GetPosition(), ctrl->GetSize() );
+                     option.Control->SetColor( aabb.contains( pos ) ? sf::Color::White : sf::Color( 150, 150, 150, 255 ) );
+                 }
+             } } );
     }
 
     MainMenuLayout::~MainMenuLayout()
