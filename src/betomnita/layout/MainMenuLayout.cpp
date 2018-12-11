@@ -1,6 +1,7 @@
 #include "MainMenuLayout.hpp"
 
 #include "app/Application.hpp"
+#include "betomnita/event/EventRegistration.hpp"
 #include "game/graphics/Text.hpp"
 #include "resource/Resource.hpp"
 

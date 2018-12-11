@@ -6,7 +6,7 @@
 
 namespace Game::EventSystem
 {
-    template< class EventId, EventId id >
+    template< auto id >
     struct EventInfo;
 
     template< class... Args >

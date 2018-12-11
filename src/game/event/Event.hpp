@@ -5,25 +5,25 @@
 
 namespace Game::EventSystem
 {
-    template< class Id, Id id >
+    template< auto id >
     class Event
     {
     public:
-        using Data = typename EventInfo< Id, id >::Data;
-        using Listener = typename EventInfo< Id, id >::Listener;
-        using ListenerId = typename EventInfo< Id, id >::ListenerId;
+        using Id = decltype( id );
+        using Data = typename EventInfo< id >::Data;
+        using Listener = typename EventInfo< id >::Listener;
+        using ListenerId = typename EventInfo< id >::ListenerId;
 
         Event() = delete;
 
-        static Id GetId()
+        static auto GetId()
         {
             return id;
         }
 
-        template< class... DataUnpacked >
+        template< class... DataUnpacked, class = std::enable_if_t< std::is_same< Pack< DataUnpacked... >, Data >::value > >
         static void Dispatch( DataUnpacked... data )
         {
-            static_assert( std::is_same< Pack< DataUnpacked... >, Data >::value, "Event and listener data does not match in function " __FUNCTION__ );
             for( auto& listener : m_listeners )
             {
                 CHECK( listener.Id != ListenerId::Undefined );
@@ -76,6 +76,6 @@ namespace Game::EventSystem
         static std::vector< Listener > m_listeners;
     };
 
-    template< class Id, Id id >
-    std::vector< typename Event< Id, id >::Listener > Event< Id, id >::m_listeners;
+    template< auto id >
+    std::vector< typename Event< id >::Listener > Event< id >::m_listeners;
 }
