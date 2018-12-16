@@ -64,6 +64,25 @@ namespace Game
             static_cast< float >( sf::Mouse::getPosition( m_window ).x ), static_cast< float >( sf::Mouse::getPosition( m_window ).y ) );
     }
 
+    sf::Vector2f GenericGame::GetModelSize() const
+    {
+        const auto& matrix = m_screenToModel.getMatrix();
+        const auto& size = m_window.getSize();
+        return { matrix[ 4 * 0 + 0 ] * static_cast< float >( size.x ), matrix[ 4 * 1 + 1 ] * static_cast< float >( size.y ) };
+    }
+
+    sf::Vector2f GenericGame::GetScreenSize() const
+    {
+        const auto& size = m_window.getSize();
+        return { static_cast< float >( size.x ), static_cast< float >( size.y ) };
+    }
+
+    sf::FloatRect GenericGame::GetModelAABB() const
+    {
+        const auto& size = GetModelSize();
+        return { ( 1.0f - size.x ) / 2, 0.0f, size.x, size.y };
+    }
+
     void GenericGame::OnStart()
     {
     }

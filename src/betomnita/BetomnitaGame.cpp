@@ -3,7 +3,9 @@
 #include "app/Debug.hpp"
 #include "betomnita/Cursor.hpp"
 #include "betomnita/event/EventRegistration.hpp"
+#include "betomnita/state/GamePlayState.hpp"
 #include "betomnita/state/MainMenuState.hpp"
+#include "betomnita/state/PauseState.hpp"
 #include "game/StateMachine.hpp"
 #include "game/graphics/Text.hpp"
 
@@ -35,6 +37,8 @@ namespace Betomnita
     void BetomnitaGame::OnStart()
     {
         m_stateMachine->RegisterState( std::make_shared< MainMenuState >() );
+        m_stateMachine->RegisterState( std::make_shared< GamePlayState >() );
+        m_stateMachine->RegisterState( std::make_shared< PauseState >() );
         m_stateMachine->PushState( Resource::StateId::MainMenu );
 
         Game::EventSystem::Event< Resource::EventId::OnStart >::Dispatch();
@@ -54,7 +58,7 @@ namespace Betomnita
 
     void BetomnitaGame::OnRender( sf::RenderTarget& target )
     {
-        target.clear( sf::Color( 200, 230, 255, 255 ) );
+        target.clear( Resource::Background );
         m_stateMachine->OnRender( target );
         m_cursor->Render( target );
         m_window.display();
@@ -79,11 +83,6 @@ namespace Betomnita
     {
         switch( key.code )
         {
-            case sf::Keyboard::Key::Escape:
-            {
-                RequestShutdown();
-            }
-            break;
             case sf::Keyboard::Key::F12:
             {
                 RequestScreenshot( Resource::ScreenshotPath );

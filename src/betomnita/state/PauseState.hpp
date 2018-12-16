@@ -6,16 +6,16 @@ namespace Betomnita
 {
     namespace Layout
     {
-        class MainMenuLayout;
+        class PauseLayout;
     }
 
-    class MainMenuState final
+    class PauseState final
         : public Game::State< Resource::StateId >
-        , public std::enable_shared_from_this< MainMenuState >
+        , public std::enable_shared_from_this< PauseState >
     {
     public:
-        MainMenuState();
-        ~MainMenuState();
+        PauseState();
+        ~PauseState();
 
         void OnRegister() override;
         void OnUnregister() override;
@@ -25,10 +25,12 @@ namespace Betomnita
         void OnBackground() override;
         void OnUpdate( const sf::Time& dt ) override;
         void OnRender( sf::RenderTarget& target ) override;
-        void OnNewGameRequest();
-        void OnExitRequest();
+
+        void OnResumeRequest();
+        void OnMainMenuRequest();
+        void OnExitGameRequest();
 
     private:
-        std::unique_ptr< Layout::MainMenuLayout > m_layout;
+        std::unique_ptr< Layout::PauseLayout > m_layout;
     };
 }

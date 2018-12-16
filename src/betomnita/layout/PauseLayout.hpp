@@ -7,29 +7,31 @@
 
 namespace Game::Graphics
 {
+    class Polygon;
     class Text;
 }
 
 namespace Betomnita
 {
-    class MainMenuState;
+    class PauseState;
 
     namespace Layout
     {
-        class MainMenuLayout
+        class PauseLayout
         {
         private:
             enum class EntryId
             {
-                NewGame,
-                Exit,
+                Resume,
+                MainMenu,
+                ExitGame,
             };
             struct Option;
             using OptionList = std::vector< Option >;
 
         public:
-            MainMenuLayout( MainMenuState* state );
-            ~MainMenuLayout();
+            PauseLayout( PauseState* state );
+            ~PauseLayout();
 
             void Show();
             void Hide();
@@ -44,7 +46,8 @@ namespace Betomnita
                 std::unique_ptr< Game::Graphics::Text > Control;
                 std::function< void() > OnEnter;
             };
-            MainMenuState* m_state;
+            PauseState* m_state;
+            std::unique_ptr< Game::Graphics::Polygon > m_shroud;
             std::unique_ptr< Game::Graphics::Text > m_title;
             OptionList m_options;
         };

@@ -25,7 +25,10 @@ namespace Game
         sf::Time GetGameTime() const
         {
             return m_gameTime;
-        };
+        }
+        sf::Vector2f GetModelSize() const;
+        sf::Vector2f GetScreenSize() const;
+        sf::FloatRect GetModelAABB() const;
 
     protected:
         virtual void OnStart() override;

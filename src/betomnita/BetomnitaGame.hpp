@@ -23,6 +23,10 @@ namespace Betomnita
         ~BetomnitaGame();
 
         static BetomnitaGame* GetInstance();
+        Game::StateMachine< Resource::StateId >* GetStateMachine() const
+        {
+            return m_stateMachine.get();
+        }
 
     private:
         void OnStart() override;

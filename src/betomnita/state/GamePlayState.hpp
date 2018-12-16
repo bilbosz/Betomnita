@@ -2,20 +2,22 @@
 #include "game/State.hpp"
 #include "resource/Resource.hpp"
 
+#include <memory>
+
+namespace Game::Graphics
+{
+    class Text;
+}
+
 namespace Betomnita
 {
-    namespace Layout
-    {
-        class MainMenuLayout;
-    }
-
-    class MainMenuState final
+    class GamePlayState final
         : public Game::State< Resource::StateId >
-        , public std::enable_shared_from_this< MainMenuState >
+        , public std::enable_shared_from_this< GamePlayState >
     {
     public:
-        MainMenuState();
-        ~MainMenuState();
+        GamePlayState();
+        ~GamePlayState();
 
         void OnRegister() override;
         void OnUnregister() override;
@@ -25,10 +27,11 @@ namespace Betomnita
         void OnBackground() override;
         void OnUpdate( const sf::Time& dt ) override;
         void OnRender( sf::RenderTarget& target ) override;
-        void OnNewGameRequest();
-        void OnExitRequest();
+
+        void OnMainMenuRequest();
 
     private:
-        std::unique_ptr< Layout::MainMenuLayout > m_layout;
+        std::unique_ptr< Game::Graphics::Text > m_timerText;
+        sf::Time m_timer;
     };
 }

@@ -27,6 +27,12 @@ namespace Resource
     sf::Font* DebugFont;
     sf::Font* DefaultFont;
 
+    const sf::Color Background = { 100, 130, 155, 255 };
+    const sf::Color Shroud = { 0, 0, 0, 100 };
+    const sf::Color MenuTitle = { 240, 240, 240, 255 };
+    const sf::Color MenuEntryNormal = { 220, 220, 220, 255 };
+    const sf::Color MenuEntrySelected = { 255, 255, 255, 255 };
+
     unsigned int DefaultCharacterSize = 30;
 
     float Pi = 2.0f * asinf( 1.0f );

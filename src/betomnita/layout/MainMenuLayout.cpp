@@ -2,6 +2,7 @@
 
 #include "app/Application.hpp"
 #include "betomnita/event/EventRegistration.hpp"
+#include "betomnita/state/MainMenuState.hpp"
 #include "game/graphics/Text.hpp"
 #include "resource/Resource.hpp"
 
@@ -9,21 +10,21 @@
 
 namespace Betomnita::Layout
 {
-    MainMenuLayout::MainMenuLayout() : m_title( std::make_unique< Game::Graphics::Text >() )
+    MainMenuLayout::MainMenuLayout( MainMenuState* state ) : m_title( std::make_unique< Game::Graphics::Text >() ), m_state( state )
     {
-        m_title->SetColor( sf::Color( 100, 100, 100, 255 ) );
+        m_title->SetColor( Resource::MenuTitle );
         m_title->SetString( Resource::GameName );
         m_title->SetFont( *Resource::DefaultFont );
         m_title->SetPosition( { 0.1f, 0.1f } );
         m_title->SetLineHeight( 0.1f );
 
-        m_options.push_back( { EntryId::NewGame, L"New Game", std::make_unique< Game::Graphics::Text >(), []() { MESSAGE( L"New Game Requested" ); } } );
-        m_options.push_back( { EntryId::Exit, L"Quit Game", std::make_unique< Game::Graphics::Text >(), []() { App::Application::GetInstance()->RequestShutdown(); } } );
+        m_options.push_back( { EntryId::NewGame, L"New Game", std::make_unique< Game::Graphics::Text >(), [this]() { m_state->OnNewGameRequest(); } } );
+        m_options.push_back( { EntryId::Exit, L"Exit Game", std::make_unique< Game::Graphics::Text >(), [this]() { m_state->OnExitRequest(); } } );
         auto y = 0.25f;
         auto x = 0.1f;
         for( auto& option : m_options )
         {
-            option.Control->SetColor( sf::Color( 150, 150, 150, 255 ) );
+            option.Control->SetColor( Resource::MenuEntryNormal );
             option.Control->SetString( option.Text );
             option.Control->SetFont( *Resource::DefaultFont );
             option.Control->SetLineHeight( 0.05f );
@@ -32,7 +33,7 @@ namespace Betomnita::Layout
         }
 
         Game::EventSystem::Event< Resource::EventId::OnMouseButtonPressed >::AddListener(
-            { Resource::ListenerId::MainMenuClick, true, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
+            { Resource::ListenerId::MainMenuClick, false, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
                  if( btn == sf::Mouse::Button::Left )
                  {
                      for( auto& option : m_options )
@@ -48,12 +49,12 @@ namespace Betomnita::Layout
              } } );
 
         Game::EventSystem::Event< Resource::EventId::OnMouseMoved >::AddListener(
-            { Resource::ListenerId::MainMenuClick, true, [this]( const sf::Vector2f& pos ) {
+            { Resource::ListenerId::MainMenuHover, false, [this]( const sf::Vector2f& pos ) {
                  for( auto& option : m_options )
                  {
                      auto& ctrl = option.Control;
                      auto aabb = sf::FloatRect( ctrl->GetPosition(), ctrl->GetSize() );
-                     option.Control->SetColor( aabb.contains( pos ) ? sf::Color::White : sf::Color( 150, 150, 150, 255 ) );
+                     option.Control->SetColor( aabb.contains( pos ) ? Resource::MenuEntrySelected : Resource::MenuEntryNormal );
                  }
              } } );
     }
@@ -64,10 +65,18 @@ namespace Betomnita::Layout
 
     void MainMenuLayout::Show()
     {
+        Game::EventSystem::Event< Resource::EventId::OnMouseButtonPressed >::GetListener( Resource::ListenerId::MainMenuClick ).IsEnabled = true;
+        Game::EventSystem::Event< Resource::EventId::OnMouseMoved >::GetListener( Resource::ListenerId::MainMenuHover ).IsEnabled = true;
     }
 
     void MainMenuLayout::Hide()
     {
+        Game::EventSystem::Event< Resource::EventId::OnMouseButtonPressed >::GetListener( Resource::ListenerId::MainMenuClick ).IsEnabled = false;
+        Game::EventSystem::Event< Resource::EventId::OnMouseMoved >::GetListener( Resource::ListenerId::MainMenuHover ).IsEnabled = false;
+        for( auto& option : m_options )
+        {
+            option.Control->SetColor( Resource::MenuEntryNormal );
+        }
     }
 
     void MainMenuLayout::OnRender( sf::RenderTarget& target )

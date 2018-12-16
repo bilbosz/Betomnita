@@ -11,7 +11,7 @@ namespace Resource
     {
         Undefined = -1,
         MainMenu,
-        Gameplay,
+        GamePlay,
         Pause,
         Size,
     };
@@ -37,6 +37,10 @@ namespace Resource
         Undefined  = -1,
         Default,
         MainMenuClick,
+        MainMenuHover,
+        PauseRequest,
+        PauseMenuClick,
+        PauseMenuHover,
         Size,
     };
 
@@ -44,6 +48,11 @@ namespace Resource
     extern const std::wstring WindowTitle;
     extern sf::Font* DebugFont;
     extern sf::Font* DefaultFont;
+    extern const sf::Color Background;
+    extern const sf::Color Shroud;
+    extern const sf::Color MenuTitle;
+    extern const sf::Color MenuEntryNormal;
+    extern const sf::Color MenuEntrySelected;
     extern unsigned int DefaultCharacterSize;
     extern float Pi;
     extern const std::string ScreenshotPath;

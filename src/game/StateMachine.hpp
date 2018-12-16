@@ -4,6 +4,7 @@
 #include "app/Debug.hpp"
 
 #include <SFML/Graphics.hpp>
+#include <array>
 #include <map>
 #include <memory>
 #include <vector>
@@ -16,7 +17,6 @@ namespace Game
     public:
         using StateType = State< StateId >;
         using StatePtr = std::shared_ptr< StateType >;
-        using StateWeakPtr = std::weak_ptr< StateType >;
 
         void RegisterState( StatePtr state );
         void UnregisterState( StateId id );
@@ -25,11 +25,16 @@ namespace Game
             CHECK( static_cast< size_t >( id ) < static_cast< size_t >( StateId::Size ) );
             return m_registeredStates[ static_cast< size_t >( id ) ] != nullptr;
         }
+        StatePtr GetState( StateId id ) const
+        {
+            CHECK( IsStateRegistered( id ) );
+            return m_registeredStates[ static_cast< size_t >( id ) ];
+        }
 
         void PushState( StateId id );
         void PopState( StateId id );
         bool IsStateActive( StateId id ) const;
-        StateWeakPtr GetForeground() const;
+        StatePtr GetForeground() const;
         bool IsStackEmpty() const
         {
             return m_activeStates.empty();
@@ -115,7 +120,7 @@ namespace Game
     }
 
     template< class StateId >
-    typename StateMachine< StateId >::StateWeakPtr StateMachine< StateId >::GetForeground() const
+    typename StateMachine< StateId >::StatePtr StateMachine< StateId >::GetForeground() const
     {
         CHECK( !IsStackEmpty() );
         return m_activeStates.back();
