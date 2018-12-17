@@ -9,6 +9,7 @@ int main( int argc, char* argv[] )
     Resource::Init();
     Betomnita::BetomnitaGame game;
 #ifdef FULLSCREEN
+    game.EnableVerticalSync();
     game.SetFullscreen();
 	game.HideCursor();
 #else

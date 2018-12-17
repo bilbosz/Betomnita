@@ -103,6 +103,16 @@ namespace App
         RequestApplyVideoSettings();
     }
 
+    void Application::EnableVerticalSync()
+    {
+        m_verticalSync = true;
+    }
+
+    void Application::DisableVerticalSync()
+    {
+        m_verticalSync = false;
+    }
+
     void Application::GrabCursor()
     {
         m_cursorGrabbed = true;
@@ -125,6 +135,7 @@ namespace App
         m_window.setFramerateLimit( m_framerateLimit );
         m_window.setMouseCursorVisible( m_cursorShown );
         m_window.setMouseCursorGrabbed( m_cursorGrabbed );
+        m_window.setVerticalSyncEnabled( m_verticalSync );
         OnVideoSettingsChanged();
     }
 

@@ -62,6 +62,13 @@ namespace App
             return m_antialiasingLevel;
         }
 
+        void EnableVerticalSync();
+        void DisableVerticalSync();
+        bool GetVerticalSync() const
+        {
+            return m_verticalSync;
+        }
+
         void SetTimeSkew( float value )
         {
             m_timeSkew = value;
@@ -114,6 +121,7 @@ namespace App
         uint32_t m_windowStyle = sf::Style::Default;
         unsigned int m_antialiasingLevel = 0;
         unsigned int m_framerateLimit = 60;
+        bool m_verticalSync = false;
         bool m_cursorShown = false;
 
         float m_timeSkew = 1.0f;
