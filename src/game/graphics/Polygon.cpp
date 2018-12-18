@@ -1,7 +1,8 @@
-#include "Polygon.hpp"
+#include "game/graphics/Polygon.hpp"
 
+#include "app/Debug.hpp"
+#include "game/GameConsts.hpp"
 #include "game/GenericGame.hpp"
-#include "resource/Resource.hpp"
 
 namespace Game::Graphics
 {
@@ -90,7 +91,7 @@ namespace Game::Graphics
         {
             angleSum += GetAngle( points[ i ], points[ ( i + 1 ) % pointsN ], points[ ( i + 2 ) % pointsN ] );
         }
-        if( angleSum >= pointsN * Resource::Pi )
+        if( angleSum >= pointsN * Game::Consts::Pi )
         {
             return L"Points have to be defined in clockwise direction";
         }
@@ -170,7 +171,7 @@ namespace Game::Graphics
     bool Polygon::IsEar( const PointsList& polygonVertices, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex ) const
     {
         auto angle = GetAngle( *previousVertex, *currentVertex, *nextVertex );
-        if( angle >= Resource::Pi )
+        if( angle >= Game::Consts::Pi )
         {
             return false;
         }
@@ -194,17 +195,20 @@ namespace Game::Graphics
     {
         auto prev = previousVertex - currentVertex;
         auto next = nextVertex - currentVertex;
-        return fmodf( atan2f( prev.y, prev.x ) - atan2f( next.y, next.x ) + 2.0f * Resource::Pi, 2.0f * Resource::Pi );
+        return fmodf( atan2f( prev.y, prev.x ) - atan2f( next.y, next.x ) + 2.0f * Game::Consts::Pi, 2.0f * Game::Consts::Pi );
     }
 
     bool Polygon::IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const
     {
-        return GetAngle( examinedPoint, a, b ) < Resource::Pi && GetAngle( examinedPoint, b, c ) < Resource::Pi && GetAngle( examinedPoint, c, a ) < Resource::Pi;
+        return GetAngle( examinedPoint, a, b ) < Game::Consts::Pi && GetAngle( examinedPoint, b, c ) < Game::Consts::Pi &&
+               GetAngle( examinedPoint, c, a ) < Game::Consts::Pi;
     }
 
     bool Polygon::AreLinesOverlapped( const std::pair< const Point&, const Point& >& lineA, const std::pair< const Point&, const Point& >& lineB )
     {
-        return ( ( GetAngle( lineA.first, lineA.second, lineB.first ) < Resource::Pi ) != ( GetAngle( lineA.first, lineA.second, lineB.second ) < Resource::Pi ) ) &&
-               ( ( GetAngle( lineB.first, lineB.second, lineA.first ) < Resource::Pi ) != ( GetAngle( lineB.first, lineB.second, lineA.second ) < Resource::Pi ) );
+        return ( ( GetAngle( lineA.first, lineA.second, lineB.first ) < Game::Consts::Pi ) !=
+                 ( GetAngle( lineA.first, lineA.second, lineB.second ) < Game::Consts::Pi ) ) &&
+               ( ( GetAngle( lineB.first, lineB.second, lineA.first ) < Game::Consts::Pi ) !=
+                 ( GetAngle( lineB.first, lineB.second, lineA.second ) < Game::Consts::Pi ) );
     }
 }

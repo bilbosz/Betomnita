@@ -1,6 +1,11 @@
 #pragma once
 #include "game/GenericGame.hpp"
 
+namespace Betomnita::Resources
+{
+    enum class StateId;
+}
+
 namespace Game
 {
     template< class StateId >
@@ -23,7 +28,7 @@ namespace Betomnita
         ~BetomnitaGame();
 
         static BetomnitaGame* GetInstance();
-        Game::StateMachine< Resource::StateId >* GetStateMachine() const
+        Game::StateMachine< Resources::StateId >* GetStateMachine() const
         {
             return m_stateMachine.get();
         }
@@ -41,7 +46,7 @@ namespace Betomnita
         void OnMouseMoved( const sf::Vector2f& position ) override;
 
         static BetomnitaGame* s_instance;
-        std::unique_ptr< Game::StateMachine< Resource::StateId > > m_stateMachine;
+        std::unique_ptr< Game::StateMachine< Resources::StateId > > m_stateMachine;
         std::unique_ptr< Cursor > m_cursor;
     };
 }

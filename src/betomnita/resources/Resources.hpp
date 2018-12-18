@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
-namespace Resource
+namespace Betomnita::Resources
 {
     void Init();
     void Dispose();
@@ -34,7 +34,7 @@ namespace Resource
 
     enum class ListenerId
     {
-        Undefined  = -1,
+        Undefined = -1,
         Default,
         MainMenuClick,
         MainMenuHover,
@@ -53,7 +53,5 @@ namespace Resource
     extern const sf::Color MenuTitle;
     extern const sf::Color MenuEntryNormal;
     extern const sf::Color MenuEntrySelected;
-    extern unsigned int DefaultCharacterSize;
-    extern float Pi;
     extern const std::string ScreenshotPath;
 }

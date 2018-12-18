@@ -9,22 +9,22 @@
 #include <iomanip>
 #include <sstream>
 
-namespace Betomnita
+namespace Betomnita::States
 {
-    GamePlayState::GamePlayState() : State( Resource::StateId::GamePlay ), m_timerText( std::make_unique< Game::Graphics::Text >() )
+    GamePlayState::GamePlayState() : State( Resources::StateId::GamePlay ), m_timerText( std::make_unique< Game::Graphics::Text >() )
     {
-        Game::EventSystem::Event< Resource::EventId::OnKeyPressed >::AddListener( { Resource::ListenerId::PauseRequest, false, [this]( const sf::Event::KeyEvent& key ) {
-                                                                                       switch( key.code )
-                                                                                       {
-                                                                                           case sf::Keyboard::Key::Escape:
-                                                                                               Betomnita::BetomnitaGame::GetInstance()->GetStateMachine()->PushState(
-                                                                                                   Resource::StateId::Pause );
-                                                                                               break;
-                                                                                       }
-                                                                                   } } );
-        const auto& aabb = Betomnita::BetomnitaGame::GetInstance()->GetModelAABB();
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::AddListener(
+            { Resources::ListenerId::PauseRequest, false, [this]( const sf::Event::KeyEvent& key ) {
+                 switch( key.code )
+                 {
+                     case sf::Keyboard::Key::Escape:
+                         BetomnitaGame::GetInstance()->GetStateMachine()->PushState( Resources::StateId::Pause );
+                         break;
+                 }
+             } } );
+        const auto& aabb = BetomnitaGame::GetInstance()->GetModelAABB();
         m_timerText->SetColor( sf::Color::White );
-        m_timerText->SetFont( *Resource::DebugFont );
+        m_timerText->SetFont( *Resources::DebugFont );
         m_timerText->SetLineHeight( 0.025f );
         m_timerText->SetPosition( { aabb.left, aabb.top } );
     }
@@ -56,13 +56,13 @@ namespace Betomnita
 
     void GamePlayState::OnForeground()
     {
-        Game::EventSystem::Event< Resource::EventId::OnKeyPressed >::GetListener( Resource::ListenerId::PauseRequest ).IsEnabled = true;
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::GetListener( Resources::ListenerId::PauseRequest ).IsEnabled = true;
         State::OnForeground();
     }
 
     void GamePlayState::OnBackground()
     {
-        Game::EventSystem::Event< Resource::EventId::OnKeyPressed >::GetListener( Resource::ListenerId::PauseRequest ).IsEnabled = false;
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::GetListener( Resources::ListenerId::PauseRequest ).IsEnabled = false;
         State::OnBackground();
     }
 

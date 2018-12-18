@@ -1,7 +1,6 @@
 #pragma once
 #include "app/Clock.hpp"
 #include "project/Config.hpp"
-#include "resource/Resource.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <cstdio>
@@ -114,7 +113,7 @@ namespace App
 
         static Application* s_instance;
 
-        std::wstring m_windowTitle = Resource::WindowTitle;
+        std::wstring m_windowTitle;
 
         Clock m_clock;
         sf::VideoMode m_videoMode = sf::VideoMode::getDesktopMode();

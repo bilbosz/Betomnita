@@ -1,8 +1,5 @@
 #pragma once
 #include "game/event/Listener.hpp"
-#include "resource/Resource.hpp"
-
-#include <tuple>
 
 namespace Game::EventSystem
 {

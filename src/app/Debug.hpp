@@ -1,13 +1,12 @@
 #pragma once
 #ifdef DEBUG
 
-#include "project/Config.hpp"
+#    include "project/Config.hpp"
 
-#include <boost/lexical_cast.hpp>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
-#include <string>
+#    include <iomanip>
+#    include <iostream>
+#    include <sstream>
+#    include <string>
 
 namespace App
 {

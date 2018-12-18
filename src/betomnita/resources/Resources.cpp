@@ -1,9 +1,9 @@
-#include "resource/Resource.hpp"
+#include "betomnita/resources/Resources.hpp"
 
 #include "app/Debug.hpp"
 #include "project/Config.hpp"
 
-namespace Resource
+namespace Betomnita::Resources
 {
     void Init()
     {
@@ -32,10 +32,6 @@ namespace Resource
     const sf::Color MenuTitle = { 240, 240, 240, 255 };
     const sf::Color MenuEntryNormal = { 220, 220, 220, 255 };
     const sf::Color MenuEntrySelected = { 255, 255, 255, 255 };
-
-    unsigned int DefaultCharacterSize = 30;
-
-    float Pi = 2.0f * asinf( 1.0f );
 
     const std::string ScreenshotPath = "screenshot.png";
 }

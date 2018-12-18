@@ -1,7 +1,6 @@
 #pragma once
-#include "game/State.hpp"
-
 #include "app/Debug.hpp"
+#include "game/State.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <array>

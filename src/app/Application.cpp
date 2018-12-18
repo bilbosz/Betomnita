@@ -171,7 +171,7 @@ namespace App
     {
         sf::Vector2u windowSize = m_window.getSize();
         sf::Texture texture;
-        texture.create(windowSize.x, windowSize.y);
+        texture.create( windowSize.x, windowSize.y );
         texture.update( m_window );
         texture.copyToImage().saveToFile( m_screenshotRequest );
         OnScreenshotTaken( m_screenshotRequest );

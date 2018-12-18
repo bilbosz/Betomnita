@@ -1,16 +1,16 @@
 #pragma once
+#include "betomnita/resources/Resources.hpp"
 #include "game/State.hpp"
-#include "resource/Resource.hpp"
 
-namespace Betomnita
+namespace Betomnita::Layouts
 {
-    namespace Layout
-    {
-        class PauseLayout;
-    }
+    class PauseLayout;
+}
 
+namespace Betomnita::States
+{
     class PauseState final
-        : public Game::State< Resource::StateId >
+        : public Game::State< Resources::StateId >
         , public std::enable_shared_from_this< PauseState >
     {
     public:
@@ -31,6 +31,6 @@ namespace Betomnita
         void OnExitGameRequest();
 
     private:
-        std::unique_ptr< Layout::PauseLayout > m_layout;
+        std::unique_ptr< Layouts::PauseLayout > m_layout;
     };
 }

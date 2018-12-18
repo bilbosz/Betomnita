@@ -1,6 +1,4 @@
 #pragma once
-#include "game/utils/Property.hpp"
-
 #include <SFML/Graphics.hpp>
 
 namespace Utils
@@ -48,7 +46,7 @@ namespace Game::Graphics
         bool GetHightlight() const
         {
 #ifdef DEBUG
-			return m_highlight;
+            return m_highlight;
 #endif
         }
 

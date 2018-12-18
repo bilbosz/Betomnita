@@ -1,16 +1,16 @@
 #pragma once
+#include "betomnita/resources/Resources.hpp"
 #include "game/State.hpp"
-#include "resource/Resource.hpp"
 
-namespace Betomnita
+namespace Betomnita::Layouts
 {
-    namespace Layout
-    {
-        class MainMenuLayout;
-    }
+    class MainMenuLayout;
+}
 
+namespace Betomnita::States
+{
     class MainMenuState final
-        : public Game::State< Resource::StateId >
+        : public Game::State< Resources::StateId >
         , public std::enable_shared_from_this< MainMenuState >
     {
     public:
@@ -29,6 +29,6 @@ namespace Betomnita
         void OnExitRequest();
 
     private:
-        std::unique_ptr< Layout::MainMenuLayout > m_layout;
+        std::unique_ptr< Layouts::MainMenuLayout > m_layout;
     };
 }

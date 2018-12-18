@@ -1,6 +1,6 @@
 #pragma once
+#include "betomnita/resources/Resources.hpp"
 #include "game/State.hpp"
-#include "resource/Resource.hpp"
 
 #include <memory>
 
@@ -9,10 +9,10 @@ namespace Game::Graphics
     class Text;
 }
 
-namespace Betomnita
+namespace Betomnita::States
 {
     class GamePlayState final
-        : public Game::State< Resource::StateId >
+        : public Game::State< Resources::StateId >
         , public std::enable_shared_from_this< GamePlayState >
     {
     public:

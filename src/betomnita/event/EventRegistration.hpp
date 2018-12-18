@@ -1,15 +1,15 @@
 #pragma once
+#include "betomnita/resources/Resources.hpp"
 #include "game/event/Event.hpp"
-#include "resource/Resource.hpp"
 
 namespace Game::EventSystem
 {
 #define REGISTER_EVENT_WO_ARGS( NAME ) \
     template<> \
-    struct EventInfo< Resource::EventId::NAME > \
+    struct EventInfo< Betomnita::Resources::EventId::NAME > \
     { \
     public: \
-        using Hlpr = EventInfoHelper< Resource::ListenerId >; \
+        using Hlpr = EventInfoHelper< Betomnita::Resources::ListenerId >; \
         using Data = Hlpr::Data; \
         using Listener = Hlpr::Listener; \
         using ListenerId = Hlpr::ListenerId; \
@@ -17,10 +17,10 @@ namespace Game::EventSystem
 
 #define REGISTER_EVENT_W_ARGS( NAME, ... ) \
     template<> \
-    struct EventInfo< Resource::EventId::NAME > \
+    struct EventInfo< Betomnita::Resources::EventId::NAME > \
     { \
     public: \
-        using Hlpr = EventInfoHelper< Resource::ListenerId, __VA_ARGS__ >; \
+        using Hlpr = EventInfoHelper< Betomnita::Resources::ListenerId, __VA_ARGS__ >; \
         using Data = Hlpr::Data; \
         using Listener = Hlpr::Listener; \
         using ListenerId = Hlpr::ListenerId; \

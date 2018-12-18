@@ -7,9 +7,9 @@
 #include "betomnita/state/GamePlayState.hpp"
 #include "game/StateMachine.hpp"
 
-namespace Betomnita
+namespace Betomnita::States
 {
-    PauseState::PauseState() : State( Resource::StateId::Pause ), m_layout( std::make_unique< Layout::PauseLayout >( this ) )
+    PauseState::PauseState() : State( Resources::StateId::Pause ), m_layout( std::make_unique< Layouts::PauseLayout >( this ) )
     {
     }
 
@@ -67,18 +67,18 @@ namespace Betomnita
 
     void PauseState::OnResumeRequest()
     {
-        Betomnita::BetomnitaGame::GetInstance()->GetStateMachine()->PopState( GetId() );
+        BetomnitaGame::GetInstance()->GetStateMachine()->PopState( GetId() );
     }
 
     void PauseState::OnMainMenuRequest()
     {
-        auto sm = Betomnita::BetomnitaGame::GetInstance()->GetStateMachine();
+        auto sm = BetomnitaGame::GetInstance()->GetStateMachine();
         sm->PopState( GetId() );
 #ifdef DEBUG
-        auto gamePlay = std::dynamic_pointer_cast< Betomnita::GamePlayState >( sm->GetState( Resource::StateId::GamePlay ) );
+        auto gamePlay = std::dynamic_pointer_cast< States::GamePlayState >( sm->GetState( Resources::StateId::GamePlay ) );
         CHECK( gamePlay );
 #else
-        auto gamePlay = std::static_pointer_cast< Betomnita::GamePlayState >( sm->GetState( Resource::StateId::GamePlay ) );
+        auto gamePlay = std::static_pointer_cast< States::GamePlayState >( sm->GetState( Resources::StateId::GamePlay ) );
 #endif
         gamePlay->OnMainMenuRequest();
     }

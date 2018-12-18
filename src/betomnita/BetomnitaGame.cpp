@@ -16,7 +16,7 @@ namespace Betomnita
 {
     BetomnitaGame* BetomnitaGame::s_instance = nullptr;
 
-    BetomnitaGame::BetomnitaGame() : m_stateMachine( std::make_unique< Game::StateMachine< Resource::StateId > >() ), m_cursor( std::make_unique< Cursor >() )
+    BetomnitaGame::BetomnitaGame() : m_stateMachine( std::make_unique< Game::StateMachine< Resources::StateId > >() ), m_cursor( std::make_unique< Cursor >() )
     {
         ASSERT( !s_instance, L"There can be only one instance of Betomnita game" );
         s_instance = this;
@@ -36,12 +36,12 @@ namespace Betomnita
 
     void BetomnitaGame::OnStart()
     {
-        m_stateMachine->RegisterState( std::make_shared< MainMenuState >() );
-        m_stateMachine->RegisterState( std::make_shared< GamePlayState >() );
-        m_stateMachine->RegisterState( std::make_shared< PauseState >() );
-        m_stateMachine->PushState( Resource::StateId::MainMenu );
+        m_stateMachine->RegisterState( std::make_shared< States::MainMenuState >() );
+        m_stateMachine->RegisterState( std::make_shared< States::GamePlayState >() );
+        m_stateMachine->RegisterState( std::make_shared< States::PauseState >() );
+        m_stateMachine->PushState( Resources::StateId::MainMenu );
 
-        Game::EventSystem::Event< Resource::EventId::OnStart >::Dispatch();
+        Game::EventSystem::Event< Resources::EventId::OnStart >::Dispatch();
         GenericGame::OnStart();
     };
 
@@ -52,30 +52,30 @@ namespace Betomnita
         std::wostringstream out;
         out << L"(" << mousePosition.x << L", " << mousePosition.y << L")";
         m_stateMachine->OnUpdate( dt );
-        Game::EventSystem::Event< Resource::EventId::OnUpdate >::Dispatch< const sf::Time& >( dt );
+        Game::EventSystem::Event< Resources::EventId::OnUpdate >::Dispatch< const sf::Time& >( dt );
         GenericGame::OnUpdate( dt );
     }
 
     void BetomnitaGame::OnRender( sf::RenderTarget& target )
     {
-        target.clear( Resource::Background );
+        target.clear( Resources::Background );
         m_stateMachine->OnRender( target );
         m_cursor->Render( target );
         m_window.display();
 
-        Game::EventSystem::Event< Resource::EventId::OnRender >::Dispatch< sf::RenderTarget& >( target );
+        Game::EventSystem::Event< Resources::EventId::OnRender >::Dispatch< sf::RenderTarget& >( target );
         GenericGame::OnRender( target );
     }
 
     void BetomnitaGame::OnVideoSettingsChanged()
     {
-        Game::EventSystem::Event< Resource::EventId::OnVideoSettingChanged >::Dispatch();
+        Game::EventSystem::Event< Resources::EventId::OnVideoSettingChanged >::Dispatch();
         GenericGame::OnVideoSettingsChanged();
     }
 
     void BetomnitaGame::OnClose()
     {
-        Game::EventSystem::Event< Resource::EventId::OnClose >::Dispatch();
+        Game::EventSystem::Event< Resources::EventId::OnClose >::Dispatch();
         GenericGame::OnClose();
     }
 
@@ -85,35 +85,35 @@ namespace Betomnita
         {
             case sf::Keyboard::Key::F12:
             {
-                RequestScreenshot( Resource::ScreenshotPath );
+                RequestScreenshot( Resources::ScreenshotPath );
             }
             break;
         }
-        Game::EventSystem::Event< Resource::EventId::OnKeyPressed >::Dispatch< const sf::Event::KeyEvent& >( key );
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::Dispatch< const sf::Event::KeyEvent& >( key );
         GenericGame::OnKeyPressed( key );
     }
 
     void BetomnitaGame::OnKeyReleased( const sf::Event::KeyEvent& key )
     {
-        Game::EventSystem::Event< Resource::EventId::OnKeyReleased >::Dispatch< const sf::Event::KeyEvent& >( key );
+        Game::EventSystem::Event< Resources::EventId::OnKeyReleased >::Dispatch< const sf::Event::KeyEvent& >( key );
         GenericGame::OnKeyReleased( key );
     }
 
     void BetomnitaGame::OnMouseButtonPressed( const sf::Vector2f& position, sf::Mouse::Button button )
     {
-        Game::EventSystem::Event< Resource::EventId::OnMouseButtonPressed >::Dispatch< const sf::Vector2f&, sf::Mouse::Button >( position, button );
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::Dispatch< const sf::Vector2f&, sf::Mouse::Button >( position, button );
         GenericGame::OnMouseButtonPressed( position, button );
     }
 
     void BetomnitaGame::OnMouseButtonReleased( const sf::Vector2f& position, sf::Mouse::Button button )
     {
-        Game::EventSystem::Event< Resource::EventId::OnMouseButtonReleased >::Dispatch< const sf::Vector2f&, sf::Mouse::Button >( position, button );
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::Dispatch< const sf::Vector2f&, sf::Mouse::Button >( position, button );
         GenericGame::OnMouseButtonReleased( position, button );
     }
 
     void BetomnitaGame::OnMouseMoved( const sf::Vector2f& position )
     {
-        Game::EventSystem::Event< Resource::EventId::OnMouseMoved >::Dispatch< const sf::Vector2f& >( position );
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::Dispatch< const sf::Vector2f& >( position );
         GenericGame::OnMouseMoved( position );
     }
 }

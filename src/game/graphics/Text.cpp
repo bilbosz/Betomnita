@@ -1,6 +1,7 @@
 #include "game/graphics/Text.hpp"
 
 #include "app/Debug.hpp"
+#include "game/GameConsts.hpp"
 #include "game/GenericGame.hpp"
 
 namespace Game::Graphics
@@ -17,8 +18,6 @@ namespace Game::Graphics
     void Text::Init()
     {
         Primitive::Init();
-
-        m_font = *Resource::DefaultFont;
     }
 
     void Text::Render( sf::RenderTarget& target )
@@ -74,10 +73,10 @@ namespace Game::Graphics
     {
         auto toModelScale = Game::GenericGame::GetInstance()->GetToModelScale().x;
 
-        auto initialFontLineSpacing = m_font.getLineSpacing( Resource::DefaultCharacterSize ) * toModelScale;
+        auto initialFontLineSpacing = m_font.getLineSpacing( Game::Consts::DefaultCharacterSize ) * toModelScale;
         auto initialRatio = m_lineHeight / initialFontLineSpacing;
 
-        auto characterSize = static_cast< unsigned int >( Resource::DefaultCharacterSize * initialRatio );
+        auto characterSize = static_cast< unsigned int >( Game::Consts::DefaultCharacterSize * initialRatio );
 
         m_fontLineSpacing = m_font.getLineSpacing( characterSize ) * toModelScale;
         m_text.setCharacterSize( characterSize );

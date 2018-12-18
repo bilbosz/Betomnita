@@ -6,9 +6,9 @@
 #include "betomnita/layout/MainMenuLayout.hpp"
 #include "game/StateMachine.hpp"
 
-namespace Betomnita
+namespace Betomnita::States
 {
-    MainMenuState::MainMenuState() : State( Resource::StateId::MainMenu ), m_layout( std::make_unique< Layout::MainMenuLayout >( this ) )
+    MainMenuState::MainMenuState() : State( Resources::StateId::MainMenu ), m_layout( std::make_unique< Layouts::MainMenuLayout >( this ) )
     {
     }
 
@@ -68,7 +68,7 @@ namespace Betomnita
 
     void MainMenuState::OnNewGameRequest()
     {
-        Betomnita::BetomnitaGame::GetInstance()->GetStateMachine()->PushState( Resource::StateId::GamePlay );
+        BetomnitaGame::GetInstance()->GetStateMachine()->PushState( Resources::StateId::GamePlay );
     }
 
     void MainMenuState::OnExitRequest()
