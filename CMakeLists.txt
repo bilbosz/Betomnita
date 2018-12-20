@@ -90,6 +90,13 @@ if( Boost_FOUND )
     target_link_libraries( ${MAIN_TARGET} ${Boost_LIBRARIES} )
 endif()
 
+if( DEFINED ENV{BOX2D_ROOT} )
+    message( STATUS "Found Box2d in $ENV{BOX2D_ROOT}" )
+    include_directories( $ENV{BOX2D_ROOT} )
+else()
+    message( FATAL_ERROR "Box2d not found" )    
+endif()
+
 add_custom_target( "CMAKE_RELOAD"
     COMMAND cmake .
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}

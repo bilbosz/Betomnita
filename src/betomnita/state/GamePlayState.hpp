@@ -1,12 +1,16 @@
 #pragma once
-#include "betomnita/resources/Resources.hpp"
 #include "game/State.hpp"
 
 #include <memory>
 
-namespace Game::Graphics
+namespace Betomnita::Resources
 {
-    class Text;
+    enum class StateId;
+}
+
+namespace Betomnita::GamePlay
+{
+    class GamePlayLogic;
 }
 
 namespace Betomnita::States
@@ -31,7 +35,6 @@ namespace Betomnita::States
         void OnMainMenuRequest();
 
     private:
-        std::unique_ptr< Game::Graphics::Text > m_timerText;
-        sf::Time m_timer;
+        std::unique_ptr< Betomnita::GamePlay::GamePlayLogic > m_logic;
     };
 }

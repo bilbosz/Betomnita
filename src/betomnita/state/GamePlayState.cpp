@@ -3,15 +3,12 @@
 #include "app/Debug.hpp"
 #include "betomnita/BetomnitaGame.hpp"
 #include "betomnita/event/EventRegistration.hpp"
+#include "betomnita/gameplay/GamePlayLogic.hpp"
 #include "game/StateMachine.hpp"
-#include "game/graphics/Text.hpp"
-
-#include <iomanip>
-#include <sstream>
 
 namespace Betomnita::States
 {
-    GamePlayState::GamePlayState() : State( Resources::StateId::GamePlay ), m_timerText( std::make_unique< Game::Graphics::Text >() )
+    GamePlayState::GamePlayState() : State( Resources::StateId::GamePlay )
     {
         Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::AddListener(
             { Resources::ListenerId::PauseRequest, false, [this]( const sf::Event::KeyEvent& key ) {
@@ -22,11 +19,6 @@ namespace Betomnita::States
                          break;
                  }
              } } );
-        const auto& aabb = BetomnitaGame::GetInstance()->GetModelAABB();
-        m_timerText->SetColor( sf::Color::White );
-        m_timerText->SetFont( *Resources::DebugFont );
-        m_timerText->SetLineHeight( 0.025f );
-        m_timerText->SetPosition( { aabb.left, aabb.top } );
     }
 
     GamePlayState::~GamePlayState()
@@ -45,12 +37,13 @@ namespace Betomnita::States
 
     void GamePlayState::OnActivate()
     {
-        m_timer = sf::Time::Zero;
+        m_logic = std::make_unique< Betomnita::GamePlay::GamePlayLogic >();
         State::OnActivate();
     }
 
     void GamePlayState::OnDeactivate()
     {
+        m_logic.reset();
         State::OnDeactivate();
     }
 
@@ -70,17 +63,14 @@ namespace Betomnita::States
     {
         if( IsForeground() )
         {
-            m_timer += dt;
-            std::wostringstream out;
-            out << L"Time: " << std::setprecision( 4 ) << m_timer.asSeconds();
-            m_timerText->SetString( out.str() );
+            m_logic->Update( dt );
             State::OnUpdate( dt );
         }
     }
 
     void GamePlayState::OnRender( sf::RenderTarget& target )
     {
-        m_timerText->Render( target );
+        m_logic->Render( target );
         State::OnRender( target );
     }
 
