@@ -7,9 +7,9 @@
 
 namespace Game::Graphics
 {
-    /* Filled closed path which is described by points ordered clockwise. It is implied in this description that there is no holes. Before rendering polygon has to be
-       divided into triangles. This class uses simple ear clipping algorithm for triangulation (based on two ears theorem) which runs in O( n ^ 3 ), where n is number of
-       points. If there are application efficiency issues caused by this code it is highly recommended to rewrite this code into O( n * log( n ) ). */
+    /* Filled closed path which is described by points ordered counter clockwise. It is implied in this description that there is no holes. Before rendering polygon has
+       to be divided into triangles. This class uses simple ear clipping algorithm for triangulation (based on two ears theorem) which runs in O( n ^ 3 ), where n is
+       number of points. If there are application efficiency issues caused by this code it is highly recommended to rewrite this code into O( n * log( n ) ). */
     class Polygon final : public Primitive
     {
     public:

@@ -4,7 +4,7 @@
 #include "betomnita/BetomnitaGame.hpp"
 #include "betomnita/event/EventRegistration.hpp"
 #include "betomnita/gameplay/GamePlayLogic.hpp"
-#include "game/StateMachine.hpp"
+#include "game/state/StateMachine.hpp"
 
 namespace Betomnita::States
 {

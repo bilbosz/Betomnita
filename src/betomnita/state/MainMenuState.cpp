@@ -4,7 +4,7 @@
 #include "app/Debug.hpp"
 #include "betomnita/BetomnitaGame.hpp"
 #include "betomnita/layout/MainMenuLayout.hpp"
-#include "game/StateMachine.hpp"
+#include "game/state/StateMachine.hpp"
 
 namespace Betomnita::States
 {

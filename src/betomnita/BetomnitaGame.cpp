@@ -6,8 +6,8 @@
 #include "betomnita/state/GamePlayState.hpp"
 #include "betomnita/state/MainMenuState.hpp"
 #include "betomnita/state/PauseState.hpp"
-#include "game/StateMachine.hpp"
 #include "game/graphics/Text.hpp"
+#include "game/state/StateMachine.hpp"
 
 #include <random>
 #include <sstream>

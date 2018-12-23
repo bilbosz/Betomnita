@@ -17,10 +17,12 @@ namespace Betomnita::Layouts
     {
         const auto& modelAABB = BetomnitaGame::GetInstance()->GetModelAABB();
         m_shroud->SetColor( Resources::Shroud );
-        m_shroud->SetPoints( { { modelAABB.left, modelAABB.top },
-                               { modelAABB.left + modelAABB.width, modelAABB.top },
-                               { modelAABB.left + modelAABB.width, modelAABB.top + modelAABB.height },
-                               { modelAABB.left, modelAABB.top + modelAABB.height } } );
+        m_shroud->SetPoints( {
+            { modelAABB.left, modelAABB.top + modelAABB.height },
+            { modelAABB.left + modelAABB.width, modelAABB.top + modelAABB.height },
+            { modelAABB.left + modelAABB.width, modelAABB.top },
+            { modelAABB.left, modelAABB.top },
+        } );
 
         m_title->SetColor( Resources::MenuTitle );
         m_title->SetString( L"Pause" );

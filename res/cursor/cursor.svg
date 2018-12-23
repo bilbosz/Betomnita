@@ -29,7 +29,7 @@
      id="namedview7"
      showgrid="false"
      inkscape:zoom="2.36"
-     inkscape:cx="7.3400765"
+     inkscape:cx="-133.12603"
      inkscape:cy="48.233683"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
@@ -54,7 +54,7 @@
      style="fill:#ff7f2a">
     <path
        style="opacity:0.75;fill:#ff7f2a;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 0,0 100,60 H 60 v 40 z"
+       d="M 0,0 60,100 V 60 h 40 z"
        id="path2534"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc" />

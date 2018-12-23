@@ -1,5 +1,5 @@
 #pragma once
-#include "game/State.hpp"
+#include "game/state/State.hpp"
 
 #include <memory>
 

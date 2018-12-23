@@ -135,7 +135,7 @@ namespace Game::Graphics
         }
         if( angleSum >= pointsN * Game::Consts::Pi )
         {
-            return L"Points have to be defined in clockwise direction";
+            return L"Points have to be defined in counter clockwise direction";
         }
 
         return std::nullopt;
@@ -237,7 +237,7 @@ namespace Game::Graphics
     {
         auto prev = previousVertex - currentVertex;
         auto next = nextVertex - currentVertex;
-        return fmodf( atan2f( prev.y, prev.x ) - atan2f( next.y, next.x ) + 2.0f * Game::Consts::Pi, 2.0f * Game::Consts::Pi );
+        return fmodf( atan2f( next.y, next.x ) - atan2f( prev.y, prev.x ) + 2.0f * Game::Consts::Pi, 2.0f * Game::Consts::Pi );
     }
 
     bool Polygon::IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const

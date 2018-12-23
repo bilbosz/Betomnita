@@ -1,6 +1,6 @@
 #pragma once
 #include "betomnita/resources/Resources.hpp"
-#include "game/State.hpp"
+#include "game/state/State.hpp"
 
 namespace Betomnita::Layouts
 {
