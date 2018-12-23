@@ -30,6 +30,7 @@ namespace Game::Graphics
             return m_points;
         }
         void SetPoints( const PointsVector& value );
+        void LoadFromFile( const std::string& path, float scale = 1.0f );
 
         const sf::Color& GetColor() const
         {

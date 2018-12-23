@@ -3,6 +3,7 @@
 
 #    include "project/Config.hpp"
 
+#    include <boost/type_index.hpp>
 #    include <iomanip>
 #    include <iostream>
 #    include <sstream>
@@ -60,5 +61,13 @@ namespace App
 #	define VERIFY(test) { if( !( test ) ) App::Debug::Breakpoint(); }
 #else
 #	define VERIFY(test) { ( test ); }
+#endif
+// clang-format on
+
+// clang-format off
+#ifdef DEBUG
+#	define PRINT_TYPE(type) { std::wostringstream out; out << boost::typeindex::type_id_with_cvr< type >().pretty_name().c_str(); App::Debug::Message( L"T", __FILE__, __LINE__, out.str(), false ); }
+#else
+#	define PRINT_TYPE(type)
 #endif
 // clang-format on

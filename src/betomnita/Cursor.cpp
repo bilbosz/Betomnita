@@ -1,17 +1,13 @@
 #include "betomnita/Cursor.hpp"
 
 #include "app/Debug.hpp"
+#include "betomnita/resources/Resources.hpp"
 
 namespace Betomnita
 {
     Cursor::Cursor()
     {
-        m_shape.SetPoints( {
-            { 0.0f, 0.0f },
-            { 0.02f, 0.012f },
-            { 0.012f, 0.02f },
-        } );
-        m_shape.SetColor( sf::Color::Black );
+        m_shape.LoadFromFile( Resources::CursorPath, 0.0004f );
     }
 
     Cursor::~Cursor()

@@ -2,8 +2,6 @@
 
 #include "app/Debug.hpp"
 
-#include "Box2D/Box2D.h"
-
 namespace Betomnita::GamePlay
 {
     GamePlayLogic::GamePlayLogic()

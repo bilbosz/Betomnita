@@ -4,6 +4,10 @@
 #include "game/GameConsts.hpp"
 #include "game/GenericGame.hpp"
 
+#define NANOSVG_IMPLEMENTATION
+#include <nanosvg.h>
+#undef NANOSVG_IMPLEMENTATION
+
 namespace Game::Graphics
 {
     Polygon::Polygon() : m_vertexArray( sf::PrimitiveType::Triangles )
@@ -32,6 +36,44 @@ namespace Game::Graphics
         }
 #endif
         m_points = value;
+        OnPointsChange();
+        Triangulate();
+    }
+
+    void Polygon::LoadFromFile( const std::string& path, float scale /* = 1.0f */ )
+    {
+        m_points.clear();
+
+        NSVGimage* svg = nsvgParseFromFile( path.c_str(), "px", 96.0f );
+        VERIFY( svg );
+        ASSERT( svg->shapes->next == NULL, L"There should be only one shape in file" );
+        NSVGshape* shape = svg->shapes;
+        VERIFY( shape );
+        ASSERT( shape->paths->next == NULL, L"There should be only one path describing polygon" );
+        NSVGpath* svgPath = shape->paths;
+        VERIFY( svgPath );
+
+        for( auto i = 0; i < svgPath->npts - 1; i += 3 )
+        {
+            m_points.push_back( { svgPath->pts[ 2 * i ] * scale, svgPath->pts[ 2 * i + 1 ] * scale } );
+        }
+        if( shape->fill.type == NSVG_PAINT_COLOR )
+        {
+            sf::Color color;
+            color.r = ( shape->fill.color >> 0 ) & 255;
+            color.g = ( shape->fill.color >> 8 ) & 255;
+            color.b = ( shape->fill.color >> 16 ) & 255;
+            color.a = static_cast< sf::Uint8 >( shape->opacity * 255 );
+            SetColor( color );
+        }
+        nsvgDelete( svg );
+#ifdef DEBUG
+        if( App::Debug::IsExpensive() )
+        {
+            auto error = GetPointsErrors( m_points );
+            ASSERT( !error.has_value(), error.value() );
+        }
+#endif
         OnPointsChange();
         Triangulate();
     }

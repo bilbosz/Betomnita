@@ -48,6 +48,7 @@ include_directories( "${CMAKE_BINARY_DIR}/include" )
 
 set( RES "${CMAKE_SOURCE_DIR}/res" )
 file( COPY "${CMAKE_SOURCE_DIR}/res" DESTINATION "${CMAKE_BINARY_DIR}" )
+message( STATUS "Resources ${CMAKE_SOURCE_DIR}/res copied into ${CMAKE_BINARY_DIR}" )
 
 set( SRC )
 file(
@@ -95,6 +96,13 @@ if( DEFINED ENV{BOX2D_ROOT} )
     include_directories( $ENV{BOX2D_ROOT} )
 else()
     message( FATAL_ERROR "Box2d not found" )    
+endif()
+
+if( DEFINED ENV{NANOSVG_SRC} )
+    message( STATUS "Found NanoSVG in $ENV{NANOSVG_SRC}" )
+    include_directories( SYSTEM $ENV{NANOSVG_SRC} )
+else()
+    message( FATAL_ERROR "NanoSVG not found" )    
 endif()
 
 add_custom_target( "CMAKE_RELOAD"

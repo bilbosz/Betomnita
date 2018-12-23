@@ -34,4 +34,5 @@ namespace Betomnita::Resources
     const sf::Color MenuEntrySelected = { 255, 255, 255, 255 };
 
     const std::string ScreenshotPath = "screenshot.png";
+    const std::string CursorPath = "res/cursor/cursor.svg";
 }
