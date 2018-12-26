@@ -7,12 +7,11 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="100"
-   height="100"
-   viewBox="0 0 100 100"
-   version="1.1"
+   style="shape-rendering:crispEdges"
    id="svg1987"
-   shape-rendering="crispEdges"
+   version="1.1"
+   height="1000"
+   width="1000"
    sodipodi:docname="pattern.svg"
    inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <sodipodi:namedview
@@ -24,16 +23,10 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="996"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
      id="namedview7"
      showgrid="false"
-     inkscape:zoom="2.36"
-     inkscape:cx="50"
-     inkscape:cy="45.558655"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
      inkscape:current-layer="svg1987" />
   <defs
      id="defs1981" />
@@ -52,8 +45,8 @@
   <g
      id="layer1">
     <path
-       style="fill:#ff00ff;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path2534"
        d="M 0,0 100,60 60,100 Z"
-       id="path2534" />
+       style="fill:#ff00ff;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>

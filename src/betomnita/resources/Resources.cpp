@@ -35,4 +35,6 @@ namespace Betomnita::Resources
 
     const std::string ScreenshotPath = "screenshot.png";
     const std::string CursorPath = "res/cursor/cursor.svg";
+    const std::string World1 = "res/worlds/1/def.svg";
+
 }

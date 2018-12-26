@@ -71,3 +71,11 @@ namespace App
 #	define PRINT_TYPE(type)
 #endif
 // clang-format on
+
+// clang-format off
+#ifdef DEBUG
+#	define WARNING(message) { std::wostringstream out; out << message; App::Debug::Message( L"W", __FILE__, __LINE__, out.str(), false ); }
+#else
+#	define WARNING(message)
+#endif
+// clang-format on

@@ -15,6 +15,7 @@ int main( int argc, char* argv[] )
     game.SetFullscreen();
     game.HideCursor();
 #else
+    game.SetFramerateLimit( 0 );
     game.SetBorderedWindow( false, true );
     game.ReleaseCursor();
     game.HideCursor();

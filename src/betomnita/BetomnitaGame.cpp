@@ -49,8 +49,6 @@ namespace Betomnita
     {
         const auto& mousePosition = GetMousePosition();
         m_cursor->SetPosition( mousePosition );
-        std::wostringstream out;
-        out << L"(" << mousePosition.x << L", " << mousePosition.y << L")";
         m_stateMachine->OnUpdate( dt );
         Game::EventSystem::Event< Resources::EventId::OnUpdate >::Dispatch< const sf::Time& >( dt );
         GenericGame::OnUpdate( dt );

@@ -1,7 +1,10 @@
 #pragma once
-#include "game/graphics/Polygon.hpp"
-
 #include <SFML/Graphics.hpp>
+
+namespace Game::Graphics
+{
+    class Polygon;
+}
 
 namespace Betomnita
 {
@@ -13,11 +16,7 @@ namespace Betomnita
 
         void Render( sf::RenderTarget& target );
 
-        void SetPosition( const sf::Vector2f& value )
-        {
-            m_position = value;
-            m_shape.SetPosition( m_position );
-        }
+        void SetPosition( const sf::Vector2f& value );
         const sf::Vector2f& GetPosition() const
         {
             return m_position;
@@ -25,6 +24,6 @@ namespace Betomnita
 
     private:
         sf::Vector2f m_position;
-        Game::Graphics::Polygon m_shape;
+        std::unique_ptr< Game::Graphics::Polygon > m_shape;
     };
 }

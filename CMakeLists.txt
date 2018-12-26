@@ -72,7 +72,6 @@ else()
     )
 endif()
 
-
 set( SFML_STATIC_LIBRARIES TRUE )
 set( SFML_REQUIRED_MODULES system window graphics audio network )
 if( ${CMAKE_SYSTEM_NAME} STREQUAL Windows )
@@ -98,11 +97,11 @@ else()
     message( FATAL_ERROR "Box2d not found" )    
 endif()
 
-if( DEFINED ENV{NANOSVG_SRC} )
-    message( STATUS "Found NanoSVG in $ENV{NANOSVG_SRC}" )
-    include_directories( SYSTEM $ENV{NANOSVG_SRC} )
+if( DEFINED ENV{PUGIXML_SRC} )
+    message( STATUS "Found pugixml in $ENV{PUGIXML_SRC}" )
+    include_directories( SYSTEM $ENV{PUGIXML_SRC} )
 else()
-    message( FATAL_ERROR "NanoSVG not found" )    
+    message( FATAL_ERROR "pugixml not found" )    
 endif()
 
 add_custom_target( "CMAKE_RELOAD"

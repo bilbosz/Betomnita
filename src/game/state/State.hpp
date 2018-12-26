@@ -42,37 +42,37 @@ namespace Game
     protected:
         virtual void OnRegister()
         {
-#ifdef DEBUG
+#ifdef SHOW_STATE_LOG
             MESSAGE( L"STATE registered: " << static_cast< int >( GetId() ) );
 #endif
         }
         virtual void OnUnregister()
         {
-#ifdef DEBUG
+#ifdef SHOW_STATE_LOG
             MESSAGE( L"STATE unregistered: " << static_cast< int >( GetId() ) );
 #endif
         }
         virtual void OnActivate()
         {
-#ifdef DEBUG
+#ifdef SHOW_STATE_LOG
             MESSAGE( L"STATE activated: " << static_cast< int >( GetId() ) );
 #endif
         }
         virtual void OnDeactivate()
         {
-#ifdef DEBUG
+#ifdef SHOW_STATE_LOG
             MESSAGE( L"STATE deactivated: " << static_cast< int >( GetId() ) );
 #endif
         }
         virtual void OnForeground()
         {
-#ifdef DEBUG
+#ifdef SHOW_STATE_LOG
             MESSAGE( L"STATE foregrounded: " << static_cast< int >( GetId() ) );
 #endif
         }
         virtual void OnBackground()
         {
-#ifdef DEBUG
+#ifdef SHOW_STATE_LOG
             MESSAGE( L"STATE state backgrounded: " << static_cast< int >( GetId() ) );
 #endif
         }

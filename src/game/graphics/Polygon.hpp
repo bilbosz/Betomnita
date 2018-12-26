@@ -13,6 +13,16 @@ namespace Game::Graphics
     class Polygon final : public Primitive
     {
     public:
+        enum class Error
+        {
+            NoError,
+            NotEnoughVerticies,
+            PointsNotUnique,
+            LinesCrossing,
+            WrongDirection,
+            Size,
+        };
+
         using Point = sf::Vector2f;
         using PointsVector = std::vector< Point >;
         using Triangle = std::tuple< Point, Point, Point >;
@@ -30,7 +40,8 @@ namespace Game::Graphics
             return m_points;
         }
         void SetPoints( const PointsVector& value );
-        void LoadFromFile( const std::string& path, float scale = 1.0f );
+        void LoadFromFile( const std::string& path );
+        static std::vector< std::unique_ptr< Polygon > > LoadManyFromFile( const std::string& path );
 
         const sf::Color& GetColor() const
         {
@@ -38,7 +49,19 @@ namespace Game::Graphics
         }
         void SetColor( const sf::Color& value );
 
-        static std::optional< std::wstring > GetPointsErrors( const PointsVector& value );
+        void SetOutlineColor( const sf::Color& value );
+        const sf::Color& GetOutlineColor() const
+        {
+            return m_outlineColor;
+        }
+
+        void SetOutlineThickness( float value );
+        float GetOutlineThickness() const
+        {
+            return m_outlineThickness;
+        }
+
+        static Error GetPointsErrors( const PointsVector& value );
 
     private:
         static float GetAngle( const Point& previousVertex, const Point& currentVertex, const Point& nextVertex );
@@ -54,8 +77,17 @@ namespace Game::Graphics
         bool IsEar( const PointsList& polygonVertices, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex ) const;
         bool IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const;
 
+        void ParseDescription( const char* description );
+        void ParseTransformation( const char* transform, float scale );
+        void ParseStyle( const char* style );
+        
+        void ReversePoints();
+
         PointsVector m_points;
         sf::Color m_color;
+
+        sf::Color m_outlineColor;
+        float m_outlineThickness;
 
         sf::Vector2f m_appliedMove;
         sf::VertexArray m_vertexArray;

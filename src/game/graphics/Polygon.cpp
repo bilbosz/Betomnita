@@ -4,9 +4,9 @@
 #include "game/GameConsts.hpp"
 #include "game/GenericGame.hpp"
 
-#define NANOSVG_IMPLEMENTATION
-#include <nanosvg.h>
-#undef NANOSVG_IMPLEMENTATION
+#include "pugixml.hpp"
+#include <sstream>
+#include <unordered_map>
 
 namespace Game::Graphics
 {
@@ -31,8 +31,7 @@ namespace Game::Graphics
 #ifdef DEBUG
         if( App::Debug::IsExpensive() )
         {
-            auto error = GetPointsErrors( value );
-            ASSERT( !error.has_value(), error.value() );
+            CHECK( GetPointsErrors( value ) == Error::NoError );
         }
 #endif
         m_points = value;
@@ -40,64 +39,116 @@ namespace Game::Graphics
         Triangulate();
     }
 
-    void Polygon::LoadFromFile( const std::string& path, float scale /* = 1.0f */ )
+    void Polygon::LoadFromFile( const std::string& path )
     {
         m_points.clear();
 
-        NSVGimage* svg = nsvgParseFromFile( path.c_str(), "px", 96.0f );
-        VERIFY( svg );
-        ASSERT( svg->shapes->next == NULL, L"There should be only one shape in file" );
-        NSVGshape* shape = svg->shapes;
-        VERIFY( shape );
-        ASSERT( shape->paths->next == NULL, L"There should be only one path describing polygon" );
-        NSVGpath* svgPath = shape->paths;
-        VERIFY( svgPath );
+        pugi::xml_document doc;
+        VERIFY( doc.load_file( path.c_str() ) );
 
-        for( auto i = 0; i < svgPath->npts - 1; i += 3 )
+        auto scale = 1.0f;
+        const auto& scaleAttr = doc.child( "svg" ).attribute( "data-scale" );
+        if( scaleAttr )
         {
-            m_points.push_back( { svgPath->pts[ 2 * i ] * scale, svgPath->pts[ 2 * i + 1 ] * scale } );
+            scale = scaleAttr.as_float();
         }
-        if( shape->fill.type == NSVG_PAINT_COLOR )
+
+        const auto& polygonElem = doc.select_node( "//path" ).node();
+
+        ParseDescription( polygonElem.attribute( "d" ).as_string() );
+        ParseTransformation( polygonElem.attribute( "transform" ).as_string(), scale );
+        ParseStyle( polygonElem.attribute( "style" ).as_string() );
+
+        auto error = GetPointsErrors( m_points );
+        CHECK( error == Error::NoError || error == Error::WrongDirection );
+        if( error == Error::WrongDirection )
         {
-            sf::Color color;
-            color.r = ( shape->fill.color >> 0 ) & 255;
-            color.g = ( shape->fill.color >> 8 ) & 255;
-            color.b = ( shape->fill.color >> 16 ) & 255;
-            color.a = static_cast< sf::Uint8 >( shape->opacity * 255 );
-            SetColor( color );
+            WARNING( L"Verticies in file " << path.c_str() << " have to be reversed." );
+            ReversePoints();
         }
-        nsvgDelete( svg );
 #ifdef DEBUG
         if( App::Debug::IsExpensive() )
         {
-            auto error = GetPointsErrors( m_points );
-            ASSERT( !error.has_value(), error.value() );
+            CHECK( GetPointsErrors( m_points ) == Error::NoError );
         }
 #endif
         OnPointsChange();
         Triangulate();
     }
 
+    std::vector< std::unique_ptr< Polygon > > Polygon::LoadManyFromFile( const std::string& path )
+    {
+        std::vector< std::unique_ptr< Polygon > > result;
+        pugi::xml_document doc;
+        VERIFY( doc.load_file( path.c_str() ) );
+
+        auto scale = 1.0f;
+        const auto& scaleAttr = doc.child( "svg" ).attribute( "data-scale" );
+        if( scaleAttr )
+        {
+            scale = scaleAttr.as_float();
+        }
+
+        const auto& paths = doc.select_nodes( "//path" );
+        result.reserve( std::distance( paths.begin(), paths.end() ) );
+        for( const auto& polygonElem : paths )
+        {
+            auto& polygon = result.emplace_back( std::make_unique< Polygon >() );
+            polygon->ParseDescription( polygonElem.node().attribute( "d" ).as_string() );
+            polygon->ParseTransformation( polygonElem.node().attribute( "transform" ).as_string(), scale );
+            polygon->ParseStyle( polygonElem.node().attribute( "style" ).as_string() );
+            auto it = std::find( polygon->m_points.rbegin(), polygon->m_points.rend(), *polygon->m_points.begin() );
+            
+
+            auto error = GetPointsErrors( polygon->GetPoints() );
+            CHECK( error == Error::NoError || error == Error::WrongDirection );
+            if( error == Error::WrongDirection )
+            {
+                WARNING( L"Verticies in file " << path.c_str() << " have to be reversed." );
+                polygon->ReversePoints();
+            }
+#ifdef DEBUG
+            if( App::Debug::IsExpensive() )
+            {
+                CHECK( GetPointsErrors( polygon->GetPoints() ) == Error::NoError );
+            }
+#endif
+            polygon->OnPointsChange();
+            polygon->Triangulate();
+        }
+        return result;
+    }
+
     void Polygon::SetColor( const sf::Color& value )
     {
         m_color = value;
         auto verticesN = m_vertexArray.getVertexCount();
-        for( auto i = 0U; i < verticesN; ++i )
+        for( size_t i = 0; i < verticesN; ++i )
         {
             m_vertexArray[ i ].color = m_color;
         }
     }
 
-    std::optional< std::wstring > Polygon::GetPointsErrors( const PointsVector& points )
+    void Polygon::SetOutlineColor( const sf::Color& value )
+    {
+        m_outlineColor = value;
+    }
+
+    void Polygon::SetOutlineThickness( float value )
+    {
+        m_outlineThickness = value;
+    }
+
+    Polygon::Error Polygon::GetPointsErrors( const PointsVector& points )
     {
         auto pointsN = points.size();
         if( pointsN == 0 )
         {
-            return std::nullopt;
+            return Error::NoError;
         }
         if( pointsN < 3 )
         {
-            return L"Polygon has to have at least 3 vertices";
+            return Error::NotEnoughVerticies;
         }
 
         for( auto i = 0; i < pointsN; ++i )
@@ -106,7 +157,7 @@ namespace Game::Graphics
             {
                 if( points[ i ] == points[ j ] )
                 {
-                    return L"Points in path defining polygon have to be unique";
+                    return Error::PointsNotUnique;
                 }
             }
         }
@@ -123,7 +174,7 @@ namespace Game::Graphics
                 std::pair< const Point&, const Point& > lineB = { points[ j ], points[ ( j + 1 ) % pointsN ] };
                 if( AreLinesOverlapped( lineA, lineB ) )
                 {
-                    return L"Lines on perimeter cannot cross with itself in polygon";
+                    return Error::LinesCrossing;
                 }
             }
         }
@@ -135,10 +186,10 @@ namespace Game::Graphics
         }
         if( angleSum >= pointsN * Game::Consts::Pi )
         {
-            return L"Points have to be defined in counter clockwise direction";
+            return Error::WrongDirection;
         }
 
-        return std::nullopt;
+        return Error::NoError;
     }
 
     void Polygon::Init()
@@ -240,17 +291,254 @@ namespace Game::Graphics
         return fmodf( atan2f( next.y, next.x ) - atan2f( prev.y, prev.x ) + 2.0f * Game::Consts::Pi, 2.0f * Game::Consts::Pi );
     }
 
-    bool Polygon::IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const
-    {
-        return GetAngle( examinedPoint, a, b ) < Game::Consts::Pi && GetAngle( examinedPoint, b, c ) < Game::Consts::Pi &&
-               GetAngle( examinedPoint, c, a ) < Game::Consts::Pi;
-    }
-
     bool Polygon::AreLinesOverlapped( const std::pair< const Point&, const Point& >& lineA, const std::pair< const Point&, const Point& >& lineB )
     {
         return ( ( GetAngle( lineA.first, lineA.second, lineB.first ) < Game::Consts::Pi ) !=
                  ( GetAngle( lineA.first, lineA.second, lineB.second ) < Game::Consts::Pi ) ) &&
                ( ( GetAngle( lineB.first, lineB.second, lineA.first ) < Game::Consts::Pi ) !=
                  ( GetAngle( lineB.first, lineB.second, lineA.second ) < Game::Consts::Pi ) );
+    }
+
+    bool Polygon::IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const
+    {
+        return GetAngle( examinedPoint, a, b ) < Game::Consts::Pi && GetAngle( examinedPoint, b, c ) < Game::Consts::Pi &&
+               GetAngle( examinedPoint, c, a ) < Game::Consts::Pi;
+    }
+
+    void Polygon::ParseDescription( const char* description )
+    {
+        auto it = description;
+        auto cmd = '\0';
+        auto isNumber = []( char ch ) { return isdigit( ch ) || ch == '-' || ch == '+' || ch == '.'; };
+        auto alterCoord = [&cmd, &it]( float& coord ) {
+            auto val = static_cast< float >( atof( it ) );
+            if( isupper( cmd ) )
+            {
+                coord = val;
+            }
+            else
+            {
+                coord += val;
+            }
+        };
+        auto x = 0.0f;
+        auto y = 0.0f;
+        auto isXLoaded = false;
+        while( *it )
+        {
+            if( isalpha( *it ) )
+            {
+                cmd = *it;
+                ++it;
+            }
+            else if( isNumber( *it ) )
+            {
+                switch( toupper( cmd ) )
+                {
+                    case 'M':
+                    case 'L':
+                        if( isXLoaded )
+                        {
+                            isXLoaded = false;
+                            alterCoord( y );
+                        }
+                        else
+                        {
+                            isXLoaded = true;
+                            alterCoord( x );
+                        }
+                        break;
+                    case 'H':
+                        alterCoord( x );
+                        break;
+                    case 'V':
+                        alterCoord( y );
+                        break;
+                    case 'Z':
+                        break;
+                    default:
+                        ASSERT( false, L"'" << toupper( cmd ) << "' is wrong command for polygon description" );
+                }
+                if( !isXLoaded )
+                {
+                    m_points.emplace_back( x, y );
+                }
+                do
+                {
+                    ++it;
+                } while( isNumber( *it ) );
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+
+    void Polygon::ParseTransformation( const char* transformation, float scale )
+    {
+        sf::Transform transform;
+        transform.scale( scale, scale );
+
+        auto it = transformation;
+        const char* funBegin = nullptr;
+        const char* funEnd = nullptr;
+        std::vector< float > args;
+        auto isNumber = []( char ch ) { return isdigit( ch ) || ch == '-' || ch == '+' || ch == '.'; };
+
+        for( ; *it; ++it )
+        {
+            if( isspace( *it ) || *it == '(' || *it == ',' )
+            {
+                continue;
+            }
+            if( !funBegin )
+            {
+                funBegin = it;
+            }
+            else if( !funEnd )
+            {
+                while( *it && !isspace( *it ) && *it != '(' )
+                {
+                    ++it;
+                }
+                funEnd = it;
+            }
+            else if( isNumber( *it ) )
+            {
+                args.emplace_back( static_cast< float >( atof( it ) ) );
+                do
+                {
+                    ++it;
+                } while( isNumber( *it ) );
+                --it;
+            }
+            else if( *it == ')' )
+            {
+                std::string fun( funBegin, funEnd );
+                std::transform( fun.begin(), fun.end(), fun.begin(), tolower );
+                if( fun == "matrix" )
+                {
+                    CHECK( args.size() == 6 );
+                    transform.combine( { args[ 0 ], args[ 2 ], args[ 4 ], args[ 1 ], args[ 3 ], args[ 5 ], 0.0f, 0.0f, 1.0f } );
+                }
+                else if( fun == "translate" )
+                {
+                    CHECK( args.size() == 1 || args.size() == 2 );
+                    transform.translate( args[ 0 ], args.size() == 2 ? args[ 1 ] : 0.0f );
+                }
+                else if( fun == "scale" )
+                {
+                    CHECK( args.size() == 1 || args.size() == 2 );
+                    transform.scale( args[ 0 ], args.size() == 2 ? args[ 1 ] : args[ 0 ] );
+                }
+                else if( fun == "rotate" )
+                {
+                    CHECK( args.size() == 1 || args.size() == 3 );
+                    if( args.size() == 1 )
+                    {
+                        transform.rotate( args[ 0 ] );
+                    }
+                    else
+                    {
+                        transform.rotate( args[ 0 ], args[ 1 ], args[ 2 ] );
+                    }
+                }
+                else if( fun == "skewx" )
+                {
+                    CHECK( args.size() == 1 );
+                    transform.combine( { 1.0f, tanf( args[ 0 ] * 180.0f / Game::Consts::Pi ), 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f } );
+                }
+                else if( fun == "skewy" )
+                {
+                    CHECK( args.size() == 1 );
+                    transform.combine( { 1.0f, 0.0f, 0.0f, tanf( args[ 0 ] * 180.0f / Game::Consts::Pi ), 1.0f, 0.0f, 0.0f, 0.0f, 1.0f } );
+                }
+                else
+                {
+                    ASSERT( false, L"There is no \"" << fun.c_str() << "\" SVG transformation" );
+                }
+                funBegin = nullptr;
+                funEnd = nullptr;
+                args.clear();
+            }
+        }
+        for( auto& point : m_points )
+        {
+            point = transform.transformPoint( point );
+        }
+    }
+
+    void Polygon::ParseStyle( const char* style )
+    {
+        auto it = style;
+        std::unordered_map< std::string, std::string > styles;
+        const char* keyBegin = nullptr;
+        const char* keyEnd = nullptr;
+        const char* valueBegin = nullptr;
+        const char* valueEnd = nullptr;
+        for( ; *it; ++it )
+        {
+            if( isspace( *it ) || *it == ':' )
+            {
+                continue;
+            }
+            if( !keyBegin )
+            {
+                if( isalpha( *it ) || *it == '-' )
+                {
+                    keyBegin = it;
+                }
+            }
+            else if( !keyEnd )
+            {
+                while( *it && !isspace( *it ) && *it != ':' )
+                {
+                    ++it;
+                }
+                CHECK( *it );
+                keyEnd = it;
+            }
+            else if( !valueBegin )
+            {
+                valueBegin = it;
+            }
+            else if( !valueEnd )
+            {
+                while( *it && !isspace( *it ) && *it != ';' )
+                {
+                    ++it;
+                }
+                valueEnd = it;
+                --it;
+                styles.emplace( std::make_pair( std::string( keyBegin, keyEnd ), std::string( valueBegin, valueEnd ) ) );
+                keyBegin = nullptr;
+                keyEnd = nullptr;
+                valueBegin = nullptr;
+                valueEnd = nullptr;
+            }
+        }
+
+        const auto& color = styles.find( "fill" );
+        uint32_t colorVal = 0xffffffff;
+        if( color != styles.cend() )
+        {
+            std::istringstream( color->second.substr( 1 ) ) >> std::hex >> colorVal;
+            colorVal = colorVal << 8 | 0xff;
+        }
+
+        const auto& opacity = styles.find( "opacity" );
+        float opacityVal;
+        if( opacity != styles.cend() )
+        {
+            opacityVal = static_cast< float >( atof( opacity->second.c_str() ) );
+            colorVal &= UINT_MAX << 8 | static_cast< uint32_t >( opacityVal * 255.0f );
+        }
+        SetColor( sf::Color( colorVal ) );
+    }
+
+    void Polygon::ReversePoints()
+    {
+        std::reverse( m_points.begin(), m_points.end() );
     }
 }

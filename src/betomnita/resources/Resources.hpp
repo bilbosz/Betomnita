@@ -55,4 +55,5 @@ namespace Betomnita::Resources
     extern const sf::Color MenuEntrySelected;
     extern const std::string ScreenshotPath;
     extern const std::string CursorPath;
+    extern const std::string World1;
 }
