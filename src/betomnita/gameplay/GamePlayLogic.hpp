@@ -11,6 +11,7 @@ namespace Betomnita::GamePlay
     class World;
     class View;
     class Cursor;
+    class Unit;
 
     class GamePlayLogic final
     {
@@ -23,9 +24,7 @@ namespace Betomnita::GamePlay
 
     private:
         sf::Time m_time;
-        std::vector< std::unique_ptr< Game::Graphics::Polygon > > m_shapes;
-        // std::unique_ptr< World > m_world;
-        // std::unique_ptr< View > m_view;
-        // std::unique_ptr< Cursor > m_cursor;
+        std::unique_ptr< World > m_world; // mainly physics and world design
+        //std::vector< std::unique_ptr< Unit > > m_units; // for executing units commands
     };
 }

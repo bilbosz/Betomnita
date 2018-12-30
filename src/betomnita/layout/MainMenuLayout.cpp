@@ -81,6 +81,7 @@ namespace Betomnita::Layouts
 
     void MainMenuLayout::OnRender( sf::RenderTarget& target )
     {
+        target.clear( Resources::MenuBackground );
         m_title->Render( target );
         for( const auto& option : m_options )
         {

@@ -59,17 +59,13 @@ namespace Game::Graphics
         ParseTransformation( polygonElem.attribute( "transform" ).as_string(), scale );
         ParseStyle( polygonElem.attribute( "style" ).as_string() );
 
+#ifdef DEBUG
         auto error = GetPointsErrors( m_points );
         CHECK( error == Error::NoError || error == Error::WrongDirection );
         if( error == Error::WrongDirection )
         {
             WARNING( L"Verticies in file " << path.c_str() << " have to be reversed." );
             ReversePoints();
-        }
-#ifdef DEBUG
-        if( App::Debug::IsExpensive() )
-        {
-            CHECK( GetPointsErrors( m_points ) == Error::NoError );
         }
 #endif
         OnPointsChange();
@@ -90,6 +86,7 @@ namespace Game::Graphics
         }
 
         const auto& paths = doc.select_nodes( "//path" );
+        auto pathN = 0;
         result.reserve( std::distance( paths.begin(), paths.end() ) );
         for( const auto& polygonElem : paths )
         {
@@ -97,14 +94,12 @@ namespace Game::Graphics
             polygon->ParseDescription( polygonElem.node().attribute( "d" ).as_string() );
             polygon->ParseTransformation( polygonElem.node().attribute( "transform" ).as_string(), scale );
             polygon->ParseStyle( polygonElem.node().attribute( "style" ).as_string() );
-            auto it = std::find( polygon->m_points.rbegin(), polygon->m_points.rend(), *polygon->m_points.begin() );
-            
 
             auto error = GetPointsErrors( polygon->GetPoints() );
             CHECK( error == Error::NoError || error == Error::WrongDirection );
             if( error == Error::WrongDirection )
             {
-                WARNING( L"Verticies in file " << path.c_str() << " have to be reversed." );
+                WARNING( L"Verticies for polygon " << pathN << L" in file " << path.c_str() << " have to be reversed." );
                 polygon->ReversePoints();
             }
 #ifdef DEBUG
@@ -115,6 +110,7 @@ namespace Game::Graphics
 #endif
             polygon->OnPointsChange();
             polygon->Triangulate();
+            ++pathN;
         }
         return result;
     }

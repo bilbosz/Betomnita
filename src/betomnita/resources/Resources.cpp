@@ -27,7 +27,7 @@ namespace Betomnita::Resources
     sf::Font* DebugFont;
     sf::Font* DefaultFont;
 
-    const sf::Color Background = { 100, 130, 155, 255 };
+    const sf::Color MenuBackground = { 100, 130, 155, 255 };
     const sf::Color Shroud = { 0, 0, 0, 100 };
     const sf::Color MenuTitle = { 240, 240, 240, 255 };
     const sf::Color MenuEntryNormal = { 220, 220, 220, 255 };

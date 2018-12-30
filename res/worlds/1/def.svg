@@ -5,6 +5,7 @@
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:svg="http://www.w3.org/2000/svg"
      xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
      xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
      xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
      style="shape-rendering:crispEdges"
@@ -24,29 +25,25 @@
          guidetolerance="10"
          inkscape:pageopacity="0"
          inkscape:pageshadow="2"
-         inkscape:window-width="944"
-         inkscape:window-height="980"
+         inkscape:window-width="1920"
+         inkscape:window-height="996"
          id="namedview7"
-         showgrid="true"
-         inkscape:current-layer="svg1987"
-         inkscape:zoom="0.90346763"
-         inkscape:cx="375"
-         inkscape:cy="646.41735"
-         inkscape:window-x="960"
-         inkscape:window-y="0"
-         inkscape:window-maximized="0">
+         showgrid="false"
+         inkscape:current-layer="layer1"
+         inkscape:zoom="0.11313709"
+         inkscape:cx="966.3058"
+         inkscape:cy="1395.5372"
+         inkscape:window-x="-8"
+         inkscape:window-y="-8"
+         inkscape:window-maximized="1"
+         showguides="false"
+         inkscape:guide-bbox="true">
         <inkscape:grid
              id="grid8"
              type="xygrid" />
     </sodipodi:namedview>
     <defs
-         id="defs1981">
-        <inkscape:path-effect
-             interpolator_type="Linear"
-             is_visible="true"
-             id="path-effect826"
-             effect="interpolate_points" />
-    </defs>
+         id="defs1981" />
     <metadata
          id="metadata1984">
         <rdf:RDF>
@@ -59,21 +56,35 @@
             </cc:Work>
         </rdf:RDF>
     </metadata>
-    <path
-         inkscape:connector-curvature="0"
-         id="path12"
-         d="M 320,580 L 120,200 L 780,300 L 720,680 L 360,800 L -40,580 L -440,140 L -40,100 L 20,380 L 240,600 L 80,240 L 40,60 L 280,580 Z"
-         style="fill:#d45500;stroke:none;stroke-width:1.05053246px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         transform="matrix(0.93442623,0,0,0.96969697,51.147541,24.242424)" />
-    <path
-         inkscape:connector-curvature="0"
-         id="path14"
-         d="M 720,140 L 960,420 L 720,900 L 360,940 L 460,1000 L 1000,940 L 1120,220 L 760,80 Z"
-         style="fill:#c8b7b7;stroke:none;stroke-width:1.01316011px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         transform="matrix(0.98684211,0,0,0.98717949,4.7368421,12.820513)" />
-    <path
-         id="path3743"
-         d="M 350,115 L 348.64254,131.66011 L 344.67157,147.52809 L 338.23918,162.15804 L 329.49747,175.10408 L 318.83604,185.719 L 306.78784,193.52976 L 293.72009,198.35166 L 280,200 L 266.27991,198.35166 L 253.21216,193.52976 L 241.16396,185.719 L 230.50253,175.10408 L 221.76082,162.15804 L 215.32843,147.52809 L 211.35746,131.66011 L 210,115 L 211.35746,98.339886 L 215.32843,82.471908 L 221.76082,67.841957 L 230.50253,54.895924 L 241.16396,44.280998 L 253.21216,36.47024 L 266.27991,31.648342 L 280,30 L 293.72009,31.648342 L 306.78784,36.47024 L 318.83604,44.280998 L 329.49747,54.895924 L 338.23918,67.841957 L 344.67157,82.471908 L 348.64254,98.339886"
-         style="fill:#ccff00"
-         inkscape:connector-curvature="0" />
+    <g
+         inkscape:groupmode="layer"
+         id="layer1"
+         inkscape:label="MainLayer"
+         style="display:inline;opacity:1">
+        <path
+             transform="matrix(6.1686337,0,0,8.7154607,-3266.9192,-6937.8814)"
+             style="opacity:1;fill:#bd9567;fill-opacity:1;stroke:none;stroke-width:0.13638304px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="M 2220,120 L 2125.592,93.203735 L 2030.0488,68.989258 L 1933.6414,47.243042 L 1836.6406,27.851562 L 1739.3176,10.701294 L 1641.9434,-4.3212891 L 1544.7888,-17.329712 L 1448.125,-28.4375 L 1352.2229,-37.758179 L 1257.3535,-45.405273 L 1071.7969,-56.132812 L 893.62305,-61.52832 L 725,-62.5 L 568.0957,-59.956055 L 425.07812,-54.804687 L 298.11523,-47.954102 L 189.375,-40.3125 L 35.234375,-26.289062 L -20,-20 L -34.335937,-18.515625 L -70.9375,-11.875 L -94.584961,-5.5957031 L -120.19531,3.203125 L -146.56738,14.931641 L -172.5,30 L -196.79199,48.818359 L -218.24219,71.796875 L -227.52625,84.974365 L -235.64941,99.345703 L -242.46155,114.96216 L -247.8125,131.875 L -251.55212,150.1355 L -253.53027,169.79492 L -253.5968,190.90454 L -251.60156,213.51562 L -247.39441,237.67944 L -240.8252,263.44727 L -231.74377,290.87036 L -220,320 L -196.25488,379.92187 L -177.22656,439.375 L -162.47559,497.89062 L -151.5625,555 L -144.04785,610.23437 L -139.49219,663.125 L -137.45605,713.20312 L -137.5,760 L -139.18457,803.04687 L -142.07031,841.875 L -149.6875,905 L -156.83594,945.625 L -160,960 L -168.75,992.5 L -176.875,1027.5 L -185,1070 L -191.25,1116.25 L -193.75,1162.5 L -193.00781,1184.4531 L -190.625,1205 L -186.36719,1223.6719 L -180,1240 L -168.36426,1259.3799 L -148.78906,1286.2891 L -121.77246,1318.8818 L -87.8125,1355.3125 L -47.407227,1393.7354 L -1.0546875,1432.3047 L 50.74707,1469.1748 L 78.535767,1486.3959 L 107.5,1502.5 L 137.57751,1517.2565 L 168.70605,1530.4346 L 200.82336,1541.8036 L 233.86719,1551.1328 L 267.77527,1558.1915 L 302.48535,1562.749 L 337.93518,1564.5746 L 374.0625,1563.4375 L 410.80505,1559.1071 L 448.10059,1551.3525 L 485.88684,1539.9432 L 524.10156,1524.6484 L 562.6825,1505.2374 L 601.56738,1481.4795 L 640.69397,1453.1439 L 680,1420 L 751.39648,1358.2666 L 782.00806,1334.1693 L 809.60937,1314.2578 L 834.48608,1298.2867 L 856.92383,1286.0107 L 877.20825,1277.1844 L 895.625,1271.5625 L 912.45972,1268.8995 L 927.99805,1268.9502 L 942.52563,1271.4691 L 956.32812,1276.2109 L 969.69116,1282.9303 L 982.90039,1291.3818 L 1010,1312.5 L 1039.9121,1337.6025 L 1074.9219,1364.7266 L 1117.3145,1391.9092 L 1141.9934,1404.9091 L 1169.375,1417.1875 L 1199.7449,1428.4991 L 1233.3887,1438.5986 L 1270.592,1447.2406 L 1311.6406,1454.1797 L 1356.8201,1459.1705 L 1406.416,1461.9678 L 1460.7141,1462.326 L 1520,1460 L 1580.65,1454.1284 L 1638.8721,1444.1992 L 1694.6991,1430.4907 L 1748.1641,1413.2813 L 1799.2999,1392.8491 L 1848.1396,1369.4727 L 1894.7162,1343.4302 L 1939.0625,1315 L 1981.2115,1284.4604 L 2021.1963,1252.0898 L 2059.0497,1218.1665 L 2094.8047,1182.9688 L 2128.4943,1146.7749 L 2160.1514,1109.8633 L 2189.809,1072.5122 L 2217.5,1035 L 2267.1143,960.60547 L 2309.2578,888.90625 L 2344.1943,822.12891 L 2372.1875,762.5 L 2393.501,712.24609 L 2408.3984,673.59375 L 2420,640 L 2420.4297,620.11719 L 2419.6875,567.1875 L 2414.7266,491.28906 L 2409.7119,447.87598 L 2402.5,402.5 L 2392.71,356.4209 L 2379.9609,310.89844 L 2363.8721,267.19238 L 2344.0625,226.5625 L 2332.6434,207.7948 L 2320.1514,190.26855 L 2306.5387,174.14124 L 2291.7578,159.57031 L 2275.7611,146.71326 L 2258.501,135.72754 L 2239.9298,126.77063"
+             id="path17"
+             inkscape:connector-curvature="0"
+             data-friction="5" />
+        <image
+             sodipodi:absref="C:\repo\betomnita\res\worlds\1\../../vehicles/chassis/t34.svg"
+             xlink:href="../../vehicles/chassis/t34.svg"
+             data-unit="1"
+             data-player="1"
+             style="opacity:1"
+             transform="translate(320,280)"
+             preserveAspectRatio="none"
+             id="image59" />
+        <image
+             sodipodi:absref="C:\repo\betomnita\res\worlds\1\../../vehicles/guns/single-tank-gun.svg"
+             xlink:href="../../vehicles/guns/single-tank-gun.svg"
+             data-unit="1"
+             data-player="1"
+             transform="translate(400.6946,83.91141)"
+             preserveAspectRatio="none"
+             id="image59-2"
+             style="display:inline;opacity:1;shape-rendering:crispEdges" />
+    </g>
 </svg>

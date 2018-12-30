@@ -1,25 +1,24 @@
-//#include "betomnita/gameplay/GamePlayLogic.hpp"
-//
-//#include "app/Debug.hpp"
-//
-//#include "Box2D/Box2D.h"
-//
-//namespace Betomnita::GamePlay
-//{
-//    GamePlayLogic::GamePlayLogic()
-//    {
-//    }
-//
-//    GamePlayLogic::~GamePlayLogic()
-//    {
-//    }
-//
-//    void GamePlayLogic::Render( sf::RenderTarget& target )
-//    {
-//    }
-//
-//    void GamePlayLogic::Update( const sf::Time& dt )
-//    {
-//        m_time += dt;
-//    }
-//}
+#include "betomnita/gameplay/World.hpp"
+
+#include "app/Debug.hpp"
+#include "betomnita/gameplay/PhysicalBody.hpp"
+
+namespace Betomnita::GamePlay
+{
+    World::World()
+    {
+        m_physicalBodies.emplace_back( std::make_unique< PhysicalBody >() );
+    }
+
+    World::~World()
+    {
+    }
+
+    void World::Render( sf::RenderTarget& target )
+    {
+    }
+
+    void World::Update( const sf::Time& dt )
+    {
+    }
+}

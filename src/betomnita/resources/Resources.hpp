@@ -48,7 +48,7 @@ namespace Betomnita::Resources
     extern const std::wstring WindowTitle;
     extern sf::Font* DebugFont;
     extern sf::Font* DefaultFont;
-    extern const sf::Color Background;
+    extern const sf::Color MenuBackground;
     extern const sf::Color Shroud;
     extern const sf::Color MenuTitle;
     extern const sf::Color MenuEntryNormal;

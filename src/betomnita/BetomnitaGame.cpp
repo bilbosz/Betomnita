@@ -56,7 +56,6 @@ namespace Betomnita
 
     void BetomnitaGame::OnRender( sf::RenderTarget& target )
     {
-        target.clear( Resources::Background );
         m_stateMachine->OnRender( target );
         m_cursor->Render( target );
         m_window.display();
