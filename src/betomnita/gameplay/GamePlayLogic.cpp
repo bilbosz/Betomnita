@@ -9,6 +9,7 @@ namespace Betomnita::GamePlay
 {
     GamePlayLogic::GamePlayLogic() : m_world( std::make_unique< World >() )
     {
+        m_world->LoadFromFile( "res/worlds/1/def.svg" );
     }
 
     GamePlayLogic::~GamePlayLogic()

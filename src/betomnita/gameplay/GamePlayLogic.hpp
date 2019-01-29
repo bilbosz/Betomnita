@@ -9,9 +9,8 @@ namespace Game::Graphics
 namespace Betomnita::GamePlay
 {
     class World;
-    class View;
-    class Cursor;
     class Unit;
+    class VechicleChassis;
 
     class GamePlayLogic final
     {
@@ -25,6 +24,7 @@ namespace Betomnita::GamePlay
     private:
         sf::Time m_time;
         std::unique_ptr< World > m_world; // mainly physics and world design
-        //std::vector< std::unique_ptr< Unit > > m_units; // for executing units commands
+        //std::vector< std::unique_ptr< VechicleChassis > > m_prototypes; // cached vechicle prototypes
+        // std::vector< std::unique_ptr< Unit > > m_units; // for executing units commands
     };
 }

@@ -10,6 +10,7 @@ namespace Betomnita::GamePlay
     class Terrain;
     class PhysicalBody;
     class TerrainPlatform;
+    class Unit;
 
     class World final
     {
@@ -20,16 +21,19 @@ namespace Betomnita::GamePlay
         void Render( sf::RenderTarget& target );
         void Update( const sf::Time& dt );
 
+        void LoadFromFile( const std::string& filename );
+
         // Map (from file)
         // Minimap (getter, thumbnail)
         // Size (AABB of possible positions)
         // PhysialBodies (obstacles, vechicles and buildings)
-        // Isohypse (terrain platforms)
+        // Isohypse (terrain platforms) later
 
     private:
         sf::FloatRect m_size;
-        //std::unique_ptr< Terrain > m_terrainSheets;
-        std::vector< std::unique_ptr< PhysicalBody > > m_physicalBodies;
+        std::vector< std::unique_ptr< Terrain > > m_terrainSheets;
+        // std::vector< std::unique_ptr< PhysicalBody > > m_physicalBodies;
+        // std::vector< std::unique_ptr< Unit > > m_units;
         // std::vector< std::unique_ptr< TerrainPlatform > > m_isohypse;
     };
 }

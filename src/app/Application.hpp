@@ -89,9 +89,9 @@ namespace App
             return m_clock.GetElapsedTime();
         }
 
-        void RequestScreenshot( const std::string& path )
+        void RequestScreenshot( const std::string& filename )
         {
-            m_screenshotRequest = path;
+            m_screenshotRequest = filename;
         }
 
     protected:
@@ -101,7 +101,7 @@ namespace App
         virtual void OnEvent( const sf::Event& e ) = 0;
         virtual void OnVideoSettingsChanged() = 0;
         virtual void OnClose() = 0;
-        virtual void OnScreenshotTaken( const std::string& path ) = 0;
+        virtual void OnScreenshotTaken( const std::string& filename ) = 0;
 
         sf::RenderWindow m_window;
 

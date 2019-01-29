@@ -16,6 +16,11 @@ namespace Game::EventSystem
         using ListenerId = typename EventInfo< id >::ListenerId;
 
         Event() = delete;
+        Event( const Event& ) = delete;
+        Event( Event&& ) = delete;
+        Event& operator=( const Event& ) = delete;
+        Event& operator=( Event&& ) = delete;
+        ~Event() = delete;
 
         static auto GetId()
         {

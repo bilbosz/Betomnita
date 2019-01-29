@@ -3,6 +3,7 @@
 #include "app/Debug.hpp"
 #include "game/GameConsts.hpp"
 #include "game/GenericGame.hpp"
+#include "game/graphics/SVGHelper.hpp"
 
 #include "pugixml.hpp"
 #include <sstream>
@@ -39,12 +40,12 @@ namespace Game::Graphics
         Triangulate();
     }
 
-    void Polygon::LoadFromFile( const std::string& path )
+    void Polygon::LoadFromFile( const std::string& filename )
     {
         m_points.clear();
 
         pugi::xml_document doc;
-        VERIFY( doc.load_file( path.c_str() ) );
+        VERIFY( doc.load_file( filename.c_str() ) );
 
         auto scale = 1.0f;
         const auto& scaleAttr = doc.child( "svg" ).attribute( "data-scale" );
@@ -64,7 +65,7 @@ namespace Game::Graphics
         CHECK( error == Error::NoError || error == Error::WrongDirection );
         if( error == Error::WrongDirection )
         {
-            WARNING( L"Verticies in file " << path.c_str() << " have to be reversed." );
+            WARNING( L"Verticies in file " << filename.c_str() << " have to be reversed." );
             ReversePoints();
         }
 #endif
@@ -72,11 +73,11 @@ namespace Game::Graphics
         Triangulate();
     }
 
-    std::vector< std::unique_ptr< Polygon > > Polygon::LoadManyFromFile( const std::string& path )
+    std::vector< std::unique_ptr< Polygon > > Polygon::LoadManyFromFile( const std::string& filename )
     {
         std::vector< std::unique_ptr< Polygon > > result;
         pugi::xml_document doc;
-        VERIFY( doc.load_file( path.c_str() ) );
+        VERIFY( doc.load_file( filename.c_str() ) );
 
         auto scale = 1.0f;
         const auto& scaleAttr = doc.child( "svg" ).attribute( "data-scale" );
@@ -99,7 +100,7 @@ namespace Game::Graphics
             CHECK( error == Error::NoError || error == Error::WrongDirection );
             if( error == Error::WrongDirection )
             {
-                WARNING( L"Verticies for polygon " << pathN << L" in file " << path.c_str() << " have to be reversed." );
+                WARNING( L"Verticies for polygon " << pathN << L" in file " << filename.c_str() << " have to be reversed." );
                 polygon->ReversePoints();
             }
 #ifdef DEBUG
@@ -175,17 +176,23 @@ namespace Game::Graphics
             }
         }
 
-        auto angleSum = 0.0f;
-        for( auto i = 0; i < pointsN; ++i )
-        {
-            angleSum += GetAngle( points[ i ], points[ ( i + 1 ) % pointsN ], points[ ( i + 2 ) % pointsN ] );
-        }
-        if( angleSum >= pointsN * Game::Consts::Pi )
+        if( !IsRightDirection( points ) )
         {
             return Error::WrongDirection;
         }
 
         return Error::NoError;
+    }
+
+    bool Polygon::IsRightDirection( const PointsVector& points )
+    {
+        auto pointsN = points.size();
+        auto angleSum = 0.0f;
+        for( auto i = 0; i < pointsN; ++i )
+        {
+            angleSum += GetAngle( points[ i ], points[ ( i + 1 ) % pointsN ], points[ ( i + 2 ) % pointsN ] );
+        }
+        return angleSum < pointsN * Game::Consts::Pi;
     }
 
     void Polygon::Init()

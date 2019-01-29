@@ -40,8 +40,8 @@ namespace Game::Graphics
             return m_points;
         }
         void SetPoints( const PointsVector& value );
-        void LoadFromFile( const std::string& path );
-        static std::vector< std::unique_ptr< Polygon > > LoadManyFromFile( const std::string& path );
+        void LoadFromFile( const std::string& filename );
+        static std::vector< std::unique_ptr< Polygon > > LoadManyFromFile( const std::string& filename );
 
         const sf::Color& GetColor() const
         {
@@ -61,7 +61,9 @@ namespace Game::Graphics
             return m_outlineThickness;
         }
 
-        static Error GetPointsErrors( const PointsVector& value );
+        static Error GetPointsErrors( const PointsVector& points );
+
+        static bool IsRightDirection( const PointsVector& points );
 
     private:
         static float GetAngle( const Point& previousVertex, const Point& currentVertex, const Point& nextVertex );

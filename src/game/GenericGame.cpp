@@ -142,7 +142,7 @@ namespace Game
         UpdateModelToScreen();
     }
 
-    void GenericGame::OnScreenshotTaken( const std::string& path )
+    void GenericGame::OnScreenshotTaken( const std::string& filename )
     {
     }
 
