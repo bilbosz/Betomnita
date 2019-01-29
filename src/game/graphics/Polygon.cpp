@@ -73,6 +73,90 @@ namespace Game::Graphics
         Triangulate();
     }
 
+    std::vector< std::unique_ptr< Polygon > > Polygon::LoadManyFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale )
+    {
+        std::vector< std::unique_ptr< Polygon > > result;
+#ifdef DEBUG
+        auto id = node.attribute( "id" ).as_string();
+#endif
+        sf::Transform transform;
+        auto desc = SVGHelper::ParsePathDescriptions( node.attribute( "d" ).as_string() );
+        auto style = SVGHelper::ParseStyle( node.attribute( "style" ).as_string() );
+        transform.scale( { scale, scale } ).combine( SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() ) );
+
+        auto current = &node.parent();
+        while( *current->name() == '\0' )
+        {
+            transform.combine( SVGHelper::ParseTransform( current->attribute( "transform" ).as_string() ) );
+            current = &current->parent();
+        }
+
+        for( auto& points : desc )
+        {
+            auto& polygon = result.emplace_back( std::make_unique< Polygon >() );
+            for( auto& point : points )
+            {
+                point = transform.transformPoint( point );
+            }
+#ifdef DEBUG
+            bool samePoints = false;
+#endif
+            while( !points.empty() && *points.cbegin() == *points.crbegin() )
+            {
+                points.pop_back();
+#ifdef DEBUG
+                samePoints = true;
+#endif
+            }
+#ifdef DEBUG
+            if( samePoints )
+            {
+                WARNING( L"Verticies on the end of the path \"" << id << L"\" in file " << filename.c_str() << L" are the same as on the beginning." );
+            }
+#endif
+
+#ifdef DEBUG
+            if( App::Debug::IsExpensive() )
+            {
+                auto error = GetPointsErrors( points );
+                switch( error )
+                {
+                    case Error::PointsNotUnique:
+                        ASSERT( false, L"Polygon \"" << id << L"\" in file " << filename.c_str() << L" have not unique points." );
+                        break;
+                    case Error::LinesCrossing:
+                        ASSERT( false, L"Polygon \"" << id << L"\" in file " << filename.c_str() << L" have lines crossing." );
+                        break;
+                }
+            }
+#endif
+            if( !IsRightDirection( points ) )
+            {
+                WARNING( L"Verticies for polygon \"" << id << L"\" in file " << filename.c_str() << L" have to be reversed." );
+                std::reverse( points.begin(), points.end() );
+            }
+            polygon->SetPoints( points );
+
+            auto fillColorStyle = style.find( "fill" );
+            uint32_t fillColor = 0x00000000;
+            if( fillColorStyle != style.cend() )
+            {
+                std::istringstream( fillColorStyle->second.substr( 1 ) ) >> std::hex >> fillColor;
+                fillColor = fillColor << 8 | 0xff;
+            }
+
+            const auto& opacityStyle = style.find( "opacity" );
+            float opacity = 1.0f;
+            if( opacityStyle != style.cend() )
+            {
+                opacity = static_cast< float >( atof( opacityStyle->second.c_str() ) );
+                fillColor &= UINT_MAX << 8 | static_cast< uint32_t >( opacity * 255.0f );
+            }
+            polygon->SetColor( sf::Color( fillColor ) );
+        }
+        return result;
+    }
+
     std::vector< std::unique_ptr< Polygon > > Polygon::LoadManyFromFile( const std::string& filename )
     {
         std::vector< std::unique_ptr< Polygon > > result;

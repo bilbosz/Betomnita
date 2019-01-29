@@ -10,11 +10,14 @@ namespace Game::Graphics
 
 namespace Betomnita::GamePlay
 {
-    class Terrain
+    class Terrain final
     {
     public:
         Terrain();
         ~Terrain();
+
+        void Update( const sf::Time& dt );
+        void Render( sf::RenderTarget& target );
 
         void SetFriction( float value )
         {
@@ -25,11 +28,10 @@ namespace Betomnita::GamePlay
             return m_friction;
         }
 
-        void SetShape( std::unique_ptr< Game::Graphics::Polygon > shape );
-        Game::Graphics::Polygon* GetShape() const;
+        void SetShape( std::vector< std::unique_ptr< Game::Graphics::Polygon > >&& shape );
 
     private:
         float m_friction = 0.0f;
-        std::unique_ptr< Game::Graphics::Polygon > m_shape;
+        std::vector< std::unique_ptr< Game::Graphics::Polygon > > m_shape;
     };
 }

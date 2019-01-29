@@ -5,6 +5,11 @@
 #include <optional>
 #include <vector>
 
+namespace pugi
+{
+    class xml_node;
+}
+
 namespace Game::Graphics
 {
     /* Filled closed path which is described by points ordered counter clockwise. It is implied in this description that there is no holes. Before rendering polygon has
@@ -41,6 +46,7 @@ namespace Game::Graphics
         }
         void SetPoints( const PointsVector& value );
         void LoadFromFile( const std::string& filename );
+        static std::vector< std::unique_ptr< Polygon > > LoadManyFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale );
         static std::vector< std::unique_ptr< Polygon > > LoadManyFromFile( const std::string& filename );
 
         const sf::Color& GetColor() const
@@ -82,7 +88,7 @@ namespace Game::Graphics
         void ParseDescription( const char* description );
         void ParseTransformation( const char* transform, float scale );
         void ParseStyle( const char* style );
-        
+
         void ReversePoints();
 
         PointsVector m_points;

@@ -30,17 +30,45 @@
          id="namedview7"
          showgrid="false"
          inkscape:current-layer="layer1"
-         inkscape:zoom="0.056568545"
-         inkscape:cx="1502.1314"
-         inkscape:cy="1843.3682"
+         inkscape:zoom="0.64000003"
+         inkscape:cx="840.07106"
+         inkscape:cy="603.5763"
          inkscape:window-x="-8"
          inkscape:window-y="-8"
          inkscape:window-maximized="1"
-         showguides="false"
+         showguides="true"
          inkscape:guide-bbox="true">
         <inkscape:grid
              type="xygrid"
              id="grid8" />
+        <sodipodi:guide
+             position="0,0"
+             orientation="0,1"
+             id="guide20"
+             inkscape:locked="false"
+             inkscape:label=""
+             inkscape:color="rgb(0,0,255)" />
+        <sodipodi:guide
+             position="0,1000"
+             orientation="0,1"
+             id="guide22"
+             inkscape:locked="false"
+             inkscape:label=""
+             inkscape:color="rgb(0,0,255)" />
+        <sodipodi:guide
+             position="0,1000"
+             orientation="1,0"
+             id="guide24"
+             inkscape:locked="false"
+             inkscape:label=""
+             inkscape:color="rgb(0,0,255)" />
+        <sodipodi:guide
+             position="1000,0"
+             orientation="1,0"
+             id="guide26"
+             inkscape:locked="false"
+             inkscape:label=""
+             inkscape:color="rgb(0,0,255)" />
     </sodipodi:namedview>
     <defs
          id="defs1981" />
@@ -88,20 +116,27 @@
         <image
              sodipodi:absref="C:\repo\betomnita\res\worlds\1\../../vehicles/chassis/t34.svg"
              xlink:href="../../vehicles/chassis/t34.svg"
-             data-unit="1"
-             data-player="1"
-             style="opacity:1"
-             transform="translate(320,280)"
+             id="image59"
              preserveAspectRatio="none"
-             id="image59" />
+             transform="translate(320,280)"
+             style="opacity:1"
+             data-player="1"
+             data-unit="1" />
         <image
              sodipodi:absref="C:\repo\betomnita\res\worlds\1\../../vehicles/guns/single-tank-gun.svg"
              xlink:href="../../vehicles/guns/single-tank-gun.svg"
-             data-unit="1"
-             data-player="1"
-             transform="translate(400.6946,83.91141)"
-             preserveAspectRatio="none"
+             style="display:inline;opacity:1;shape-rendering:crispEdges"
              id="image59-2"
-             style="display:inline;opacity:1;shape-rendering:crispEdges" />
+             preserveAspectRatio="none"
+             transform="translate(400.6946,83.91141)"
+             data-player="1"
+             data-unit="1" />
+        <path
+             style="fill:#d45500;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="M 73.437497,787.50001 L -70.312497,271.87503 L 265.62499,250.00003 Z"
+             id="path18"
+             inkscape:connector-curvature="0"
+             class="terrain"
+             transform="translate(-7.8124989,179.68749)" />
     </g>
 </svg>

@@ -1,5 +1,6 @@
 #include "betomnita/gameplay/Terrain.hpp"
 
+#include "app/Debug.hpp"
 #include "game/graphics/Polygon.hpp"
 
 namespace Betomnita::GamePlay
@@ -12,13 +13,20 @@ namespace Betomnita::GamePlay
     {
     }
 
-    void Terrain::SetShape( std::unique_ptr< Game::Graphics::Polygon > shape )
+    void Terrain::Update( const sf::Time& dt )
     {
-        m_shape = std::move( shape );
     }
 
-    Game::Graphics::Polygon* Terrain::GetShape() const
+    void Terrain::Render( sf::RenderTarget& target )
     {
-        return m_shape.get();
+        for( auto& shape : m_shape )
+        {
+            shape->Render( target );
+        }
+    }
+
+    void Terrain::SetShape( std::vector< std::unique_ptr< Game::Graphics::Polygon > >&& shape )
+    {
+        m_shape = std::move( shape );
     }
 }
