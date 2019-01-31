@@ -44,7 +44,7 @@ namespace Betomnita::GamePlay
         auto scale = 1.0f;
         if( scaleAttr )
         {
-            scale = scaleAttr.as_float( 1.0f );
+            scale = scaleAttr.as_float( scale );
         }
 
         const auto& elems = svgNode.select_nodes( "//path | //image" );
@@ -59,12 +59,10 @@ namespace Betomnita::GamePlay
                 case 'p':
                 {
                     auto classes = Game::Graphics::SVGHelper::ParseClass( node.attribute( "class" ).as_string() );
-                    auto isTerrain = std::find( classes.begin(), classes.end(), "terrain" ) != classes.end();
-                    if( isTerrain )
+                    if( std::find( classes.begin(), classes.end(), "terrain" ) != classes.end() )
                     {
                         auto& terrain = m_terrainSheets.emplace_back( std::make_unique< Terrain >() );
-                        terrain->SetShape( std::move( Game::Graphics::Polygon::LoadManyFromSVGNode( filename, node, scale ) ) );
-                        terrain->SetFriction( node.attribute( "data-friction" ).as_float() );
+                        terrain->LoadFromSVGNode( filename, node, scale );
                     }
                 }
                 break;

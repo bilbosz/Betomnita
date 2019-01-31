@@ -3,6 +3,11 @@
 #include <memory>
 #include <vector>
 
+namespace pugi
+{
+    class xml_node;
+}
+
 namespace Game::Graphics
 {
     class Polygon;
@@ -19,16 +24,12 @@ namespace Betomnita::GamePlay
         void Update( const sf::Time& dt );
         void Render( sf::RenderTarget& target );
 
-        void SetFriction( float value )
-        {
-            m_friction = value;
-        }
         float GetFriction() const
         {
             return m_friction;
         }
 
-        void SetShape( std::vector< std::unique_ptr< Game::Graphics::Polygon > >&& shape );
+        void LoadFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale );
 
     private:
         float m_friction = 0.0f;

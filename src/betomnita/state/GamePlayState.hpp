@@ -11,6 +11,7 @@ namespace Betomnita::Resources
 namespace Betomnita::GamePlay
 {
     class GamePlayLogic;
+    class Prototype;
 }
 
 namespace Betomnita::States
@@ -31,6 +32,9 @@ namespace Betomnita::States
         void OnBackground() override;
         void OnUpdate( const sf::Time& dt ) override;
         void OnRender( sf::RenderTarget& target ) override;
+
+        void ReloadPrototypes();
+        Prototype GetPrototype( const std::wstring& name ) const;
 
         void OnMainMenuRequest();
 
