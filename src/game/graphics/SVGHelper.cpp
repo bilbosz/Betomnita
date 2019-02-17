@@ -11,7 +11,7 @@ namespace Game::Graphics
 
         auto it = value;
         auto cmd = '\0';
-        auto isNumber = []( char ch ) { return isdigit( ch ) || ch == '-' || ch == '+' || ch == '.'; };
+        auto isNumber = []( char ch ) { return isdigit( ch ) || ch == '-' || ch == '+' || ch == '.' || ch == 'e'; };
         auto alterCoord = [&cmd, &it]( float& coord ) {
             auto val = static_cast< float >( atof( it ) );
             if( isupper( cmd ) )

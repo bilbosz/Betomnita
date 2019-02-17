@@ -5,7 +5,7 @@
 #include "game/GenericGame.hpp"
 #include "game/graphics/SVGHelper.hpp"
 
-#include "pugixml.hpp"
+#include <pugixml.hpp>
 #include <sstream>
 #include <unordered_map>
 
@@ -82,7 +82,7 @@ namespace Game::Graphics
         sf::Transform transform;
         auto desc = SVGHelper::ParsePathDescriptions( node.attribute( "d" ).as_string() );
         auto style = SVGHelper::ParseStyle( node.attribute( "style" ).as_string() );
-        transform.scale( { scale, scale } ).combine( SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() ) );
+        transform.combine( SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() ) );
 
         auto current = &node.parent();
         while( *current->name() == '\0' )
@@ -90,6 +90,7 @@ namespace Game::Graphics
             transform.combine( SVGHelper::ParseTransform( current->attribute( "transform" ).as_string() ) );
             current = &current->parent();
         }
+        transform.scale( { scale, scale } );
 
         for( auto& points : desc )
         {

@@ -33,9 +33,6 @@ namespace Betomnita::States
         void OnUpdate( const sf::Time& dt ) override;
         void OnRender( sf::RenderTarget& target ) override;
 
-        void ReloadPrototypes();
-        Prototype GetPrototype( const std::wstring& name ) const;
-
         void OnMainMenuRequest();
 
     private:

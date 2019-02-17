@@ -11,11 +11,12 @@ namespace Betomnita::GamePlay
     class PhysicalBody;
     class TerrainPlatform;
     class Unit;
+    class GamePlayLogic;
 
     class World final
     {
     public:
-        World();
+        World( GamePlayLogic* logic );
         ~World();
 
         void Render( sf::RenderTarget& target );
@@ -32,6 +33,7 @@ namespace Betomnita::GamePlay
     private:
         sf::FloatRect m_size;
         std::vector< std::unique_ptr< Terrain > > m_terrainSheets;
+        GamePlayLogic* m_currentLogic;
         // std::vector< std::unique_ptr< PhysicalBody > > m_physicalBodies;
         // std::vector< std::unique_ptr< Unit > > m_units;
         // std::vector< std::unique_ptr< TerrainPlatform > > m_isohypse;

@@ -31,8 +31,8 @@
          showgrid="false"
          inkscape:current-layer="layer1"
          inkscape:zoom="0.64000003"
-         inkscape:cx="840.07106"
-         inkscape:cy="603.5763"
+         inkscape:cx="971.26129"
+         inkscape:cy="437.28864"
          inkscape:window-x="-8"
          inkscape:window-y="-8"
          inkscape:window-maximized="1"
@@ -116,27 +116,20 @@
         <image
              sodipodi:absref="C:\repo\betomnita\res\worlds\1\../../vehicles/chassis/t34.svg"
              xlink:href="../../vehicles/chassis/t34.svg"
-             id="image59"
-             preserveAspectRatio="none"
-             transform="translate(320,280)"
-             style="opacity:1"
+             data-unit="1"
              data-player="1"
-             data-unit="1" />
+             style="opacity:1"
+             transform="translate(320,280)"
+             preserveAspectRatio="none"
+             id="image59" />
         <image
              sodipodi:absref="C:\repo\betomnita\res\worlds\1\../../vehicles/guns/single-tank-gun.svg"
              xlink:href="../../vehicles/guns/single-tank-gun.svg"
-             style="display:inline;opacity:1;shape-rendering:crispEdges"
-             id="image59-2"
-             preserveAspectRatio="none"
-             transform="translate(400.6946,83.91141)"
+             data-unit="1"
              data-player="1"
-             data-unit="1" />
-        <path
-             style="fill:#d45500;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-             d="M 73.437497,787.50001 L -70.312497,271.87503 L 265.62499,250.00003 Z"
-             id="path18"
-             inkscape:connector-curvature="0"
-             class="terrain"
-             transform="translate(-7.8124989,179.68749)" />
+             transform="translate(400.6946,83.91141)"
+             preserveAspectRatio="none"
+             id="image59-2"
+             style="display:inline;opacity:1;shape-rendering:crispEdges" />
     </g>
 </svg>

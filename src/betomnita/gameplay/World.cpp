@@ -1,19 +1,23 @@
 #include "betomnita/gameplay/World.hpp"
 
 #include "app/Debug.hpp"
+#include "betomnita/gameplay/GamePlayLogic.hpp"
 #include "betomnita/gameplay/PhysicalBody.hpp"
+#include "betomnita/gameplay/PrototypeDict.hpp"
 #include "betomnita/gameplay/Terrain.hpp"
 #include "game/graphics/Polygon.hpp"
 #include "game/graphics/SVGHelper.hpp"
 
-#include "pugixml.hpp"
 #include <algorithm>
 #include <cstring>
 #include <filesystem>
+#include <pugixml.hpp>
+
+#include "betomnita/gameplay/VehicleChassisPrototype.hpp"
 
 namespace Betomnita::GamePlay
 {
-    World::World()
+    World::World( GamePlayLogic* logic ) : m_currentLogic( logic )
     {
     }
 
@@ -26,6 +30,11 @@ namespace Betomnita::GamePlay
         for( auto& terrain : m_terrainSheets )
         {
             terrain->Render( target );
+        }
+        for( auto& shape :
+             static_cast< const VehicleChassisPrototype& >( m_currentLogic->GetPrototypeDict().GetPrototypeByName( "res\\vehicles\\chassis\\t34.svg" ) ).m_shape )
+        {
+            shape->Render( target );
         }
     }
 
