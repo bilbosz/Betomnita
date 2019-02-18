@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-     data-scale="0.001"
      xmlns:dc="http://purl.org/dc/elements/1.1/"
      xmlns:cc="http://creativecommons.org/ns#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -8,6 +7,7 @@
      xmlns="http://www.w3.org/2000/svg"
      xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
      xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     data-scale="0.001"
      style="shape-rendering:crispEdges"
      id="svg1987"
      version="1.1"
@@ -30,7 +30,7 @@
          showgrid="false"
          inkscape:current-layer="svg1987"
          inkscape:zoom="1"
-         inkscape:cx="213.31647"
+         inkscape:cx="153.8"
          inkscape:cy="739.1341"
          inkscape:window-x="960"
          inkscape:window-y="0"
@@ -70,7 +70,6 @@
          inkscape:connector-curvature="0"
          inkscape:label="path50" />
     <ellipse
-         data-gun-rotator=""
          transform="matrix(1.0263563,-0.03090662,0.0335905,0.9443502,-104.46318,34.255129)"
          ry="25.95339"
          rx="23.834745"
@@ -78,7 +77,8 @@
          cx="152.01271"
          id="path52-3"
          style="opacity:0.5;fill:none;fill-opacity:1;stroke:#0000ff;stroke-width:1.01520073;stroke-opacity:1;shape-rendering:crispEdges"
-         data-do-not-draw="true" />
+         data-do-not-draw="true"
+         class="gun-rotator" />
     <path
          transform="matrix(0.35499739,0,0,1.6505483,15.33671,-107.62374)"
          style="opacity:1;fill:#808080;fill-opacity:1;stroke:none;stroke-width:1.30639136;stroke-opacity:1"
@@ -90,12 +90,12 @@
          id="path4566"
          inkscape:connector-curvature="0"
          transform="matrix(1.011875,0,0,1.0089903,0.71412422,-2.022429)"
-         data-shot-direction=""
-         data-do-not-draw="true" />
+         data-do-not-draw="true"
+         class="shot-direction" />
     <path
          style="fill:none;fill-opacity:1;stroke:#00ff00;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="M 51.986328,0 V 312.78711 H 52.003906 L 1.7792969,350.1543 L -0.42773438,531.36133 L 35.837891,545.57617 L 38.443359,574.13672 L 99.894531,574.14844 L 109.99805,545.36914 L 140.37109,524.7207 L 137.55078,359.49219 L 80.601562,312.78711 V 0 H 66.486328 Z"
          id="path40"
          inkscape:connector-curvature="0"
-         data-physical-body-shape="" />
+         class="physical-body-shape" />
 </svg>

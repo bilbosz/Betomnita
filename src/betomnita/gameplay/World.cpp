@@ -14,6 +14,7 @@
 #include <pugixml.hpp>
 
 #include "betomnita/gameplay/VehicleChassisPrototype.hpp"
+#include "betomnita/gameplay/VehicleGunPrototype.hpp"
 
 namespace Betomnita::GamePlay
 {
@@ -33,6 +34,11 @@ namespace Betomnita::GamePlay
         }
         for( auto& shape :
              static_cast< const VehicleChassisPrototype& >( m_currentLogic->GetPrototypeDict().GetPrototypeByName( "res\\vehicles\\chassis\\t34.svg" ) ).m_shape )
+        {
+            shape->Render( target );
+        }
+        for( auto& shape :
+             static_cast< const VehicleChassisPrototype& >( m_currentLogic->GetPrototypeDict().GetPrototypeByName( "res\\vehicles\\guns\\single-tank-gun.svg" ) ).m_shape )
         {
             shape->Render( target );
         }

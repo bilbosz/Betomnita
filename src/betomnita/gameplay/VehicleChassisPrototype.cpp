@@ -40,12 +40,12 @@ namespace Betomnita::GamePlay
                 {
                     if( std::find( classes.begin(), classes.end(), "physical-body-shape" ) != classes.end() )
                     {
-                        // TODO move to Polygon::GetRingFromSVGNode
                         auto pathDesc = Game::Graphics::SVGHelper::ParsePathDescriptions( node.attribute( "d" ).as_string() );
                         ASSERT( pathDesc.size() == 1, L"Physical body shape should be in one piece" );
 
                         m_physicalBodyShape = pathDesc[ 0 ];
                         sf::Transform transform;
+                        transform.scale( { scale, scale } );
                         transform.combine( Game::Graphics::SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() ) );
 
                         auto current = &node.parent();
@@ -54,7 +54,6 @@ namespace Betomnita::GamePlay
                             transform.combine( Game::Graphics::SVGHelper::ParseTransform( current->attribute( "transform" ).as_string() ) );
                             current = &current->parent();
                         }
-                        transform.scale( { scale, scale } );
                         for( auto& point : m_physicalBodyShape )
                         {
                             point = transform.transformPoint( point );
@@ -74,6 +73,7 @@ namespace Betomnita::GamePlay
                     point.y = node.attribute( "cy" ).as_float();
 
                     sf::Transform transform;
+                    transform.scale( { scale, scale } );
                     transform.combine( Game::Graphics::SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() ) );
 
                     auto current = &node.parent();
@@ -82,7 +82,6 @@ namespace Betomnita::GamePlay
                         transform.combine( Game::Graphics::SVGHelper::ParseTransform( current->attribute( "transform" ).as_string() ) );
                         current = &current->parent();
                     }
-                    transform.scale( { scale, scale } );
                     point = transform.transformPoint( point );
 
                     if( std::find( classes.begin(), classes.end(), "pivot" ) != classes.end() )

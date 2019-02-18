@@ -4,7 +4,7 @@
 #include <functional>
 #include <vector>
 
-namespace Utils
+namespace Game::Utils
 {
     template< class Type >
     class Property

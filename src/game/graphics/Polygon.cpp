@@ -82,6 +82,7 @@ namespace Game::Graphics
         sf::Transform transform;
         auto desc = SVGHelper::ParsePathDescriptions( node.attribute( "d" ).as_string() );
         auto style = SVGHelper::ParseStyle( node.attribute( "style" ).as_string() );
+        transform.scale( { scale, scale } );
         transform.combine( SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() ) );
 
         auto current = &node.parent();
@@ -90,7 +91,6 @@ namespace Game::Graphics
             transform.combine( SVGHelper::ParseTransform( current->attribute( "transform" ).as_string() ) );
             current = &current->parent();
         }
-        transform.scale( { scale, scale } );
 
         for( auto& points : desc )
         {
