@@ -1,6 +1,9 @@
 #pragma once
 #include "betomnita/gameplay/PhysicalBody.hpp"
 
+#include <memory>
+#include <vector>
+
 namespace Betomnita::GamePlay
 {
     class VehicleChassisPrototype;

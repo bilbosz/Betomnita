@@ -19,60 +19,6 @@ namespace Game::Graphics
     {
     }
 
-    void Polygon::Render( sf::RenderTarget& target )
-    {
-        if( m_vertexArray.getVertexCount() >= 3 )
-        {
-            target.draw( m_vertexArray, Game::GenericGame::GetInstance()->GetToScreenTransform() );
-        }
-    }
-
-    void Polygon::SetPoints( const PointsVector& value )
-    {
-#ifdef DEBUG
-        if( App::Debug::IsExpensive() )
-        {
-            CHECK( GetPointsErrors( value ) == Error::NoError );
-        }
-#endif
-        m_points = value;
-        OnPointsChange();
-        Triangulate();
-    }
-
-    void Polygon::LoadFromFile( const std::string& filename )
-    {
-        m_points.clear();
-
-        pugi::xml_document doc;
-        VERIFY( doc.load_file( filename.c_str() ) );
-
-        auto scale = 1.0f;
-        const auto& scaleAttr = doc.child( "svg" ).attribute( "data-scale" );
-        if( scaleAttr )
-        {
-            scale = scaleAttr.as_float();
-        }
-
-        const auto& polygonElem = doc.select_node( "//path" ).node();
-
-        ParseDescription( polygonElem.attribute( "d" ).as_string() );
-        ParseTransformation( polygonElem.attribute( "transform" ).as_string(), scale );
-        ParseStyle( polygonElem.attribute( "style" ).as_string() );
-
-#ifdef DEBUG
-        auto error = GetPointsErrors( m_points );
-        CHECK( error == Error::NoError || error == Error::WrongDirection );
-        if( error == Error::WrongDirection )
-        {
-            WARNING( L"Verticies in file " << filename.c_str() << " have to be reversed." );
-            ReversePoints();
-        }
-#endif
-        OnPointsChange();
-        Triangulate();
-    }
-
     std::vector< std::unique_ptr< Polygon > > Polygon::LoadManyFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale )
     {
         std::vector< std::unique_ptr< Polygon > > result;
@@ -158,47 +104,25 @@ namespace Game::Graphics
         return result;
     }
 
-    std::vector< std::unique_ptr< Polygon > > Polygon::LoadManyFromFile( const std::string& filename )
+    void Polygon::Render( sf::RenderTarget& target )
     {
-        std::vector< std::unique_ptr< Polygon > > result;
-        pugi::xml_document doc;
-        VERIFY( doc.load_file( filename.c_str() ) );
-
-        auto scale = 1.0f;
-        const auto& scaleAttr = doc.child( "svg" ).attribute( "data-scale" );
-        if( scaleAttr )
+        if( m_vertexArray.getVertexCount() >= 3 )
         {
-            scale = scaleAttr.as_float();
+            target.draw( m_vertexArray, Game::GenericGame::GetInstance()->GetToScreenTransform() );
         }
+    }
 
-        const auto& paths = doc.select_nodes( "//path" );
-        auto pathN = 0;
-        result.reserve( std::distance( paths.begin(), paths.end() ) );
-        for( const auto& polygonElem : paths )
-        {
-            auto& polygon = result.emplace_back( std::make_unique< Polygon >() );
-            polygon->ParseDescription( polygonElem.node().attribute( "d" ).as_string() );
-            polygon->ParseTransformation( polygonElem.node().attribute( "transform" ).as_string(), scale );
-            polygon->ParseStyle( polygonElem.node().attribute( "style" ).as_string() );
-
-            auto error = GetPointsErrors( polygon->GetPoints() );
-            CHECK( error == Error::NoError || error == Error::WrongDirection );
-            if( error == Error::WrongDirection )
-            {
-                WARNING( L"Verticies for polygon " << pathN << L" in file " << filename.c_str() << " have to be reversed." );
-                polygon->ReversePoints();
-            }
+    void Polygon::SetPoints( const PointsVector& value )
+    {
 #ifdef DEBUG
-            if( App::Debug::IsExpensive() )
-            {
-                CHECK( GetPointsErrors( polygon->GetPoints() ) == Error::NoError );
-            }
-#endif
-            polygon->OnPointsChange();
-            polygon->Triangulate();
-            ++pathN;
+        if( App::Debug::IsExpensive() )
+        {
+            CHECK( GetPointsErrors( value ) == Error::NoError );
         }
-        return result;
+#endif
+        m_points = value;
+        OnPointsChange();
+        Triangulate();
     }
 
     void Polygon::SetColor( const sf::Color& value )

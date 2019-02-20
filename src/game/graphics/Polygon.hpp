@@ -38,6 +38,8 @@ namespace Game::Graphics
         Polygon();
         ~Polygon();
 
+        static std::vector< std::unique_ptr< Polygon > > LoadManyFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale );
+
         void Render( sf::RenderTarget& target ) override;
 
         const PointsVector& GetPoints() const
@@ -45,9 +47,6 @@ namespace Game::Graphics
             return m_points;
         }
         void SetPoints( const PointsVector& value );
-        void LoadFromFile( const std::string& filename );
-        static std::vector< std::unique_ptr< Polygon > > LoadManyFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale );
-        static std::vector< std::unique_ptr< Polygon > > LoadManyFromFile( const std::string& filename );
 
         const sf::Color& GetColor() const
         {
