@@ -19,7 +19,7 @@ namespace Game::Graphics
     {
     }
 
-    std::vector< Polygon > Polygon::LoadManyFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale )
+    std::vector< Polygon > Polygon::LoadManyFromSVGNode( const std::string& filename, pugi::xml_document& doc, pugi::xml_node& node, float scale )
     {
         std::vector< Polygon > result;
 #ifdef DEBUG
@@ -38,13 +38,9 @@ namespace Game::Graphics
             current = &current->parent();
         }
 
+        bool fixNeeded = false;
         for( auto& points : desc )
         {
-            auto& polygon = result.emplace_back();
-            for( auto& point : points )
-            {
-                point = transform.transformPoint( point );
-            }
 #ifdef DEBUG
             bool samePoints = false;
 #endif
@@ -58,6 +54,7 @@ namespace Game::Graphics
 #ifdef DEBUG
             if( samePoints )
             {
+                fixNeeded = true;
                 WARNING( L"Verticies on the end of the path \"" << id << L"\" in file " << filename.c_str() << L" are the same as on the beginning." );
             }
 #endif
@@ -79,8 +76,26 @@ namespace Game::Graphics
 #endif
             if( !IsRightDirection( points ) )
             {
+                fixNeeded = true;
                 WARNING( L"Verticies for polygon \"" << id << L"\" in file " << filename.c_str() << L" have to be reversed." );
                 std::reverse( points.begin(), points.end() );
+            }
+        }
+
+#ifdef DEBUG
+        if( fixNeeded )
+        {
+            node.attribute( "d" ).set_value( SVGHelper::ConstructPathDescriptionString( desc ).c_str() );
+            doc.save_file( filename.c_str() );
+        }
+#endif
+
+        for( auto& points : desc )
+        {
+            auto& polygon = result.emplace_back();
+            for( auto& point : points )
+            {
+                point = transform.transformPoint( point );
             }
             polygon.SetPoints( points );
 

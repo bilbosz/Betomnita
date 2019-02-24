@@ -28,9 +28,9 @@ namespace Betomnita::GamePlay
         }
     }
 
-    void Terrain::LoadFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale )
+    void Terrain::LoadFromSVGNode( const std::string& filename, pugi::xml_document& doc, pugi::xml_node& node, float scale )
     {
-        m_shape = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, node, scale );
+        m_shape = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, doc, node, scale );
         m_friction = node.attribute( "data-friction" ).as_float();
     }
 }

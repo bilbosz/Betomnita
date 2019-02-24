@@ -26,7 +26,7 @@ namespace Betomnita::GamePlay
             return m_friction;
         }
 
-        void LoadFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale );
+        void LoadFromSVGNode( const std::string& filename, pugi::xml_document& doc, pugi::xml_node& node, float scale );
 
     private:
         float m_friction = 0.0f;

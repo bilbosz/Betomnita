@@ -52,11 +52,11 @@ namespace Betomnita::GamePlay
             scale = scaleAttr.as_float( scale );
         }
 
-        const auto& elems = svgNode.select_nodes( "//path | //image" );
+        auto& elems = svgNode.select_nodes( "//path | //image" );
 
-        for( const auto& elem : elems )
+        for( auto& elem : elems )
         {
-            const auto& node = elem.node();
+            auto& node = elem.node();
             const auto nodeName = node.name();
             CHECK( strcmp( nodeName, "path" ) == 0 || strcmp( nodeName, "image" ) == 0 );
             switch( *nodeName )
@@ -67,7 +67,7 @@ namespace Betomnita::GamePlay
                     if( std::find( classes.begin(), classes.end(), "terrain" ) != classes.end() )
                     {
                         auto& terrain = m_terrainSheets.emplace_back( std::make_unique< Terrain >() );
-                        terrain->LoadFromSVGNode( filename, node, scale );
+                        terrain->LoadFromSVGNode( filename, def, node, scale );
                     }
                 }
                 break;

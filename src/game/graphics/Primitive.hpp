@@ -50,13 +50,37 @@ namespace Game::Graphics
 #endif
         }
 
+        void SetTransform( const sf::Transform& value )
+        {
+            m_transform = value;
+        }
+
+        const sf::Transform& GetTransform() const
+        {
+            return m_transform;
+        }
+
+        void SetPivot( const sf::Vector2f& value )
+        {
+            m_pivot = value;
+        }
+
+        const sf::Vector2f& GetPivot() const
+        {
+            return m_pivot;
+        }
+
     protected:
         virtual void Init();
 
         virtual void OnPositionChange();
+        virtual void OnTransformChange();
+        virtual void OnPivotChange();
         virtual void OnSizeChange();
 
         sf::Vector2f m_position;
+        sf::Transform m_transform;
+        sf::Vector2f m_pivot;
         sf::Vector2f m_size;
 
     private:

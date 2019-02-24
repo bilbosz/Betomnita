@@ -84,6 +84,36 @@ namespace Game::Graphics
         return result;
     }
 
+    std::string SVGHelper::ConstructPathDescriptionString( const std::vector< std::vector< sf::Vector2f > >& value )
+    {
+        std::ostringstream out;
+        for( const auto& points : value )
+        {
+            auto it = points.cbegin();
+            out << "M " << it->x << "," << it->y << " ";
+            auto prev = it;
+            ++it;
+            for( ; it != points.cend(); ++it )
+            {
+                if( prev->x == it->x )
+                {
+                    out << "V " << it->y << " ";
+                }
+                else if( prev->y == it->y )
+                {
+                    out << "H " << it->x << " ";
+                }
+                else
+                {
+                    out << "L " << it->x << "," << it->y << " ";
+                }
+                prev = it;
+            }
+            out << "Z";
+        }
+        return out.str();
+    }
+
     std::unordered_map< std::string, std::string > SVGHelper::ParseStyle( const char* value )
     {
         std::unordered_map< std::string, std::string > result;

@@ -19,7 +19,9 @@ namespace Game::Graphics
 #ifdef DEBUG
         if( m_highlight )
         {
-            target.draw( m_debugRect, Game::GenericGame::GetInstance()->GetToScreenTransform() );
+            sf::Transform resultTransform = Game::GenericGame::GetInstance()->GetToScreenTransform();
+            resultTransform.combine( m_transform );
+            target.draw( m_debugRect, resultTransform );
         }
 #endif
     }
@@ -35,6 +37,17 @@ namespace Game::Graphics
     {
 #ifdef DEBUG
         m_debugRect.setPosition( m_position );
+#endif
+    }
+
+    void Primitive::OnTransformChange()
+    {
+    }
+
+    void Primitive::OnPivotChange()
+    {
+#ifdef DEBUG
+        m_debugRect.setOrigin( m_pivot );
 #endif
     }
 

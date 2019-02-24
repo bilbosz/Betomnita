@@ -26,11 +26,11 @@ namespace Betomnita::GamePlay
             scale = scaleAttr.as_float( scale );
         }
 
-        const auto& elems = svgNode.select_nodes( "//path | //ellipse" );
+        auto& elems = svgNode.select_nodes( "//path | //ellipse" );
 
-        for( const auto& elem : elems )
+        for( auto& elem : elems )
         {
-            const auto& node = elem.node();
+            auto& node = elem.node();
             const auto nodeName = node.name();
             auto classes = Game::Graphics::SVGHelper::ParseClass( node.attribute( "class" ).as_string() );
             CHECK( strcmp( nodeName, "path" ) == 0 || strcmp( nodeName, "ellipse" ) == 0 );
@@ -61,7 +61,7 @@ namespace Betomnita::GamePlay
                     }
                     else
                     {
-                        m_shape = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, node, scale );
+                        m_shape = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, doc, node, scale );
                     }
                 }
                 break;

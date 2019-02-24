@@ -43,6 +43,7 @@ namespace Game::Graphics
         ~SVGHelper() = delete;
 
         static std::vector< std::vector< sf::Vector2f > > ParsePathDescriptions( const char* value );
+        static std::string ConstructPathDescriptionString( const std::vector< std::vector< sf::Vector2f > >& value );
         static std::unordered_map< std::string, std::string > ParseStyle( const char* value );
         static sf::Transform ParseTransform( const char* value );
         static std::vector< std::string > ParseClass( const char* value );

@@ -23,10 +23,9 @@ namespace Betomnita
             scale = scaleAttr.as_float( scale );
         }
 
-        const auto& node = svgNode.select_node( "//path" ).node();
-        const auto nodeName = node.name();
+        auto& node = svgNode.select_node( "//path" ).node();
 
-        m_shape = std::make_unique< Game::Graphics::Polygon >( Game::Graphics::Polygon::LoadManyFromSVGNode( Resources::CursorPath.c_str(), node, scale )[ 0 ] );
+        m_shape = std::make_unique< Game::Graphics::Polygon >( Game::Graphics::Polygon::LoadManyFromSVGNode( Resources::CursorPath.c_str(), doc, node, scale )[ 0 ] );
     }
 
     Cursor::~Cursor()
