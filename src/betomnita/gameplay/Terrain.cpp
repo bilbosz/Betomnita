@@ -24,7 +24,7 @@ namespace Betomnita::GamePlay
     {
         for( auto& shape : m_shape )
         {
-            shape->Render( target );
+            shape.Render( target );
         }
     }
 

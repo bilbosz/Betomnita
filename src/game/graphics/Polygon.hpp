@@ -38,7 +38,7 @@ namespace Game::Graphics
         Polygon();
         ~Polygon();
 
-        static std::vector< std::unique_ptr< Polygon > > LoadManyFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale );
+        static std::vector< Polygon > LoadManyFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale );
 
         void Render( sf::RenderTarget& target ) override;
 
@@ -98,5 +98,7 @@ namespace Game::Graphics
 
         sf::Vector2f m_appliedMove;
         sf::VertexArray m_vertexArray;
+
+        sf::Transform m_transform;
     };
 }

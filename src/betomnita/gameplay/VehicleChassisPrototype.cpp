@@ -61,8 +61,7 @@ namespace Betomnita::GamePlay
                     }
                     else
                     {
-                        auto shape = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, node, scale );
-                        std::move( shape.begin(), shape.end(), std::back_inserter( m_shape ) );
+                        m_shape = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, node, scale );
                     }
                 }
                 break;

@@ -1,4 +1,6 @@
 #pragma once
+#include "game/graphics/Polygon.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>
@@ -6,11 +8,6 @@
 namespace pugi
 {
     class xml_node;
-}
-
-namespace Game::Graphics
-{
-    class Polygon;
 }
 
 namespace Betomnita::GamePlay
@@ -33,6 +30,6 @@ namespace Betomnita::GamePlay
 
     private:
         float m_friction = 0.0f;
-        std::vector< std::unique_ptr< Game::Graphics::Polygon > > m_shape;
+        std::vector< Game::Graphics::Polygon > m_shape;
     };
 }

@@ -32,16 +32,6 @@ namespace Betomnita::GamePlay
         {
             terrain->Render( target );
         }
-        for( auto& shape :
-             static_cast< const VehicleChassisPrototype& >( m_currentLogic->GetPrototypeDict().GetPrototypeByName( "res\\vehicles\\chassis\\t34.svg" ) ).m_shape )
-        {
-            shape->Render( target );
-        }
-        for( auto& shape :
-             static_cast< const VehicleChassisPrototype& >( m_currentLogic->GetPrototypeDict().GetPrototypeByName( "res\\vehicles\\guns\\single-tank-gun.svg" ) ).m_shape )
-        {
-            shape->Render( target );
-        }
     }
 
     void World::Update( const sf::Time& dt )

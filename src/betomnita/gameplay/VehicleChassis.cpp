@@ -23,9 +23,9 @@ namespace Betomnita::GamePlay
 
     void VehicleChassis::LoadFromPrototype( const VehicleChassisPrototype& prototype )
     {
-        for( const auto& polygon : prototype.m_shape )
-        {
-            prototype.m_shape.push_back( std::make_unique< Game::Graphics::Polygon >( *polygon ) );
-        }
+        m_pivot = prototype.m_pivot;
+        m_gunRotatorSlot = prototype.m_gunRotatorSlot;
+        m_physicalBodyShape = prototype.m_physicalBodyShape;
+        m_shape = prototype.m_shape;
     }
 }

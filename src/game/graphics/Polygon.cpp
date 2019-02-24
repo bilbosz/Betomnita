@@ -19,9 +19,9 @@ namespace Game::Graphics
     {
     }
 
-    std::vector< std::unique_ptr< Polygon > > Polygon::LoadManyFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale )
+    std::vector< Polygon > Polygon::LoadManyFromSVGNode( const std::string& filename, const pugi::xml_node& node, float scale )
     {
-        std::vector< std::unique_ptr< Polygon > > result;
+        std::vector< Polygon > result;
 #ifdef DEBUG
         auto id = node.attribute( "id" ).as_string();
 #endif
@@ -40,7 +40,7 @@ namespace Game::Graphics
 
         for( auto& points : desc )
         {
-            auto& polygon = result.emplace_back( std::make_unique< Polygon >() );
+            auto& polygon = result.emplace_back();
             for( auto& point : points )
             {
                 point = transform.transformPoint( point );
@@ -82,7 +82,7 @@ namespace Game::Graphics
                 WARNING( L"Verticies for polygon \"" << id << L"\" in file " << filename.c_str() << L" have to be reversed." );
                 std::reverse( points.begin(), points.end() );
             }
-            polygon->SetPoints( points );
+            polygon.SetPoints( points );
 
             auto fillColorStyle = style.find( "fill" );
             uint32_t fillColor = 0x00000000;
@@ -99,7 +99,7 @@ namespace Game::Graphics
                 opacity = static_cast< float >( atof( opacityStyle->second.c_str() ) );
                 fillColor &= UINT_MAX << 8 | static_cast< uint32_t >( opacity * 255.0f );
             }
-            polygon->SetColor( sf::Color( fillColor ) );
+            polygon.SetColor( sf::Color( fillColor ) );
         }
         return result;
     }

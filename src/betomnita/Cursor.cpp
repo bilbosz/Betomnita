@@ -26,7 +26,7 @@ namespace Betomnita
         const auto& node = svgNode.select_node( "//path" ).node();
         const auto nodeName = node.name();
 
-        m_shape = std::move( Game::Graphics::Polygon::LoadManyFromSVGNode( Resources::CursorPath.c_str(), node, scale )[ 0 ] );
+        m_shape = std::make_unique< Game::Graphics::Polygon >( Game::Graphics::Polygon::LoadManyFromSVGNode( Resources::CursorPath.c_str(), node, scale )[ 0 ] );
     }
 
     Cursor::~Cursor()
