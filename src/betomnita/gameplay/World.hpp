@@ -12,6 +12,7 @@ namespace Betomnita::GamePlay
     class TerrainPlatform;
     class Unit;
     class GamePlayLogic;
+    class VehicleChassis;
 
     class World final
     {
@@ -19,6 +20,7 @@ namespace Betomnita::GamePlay
         World( GamePlayLogic* logic );
         ~World();
 
+        void Init();
         void Render( sf::RenderTarget& target );
         void Update( const sf::Time& dt );
 
@@ -34,6 +36,7 @@ namespace Betomnita::GamePlay
         sf::FloatRect m_size;
         std::vector< std::unique_ptr< Terrain > > m_terrainSheets;
         GamePlayLogic* m_currentLogic;
+        std::unique_ptr< VehicleChassis > m_vehicle;
         // std::vector< std::unique_ptr< PhysicalBody > > m_physicalBodies;
         // std::vector< std::unique_ptr< Unit > > m_units;
         // std::vector< std::unique_ptr< TerrainPlatform > > m_isohypse;

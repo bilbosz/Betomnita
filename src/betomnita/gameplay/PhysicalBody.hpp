@@ -17,7 +17,7 @@ namespace Betomnita::GamePlay
         ~PhysicalBody();
 
     private:
-        std::vector< sf::Vector2f > m_shape;
-        std::unique_ptr< Game::Graphics::Polygon > m_graphics;
+        //std::vector< sf::Vector2f > m_shape;
+        //std::unique_ptr< Game::Graphics::Polygon > m_graphics;
     };
 }

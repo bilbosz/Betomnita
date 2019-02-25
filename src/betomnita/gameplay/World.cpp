@@ -13,17 +13,25 @@
 #include <filesystem>
 #include <pugixml.hpp>
 
+#include "betomnita/gameplay/VehicleChassis.hpp"
 #include "betomnita/gameplay/VehicleChassisPrototype.hpp"
 #include "betomnita/gameplay/VehicleGunPrototype.hpp"
 
 namespace Betomnita::GamePlay
 {
-    World::World( GamePlayLogic* logic ) : m_currentLogic( logic )
+    World::World( GamePlayLogic* logic ) : m_currentLogic( logic ), m_vehicle( std::make_unique< VehicleChassis >() )
     {
     }
 
     World::~World()
     {
+    }
+
+    void World::Init()
+    {
+        const auto& prototype = m_currentLogic->GetPrototypeDict().GetPrototypeByName( "res/vehicles/chassis/t34.svg" );
+        m_vehicle->LoadFromPrototype( static_cast< const VehicleChassisPrototype& >( prototype ) );
+        //m_vehicle->
     }
 
     void World::Render( sf::RenderTarget& target )
@@ -32,6 +40,7 @@ namespace Betomnita::GamePlay
         {
             terrain->Render( target );
         }
+        m_vehicle->Render( target );
     }
 
     void World::Update( const sf::Time& dt )

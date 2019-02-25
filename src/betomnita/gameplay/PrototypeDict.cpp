@@ -23,7 +23,7 @@ namespace Betomnita::GamePlay
             for( auto& currentFile : std::filesystem::directory_iterator( currentDir ) )
             {
                 CHECK( currentFile.is_regular_file() );
-                std::string prototypePath = currentFile.path().lexically_normal().string();
+                std::string prototypePath = currentFile.path().lexically_normal().generic_string();
                 std::unique_ptr< Prototype > prototype;
                 switch( typeDir.second )
                 {

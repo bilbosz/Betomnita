@@ -5,7 +5,7 @@
 
 namespace Betomnita::GamePlay
 {
-    PhysicalBody::PhysicalBody() : m_graphics( std::make_unique< Game::Graphics::Polygon >() )
+    PhysicalBody::PhysicalBody() //: m_graphics( std::make_unique< Game::Graphics::Polygon >() )
     {
     }
 

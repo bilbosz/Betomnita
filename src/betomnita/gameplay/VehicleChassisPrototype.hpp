@@ -12,7 +12,6 @@ namespace Betomnita::GamePlay
     class VehicleChassisPrototype : public Prototype
     {
     public:
-        friend class World;
         friend class VehicleChassis;
         VehicleChassisPrototype();
         void LoadFromFile( const std::string& filename ) override;

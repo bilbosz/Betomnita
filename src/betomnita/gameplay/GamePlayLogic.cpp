@@ -12,6 +12,7 @@ namespace Betomnita::GamePlay
     {
         m_prototypeDict->LoadFromDirectory( "res" );
         m_world->LoadFromFile( "res/worlds/1/def.svg" );
+        m_world->Init();
     }
 
     GamePlayLogic::~GamePlayLogic()

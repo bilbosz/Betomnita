@@ -14,6 +14,8 @@ namespace Betomnita::GamePlay
 
     void VehicleChassisPrototype::LoadFromFile( const std::string& filename )
     {
+        m_shape.clear();
+
         pugi::xml_document doc;
         VERIFY( doc.load_file( filename.c_str() ) );
 
@@ -61,7 +63,8 @@ namespace Betomnita::GamePlay
                     }
                     else
                     {
-                        m_shape = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, doc, node, scale );
+                        auto polygons = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, doc, node, scale );
+                        std::move( polygons.cbegin(), polygons.cend(), std::back_inserter( m_shape ) );
                     }
                 }
                 break;

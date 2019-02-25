@@ -15,6 +15,10 @@ namespace Betomnita::GamePlay
 
     void VehicleChassis::Render( sf::RenderTarget& target )
     {
+        for( auto& polygon : m_shape )
+        {
+            polygon.Render( target );
+        }
     }
 
     void VehicleChassis::Update( const sf::Time& dt )
