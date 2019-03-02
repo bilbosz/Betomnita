@@ -98,5 +98,9 @@ namespace Betomnita::GamePlay
                 break;
             }
         }
+        for( auto& polygon : m_shape )
+        {
+            polygon.SetPivot( m_pivot );
+        }
     }
 }

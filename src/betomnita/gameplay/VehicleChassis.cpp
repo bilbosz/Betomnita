@@ -1,6 +1,8 @@
 #include "betomnita/gameplay/VehicleChassis.hpp"
 
+#include "app/Debug.hpp"
 #include "betomnita/gameplay/VehicleChassisPrototype.hpp"
+#include "game/GameConsts.hpp"
 #include "game/graphics/Polygon.hpp"
 
 namespace Betomnita::GamePlay
@@ -25,11 +27,12 @@ namespace Betomnita::GamePlay
     {
     }
 
-    void VehicleChassis::LoadFromPrototype( const VehicleChassisPrototype& prototype )
+    void VehicleChassis::LoadFromPrototype( const Prototype& prototype )
     {
-        m_pivot = prototype.m_pivot;
-        m_gunRotatorSlot = prototype.m_gunRotatorSlot;
-        m_physicalBodyShape = prototype.m_physicalBodyShape;
-        m_shape = prototype.m_shape;
+        const auto& vehiclePrototype = static_cast< const VehicleChassisPrototype& >( prototype );
+        m_pivot = vehiclePrototype.m_pivot;
+        m_gunRotatorSlot = vehiclePrototype.m_gunRotatorSlot;
+        m_physicalBodyShape = vehiclePrototype.m_physicalBodyShape;
+        m_shape = vehiclePrototype.m_shape;
     }
 }

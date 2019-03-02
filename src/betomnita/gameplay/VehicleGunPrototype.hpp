@@ -13,8 +13,8 @@ namespace Betomnita::GamePlay
     class VehicleGunPrototype : public Prototype
     {
     public:
+        friend class VehicleGun;
         VehicleGunPrototype();
-
         void LoadFromFile( const std::string& filename ) override;
 
     private:

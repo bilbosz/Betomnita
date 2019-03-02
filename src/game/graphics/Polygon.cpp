@@ -123,7 +123,9 @@ namespace Game::Graphics
     {
         if( m_vertexArray.getVertexCount() >= 3 )
         {
-            target.draw( m_vertexArray, Game::GenericGame::GetInstance()->GetToScreenTransform() );
+            sf::Transform transform = Game::GenericGame::GetInstance()->GetToScreenTransform();
+            transform.combine( m_transform );
+            target.draw( m_vertexArray, transform );
         }
     }
 
@@ -229,9 +231,9 @@ namespace Game::Graphics
         auto verticesN = m_vertexArray.getVertexCount();
         for( auto i = 0U; i < verticesN; ++i )
         {
-            m_vertexArray[ i ].position = m_vertexArray[ i ].position - m_appliedMove + m_position;
+            m_vertexArray[ i ].position = m_vertexArray[ i ].position - m_appliedMove + m_position - m_pivot;
         }
-        m_appliedMove = m_position;
+        m_appliedMove = m_position - m_pivot;
         Primitive::OnPositionChange();
     }
 
@@ -330,238 +332,6 @@ namespace Game::Graphics
     {
         return GetAngle( examinedPoint, a, b ) < Game::Consts::Pi && GetAngle( examinedPoint, b, c ) < Game::Consts::Pi &&
                GetAngle( examinedPoint, c, a ) < Game::Consts::Pi;
-    }
-
-    void Polygon::ParseDescription( const char* description )
-    {
-        auto it = description;
-        auto cmd = '\0';
-        auto isNumber = []( char ch ) { return isdigit( ch ) || ch == '-' || ch == '+' || ch == '.'; };
-        auto alterCoord = [&cmd, &it]( float& coord ) {
-            auto val = static_cast< float >( atof( it ) );
-            if( isupper( cmd ) )
-            {
-                coord = val;
-            }
-            else
-            {
-                coord += val;
-            }
-        };
-        auto x = 0.0f;
-        auto y = 0.0f;
-        auto isXLoaded = false;
-        while( *it )
-        {
-            if( isalpha( *it ) )
-            {
-                cmd = *it;
-                ++it;
-            }
-            else if( isNumber( *it ) )
-            {
-                switch( toupper( cmd ) )
-                {
-                    case 'M':
-                    case 'L':
-                        if( isXLoaded )
-                        {
-                            isXLoaded = false;
-                            alterCoord( y );
-                        }
-                        else
-                        {
-                            isXLoaded = true;
-                            alterCoord( x );
-                        }
-                        break;
-                    case 'H':
-                        alterCoord( x );
-                        break;
-                    case 'V':
-                        alterCoord( y );
-                        break;
-                    case 'Z':
-                        break;
-                    default:
-                        ASSERT( false, L"'" << toupper( cmd ) << "' is wrong command for polygon description" );
-                }
-                if( !isXLoaded )
-                {
-                    m_points.emplace_back( x, y );
-                }
-                do
-                {
-                    ++it;
-                } while( isNumber( *it ) );
-            }
-            else
-            {
-                ++it;
-            }
-        }
-    }
-
-    void Polygon::ParseTransformation( const char* transformation, float scale )
-    {
-        sf::Transform transform;
-        transform.scale( scale, scale );
-
-        auto it = transformation;
-        const char* funBegin = nullptr;
-        const char* funEnd = nullptr;
-        std::vector< float > args;
-        auto isNumber = []( char ch ) { return isdigit( ch ) || ch == '-' || ch == '+' || ch == '.'; };
-
-        for( ; *it; ++it )
-        {
-            if( isspace( *it ) || *it == '(' || *it == ',' )
-            {
-                continue;
-            }
-            if( !funBegin )
-            {
-                funBegin = it;
-            }
-            else if( !funEnd )
-            {
-                while( *it && !isspace( *it ) && *it != '(' )
-                {
-                    ++it;
-                }
-                funEnd = it;
-            }
-            else if( isNumber( *it ) )
-            {
-                args.emplace_back( static_cast< float >( atof( it ) ) );
-                do
-                {
-                    ++it;
-                } while( isNumber( *it ) );
-                --it;
-            }
-            else if( *it == ')' )
-            {
-                std::string fun( funBegin, funEnd );
-                std::transform( fun.begin(), fun.end(), fun.begin(), tolower );
-                if( fun == "matrix" )
-                {
-                    CHECK( args.size() == 6 );
-                    transform.combine( { args[ 0 ], args[ 2 ], args[ 4 ], args[ 1 ], args[ 3 ], args[ 5 ], 0.0f, 0.0f, 1.0f } );
-                }
-                else if( fun == "translate" )
-                {
-                    CHECK( args.size() == 1 || args.size() == 2 );
-                    transform.translate( args[ 0 ], args.size() == 2 ? args[ 1 ] : 0.0f );
-                }
-                else if( fun == "scale" )
-                {
-                    CHECK( args.size() == 1 || args.size() == 2 );
-                    transform.scale( args[ 0 ], args.size() == 2 ? args[ 1 ] : args[ 0 ] );
-                }
-                else if( fun == "rotate" )
-                {
-                    CHECK( args.size() == 1 || args.size() == 3 );
-                    if( args.size() == 1 )
-                    {
-                        transform.rotate( args[ 0 ] );
-                    }
-                    else
-                    {
-                        transform.rotate( args[ 0 ], args[ 1 ], args[ 2 ] );
-                    }
-                }
-                else if( fun == "skewx" )
-                {
-                    CHECK( args.size() == 1 );
-                    transform.combine( { 1.0f, tanf( args[ 0 ] * 180.0f / Game::Consts::Pi ), 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f } );
-                }
-                else if( fun == "skewy" )
-                {
-                    CHECK( args.size() == 1 );
-                    transform.combine( { 1.0f, 0.0f, 0.0f, tanf( args[ 0 ] * 180.0f / Game::Consts::Pi ), 1.0f, 0.0f, 0.0f, 0.0f, 1.0f } );
-                }
-                else
-                {
-                    ASSERT( false, L"There is no \"" << fun.c_str() << "\" SVG transformation" );
-                }
-                funBegin = nullptr;
-                funEnd = nullptr;
-                args.clear();
-            }
-        }
-        for( auto& point : m_points )
-        {
-            point = transform.transformPoint( point );
-        }
-    }
-
-    void Polygon::ParseStyle( const char* style )
-    {
-        auto it = style;
-        std::unordered_map< std::string, std::string > styles;
-        const char* keyBegin = nullptr;
-        const char* keyEnd = nullptr;
-        const char* valueBegin = nullptr;
-        const char* valueEnd = nullptr;
-        for( ; *it; ++it )
-        {
-            if( isspace( *it ) || *it == ':' )
-            {
-                continue;
-            }
-            if( !keyBegin )
-            {
-                if( isalpha( *it ) || *it == '-' )
-                {
-                    keyBegin = it;
-                }
-            }
-            else if( !keyEnd )
-            {
-                while( *it && !isspace( *it ) && *it != ':' )
-                {
-                    ++it;
-                }
-                CHECK( *it );
-                keyEnd = it;
-            }
-            else if( !valueBegin )
-            {
-                valueBegin = it;
-            }
-            else if( !valueEnd )
-            {
-                while( *it && !isspace( *it ) && *it != ';' )
-                {
-                    ++it;
-                }
-                valueEnd = it;
-                --it;
-                styles.emplace( std::make_pair( std::string( keyBegin, keyEnd ), std::string( valueBegin, valueEnd ) ) );
-                keyBegin = nullptr;
-                keyEnd = nullptr;
-                valueBegin = nullptr;
-                valueEnd = nullptr;
-            }
-        }
-
-        const auto& color = styles.find( "fill" );
-        uint32_t colorVal = 0xffffffff;
-        if( color != styles.cend() )
-        {
-            std::istringstream( color->second.substr( 1 ) ) >> std::hex >> colorVal;
-            colorVal = colorVal << 8 | 0xff;
-        }
-
-        const auto& opacity = styles.find( "opacity" );
-        float opacityVal;
-        if( opacity != styles.cend() )
-        {
-            opacityVal = static_cast< float >( atof( opacity->second.c_str() ) );
-            colorVal &= UINT_MAX << 8 | static_cast< uint32_t >( opacityVal * 255.0f );
-        }
-        SetColor( sf::Color( colorVal ) );
     }
 
     void Polygon::ReversePoints()

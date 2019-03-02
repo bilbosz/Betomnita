@@ -8,7 +8,7 @@
 
 namespace Betomnita::GamePlay
 {
-    class VehicleChassisPrototype;
+    class Prototype;
 
     class VehicleChassis : public PhysicalBody
     {
@@ -17,7 +17,7 @@ namespace Betomnita::GamePlay
         ~VehicleChassis();
         void Render( sf::RenderTarget& target );
         void Update( const sf::Time& dt );
-        void LoadFromPrototype( const VehicleChassisPrototype& prototype );
+        void LoadFromPrototype( const Prototype& prototype );
 
     private:
         sf::Vector2f m_position = { 0.0f, 0.0f };

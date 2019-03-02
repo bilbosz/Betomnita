@@ -13,6 +13,7 @@ namespace Betomnita::GamePlay
     class Unit;
     class GamePlayLogic;
     class VehicleChassis;
+    class Vehicle;
 
     class World final
     {
@@ -26,17 +27,11 @@ namespace Betomnita::GamePlay
 
         void LoadFromFile( const std::string& filename );
 
-        // Map (from file)
-        // Minimap (getter, thumbnail)
-        // Size (AABB of possible positions)
-        // PhysialBodies (obstacles, vechicles and buildings)
-        // Isohypse (terrain platforms) later
-
     private:
         sf::FloatRect m_size;
         std::vector< std::unique_ptr< Terrain > > m_terrainSheets;
         GamePlayLogic* m_currentLogic;
-        std::unique_ptr< VehicleChassis > m_vehicle;
+        std::vector< Vehicle > m_vehicles;
         // std::vector< std::unique_ptr< PhysicalBody > > m_physicalBodies;
         // std::vector< std::unique_ptr< Unit > > m_units;
         // std::vector< std::unique_ptr< TerrainPlatform > > m_isohypse;

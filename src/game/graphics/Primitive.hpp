@@ -50,12 +50,7 @@ namespace Game::Graphics
 #endif
         }
 
-        void SetTransform( const sf::Transform& value )
-        {
-            m_transform = value;
-        }
-
-        const sf::Transform& GetTransform() const
+        sf::Transform& Transform()
         {
             return m_transform;
         }
@@ -63,6 +58,7 @@ namespace Game::Graphics
         void SetPivot( const sf::Vector2f& value )
         {
             m_pivot = value;
+            OnPositionChange();
         }
 
         const sf::Vector2f& GetPivot() const

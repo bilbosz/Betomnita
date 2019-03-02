@@ -85,10 +85,6 @@ namespace Game::Graphics
         bool IsEar( const PointsList& polygonVertices, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex ) const;
         bool IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const;
 
-        void ParseDescription( const char* description );
-        void ParseTransformation( const char* transform, float scale );
-        void ParseStyle( const char* style );
-
         void ReversePoints();
 
         PointsVector m_points;

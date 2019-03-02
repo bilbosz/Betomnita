@@ -26,7 +26,7 @@ namespace Betomnita::GamePlay
             scale = scaleAttr.as_float( scale );
         }
 
-        const auto& elems = svgNode.select_nodes( "//path | //ellipse" );
+        auto& elems = svgNode.select_nodes( "//path | //ellipse" );
 
         for( auto& elem : elems )
         {
@@ -110,6 +110,10 @@ namespace Betomnita::GamePlay
                 }
                 break;
             }
+        }
+        for( auto& polygon : m_shape )
+        {
+            polygon.SetPivot( m_gunRotator );
         }
     }
 }

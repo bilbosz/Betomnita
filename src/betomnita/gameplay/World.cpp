@@ -13,13 +13,14 @@
 #include <filesystem>
 #include <pugixml.hpp>
 
+#include "betomnita/gameplay/Vehicle.hpp"
 #include "betomnita/gameplay/VehicleChassis.hpp"
 #include "betomnita/gameplay/VehicleChassisPrototype.hpp"
 #include "betomnita/gameplay/VehicleGunPrototype.hpp"
 
 namespace Betomnita::GamePlay
 {
-    World::World( GamePlayLogic* logic ) : m_currentLogic( logic ), m_vehicle( std::make_unique< VehicleChassis >() )
+    World::World( GamePlayLogic* logic ) : m_currentLogic( logic )
     {
     }
 
@@ -29,9 +30,6 @@ namespace Betomnita::GamePlay
 
     void World::Init()
     {
-        const auto& prototype = m_currentLogic->GetPrototypeDict().GetPrototypeByName( "res/vehicles/chassis/t34.svg" );
-        m_vehicle->LoadFromPrototype( static_cast< const VehicleChassisPrototype& >( prototype ) );
-        //m_vehicle->
     }
 
     void World::Render( sf::RenderTarget& target )
@@ -40,11 +38,18 @@ namespace Betomnita::GamePlay
         {
             terrain->Render( target );
         }
-        m_vehicle->Render( target );
+        for( auto& vehicle : m_vehicles )
+        {
+            vehicle.Render( target );
+        }
     }
 
     void World::Update( const sf::Time& dt )
     {
+        for( auto& vehicle : m_vehicles )
+        {
+            vehicle.Update( dt );
+        }
     }
 
     void World::LoadFromFile( const std::string& filename )
@@ -90,9 +95,32 @@ namespace Betomnita::GamePlay
                     {
                         href = node.attribute( "xlink:href" ).as_string();
                     }
-                    auto normalizedHref = ( std::filesystem::path( filename ).parent_path() / href ).lexically_normal().wstring();
+                    auto normalizedHref = ( std::filesystem::path( filename ).parent_path() / href ).lexically_normal().generic_string();
 
                     auto transform = Game::Graphics::SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() );
+
+                    auto unitId = node.attribute( "data-unit" ).as_int();
+
+                    const auto& prototype = m_currentLogic->GetPrototypeDict().GetPrototypeByName( normalizedHref );
+
+                    auto it = std::lower_bound( m_vehicles.begin(), m_vehicles.end(), unitId, []( const Vehicle& vehicle, int id ) { return vehicle.GetId() < id; } );
+                    if( it == m_vehicles.end() || it->GetId() != unitId )
+                    {
+                        it = m_vehicles.emplace( it );
+                        it->SetId( unitId );
+                    }
+                    switch( prototype.GetType() )
+                    {
+                        case Prototype::Type::Chassis:
+                            it->Chassis().LoadFromPrototype( prototype );
+                            break;
+                        case Prototype::Type::Gun:
+                            it->Gun().LoadFromPrototype( prototype );
+                            break;
+                        default:
+                            ASSERT( false, L"Wrong prototype type" );
+                            break;
+                    }
                 }
                 break;
             }
