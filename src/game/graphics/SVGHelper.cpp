@@ -3,6 +3,8 @@
 #include "app/Debug.hpp"
 #include "game/GameConsts.hpp"
 
+#include <sstream>
+
 namespace Game::Graphics
 {
     std::vector< std::vector< sf::Vector2f > > SVGHelper::ParsePathDescriptions( const char* value )

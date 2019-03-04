@@ -30,11 +30,33 @@ namespace Betomnita::GamePlay
             m_id = value;
         }
 
+        void SetDirection( float value )
+        {
+            m_direction = value;
+        }
+        float GetDirection() const
+        {
+            return m_direction;
+        }
+
+        void SetPosition( const sf::Vector2f& value )
+        {
+            m_position = value;
+            m_chassis.SetPosition( m_position );
+            m_gun.SetPosition( m_position + m_chassis.GetGunRotatorSlot() );
+        }
+        const sf::Vector2f& GetPosition() const
+        {
+            return m_position;
+        }
+
         VehicleChassis& Chassis();
         VehicleGun& Gun();
 
     private:
         int m_id = -1;
+        float m_direction = 0.0f;
+        sf::Vector2f m_position;
         VehicleChassis m_chassis;
         VehicleGun m_gun;
     };

@@ -81,7 +81,8 @@ namespace Betomnita::GamePlay
                     }
                     else
                     {
-                        m_shape = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, doc, node, scale );
+                        auto polygons = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, doc, node, scale );
+                        std::move( polygons.cbegin(), polygons.cend(), std::back_inserter( m_shape ) );
                     }
                 }
                 break;
@@ -103,7 +104,7 @@ namespace Betomnita::GamePlay
                     }
                     point = transform.transformPoint( point );
 
-                    if( std::find( classes.begin(), classes.end(), "gun-rotator-slot" ) != classes.end() )
+                    if( std::find( classes.begin(), classes.end(), "gun-rotator" ) != classes.end() )
                     {
                         m_gunRotator = point;
                     }

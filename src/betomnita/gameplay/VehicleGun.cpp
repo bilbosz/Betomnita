@@ -32,4 +32,13 @@ namespace Betomnita::GamePlay
         m_physicalBodyShape = gunPrototype.m_physicalBodyShape;
         m_shotDirection = gunPrototype.m_shotDirection;
     }
+
+    void VehicleGun::SetPosition( const sf::Vector2f& value )
+    {
+        m_position = value;
+        for( auto& polygon : m_shape )
+        {
+            polygon.SetPosition( m_position );
+        }
+    }
 }

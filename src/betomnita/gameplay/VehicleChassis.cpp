@@ -35,4 +35,13 @@ namespace Betomnita::GamePlay
         m_physicalBodyShape = vehiclePrototype.m_physicalBodyShape;
         m_shape = vehiclePrototype.m_shape;
     }
+
+    void VehicleChassis::SetPosition( const sf::Vector2f& value )
+    {
+        m_position = value;
+        for( auto& polygon : m_shape )
+        {
+            polygon.SetPosition( m_position );
+        }
+    }
 }

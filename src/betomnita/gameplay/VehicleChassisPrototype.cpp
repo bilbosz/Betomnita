@@ -102,5 +102,6 @@ namespace Betomnita::GamePlay
         {
             polygon.SetPivot( m_pivot );
         }
+        m_gunRotatorSlot = m_gunRotatorSlot - m_pivot;
     }
 }

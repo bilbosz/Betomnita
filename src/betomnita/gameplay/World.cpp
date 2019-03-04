@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <cstring>
 #include <filesystem>
+#include <map>
 #include <pugixml.hpp>
 
 #include "betomnita/gameplay/Vehicle.hpp"
@@ -66,8 +67,9 @@ namespace Betomnita::GamePlay
             scale = scaleAttr.as_float( scale );
         }
 
-        auto& elems = svgNode.select_nodes( "//path | //image" );
+        std::map< int, sf::Vector2f > vehiclesPositions;
 
+        auto& elems = svgNode.select_nodes( "//path | //image" );
         for( auto& elem : elems )
         {
             auto& node = elem.node();
@@ -97,7 +99,9 @@ namespace Betomnita::GamePlay
                     }
                     auto normalizedHref = ( std::filesystem::path( filename ).parent_path() / href ).lexically_normal().generic_string();
 
-                    auto transform = Game::Graphics::SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() );
+                    sf::Transform transform;
+                    transform.scale( scale, scale );
+                    transform.combine( Game::Graphics::SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() ) );
 
                     auto unitId = node.attribute( "data-unit" ).as_int();
 
@@ -113,6 +117,7 @@ namespace Betomnita::GamePlay
                     {
                         case Prototype::Type::Chassis:
                             it->Chassis().LoadFromPrototype( prototype );
+                            vehiclesPositions[ unitId ] = transform.transformPoint( 0.0f, 0.0f );
                             break;
                         case Prototype::Type::Gun:
                             it->Gun().LoadFromPrototype( prototype );
@@ -124,6 +129,10 @@ namespace Betomnita::GamePlay
                 }
                 break;
             }
+        }
+        for( auto& vehicle : m_vehicles )
+        {
+            vehicle.SetPosition( vehiclesPositions[ vehicle.GetId() ] + vehicle.Chassis().GetPivot() );
         }
     }
 }
