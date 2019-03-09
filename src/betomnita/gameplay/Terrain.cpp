@@ -1,6 +1,7 @@
 #include "betomnita/gameplay/Terrain.hpp"
 
 #include "app/Debug.hpp"
+#include "betomnita/gameplay/World.hpp"
 #include "game/graphics/Polygon.hpp"
 #include "game/graphics/SVGHelper.hpp"
 
@@ -8,7 +9,7 @@
 
 namespace Betomnita::GamePlay
 {
-    Terrain::Terrain()
+    Terrain::Terrain( const World* world ) : m_world( world )
     {
     }
 
@@ -32,5 +33,13 @@ namespace Betomnita::GamePlay
     {
         m_shape = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, doc, node, scale );
         m_friction = node.attribute( "data-friction" ).as_float();
+    }
+
+    void Terrain::SetTransform( const sf::Transform& transform )
+    {
+        for( auto& shape : m_shape )
+        {
+            shape.Transform() = transform;
+        }
     }
 }

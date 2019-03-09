@@ -35,6 +35,14 @@ namespace Betomnita::GamePlay
             return m_gunRotatorSlot;
         }
 
+        void SetTransform( const sf::Transform& transform )
+        {
+            for( auto& polygon : m_shape )
+            {
+                polygon.Transform() = transform;
+            }
+        }
+
     private:
         sf::Vector2f m_position;
         float m_direction = 0.0f;

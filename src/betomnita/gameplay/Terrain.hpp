@@ -12,10 +12,12 @@ namespace pugi
 
 namespace Betomnita::GamePlay
 {
+    class World;
+
     class Terrain final
     {
     public:
-        Terrain();
+        Terrain( const World* world );
         ~Terrain();
 
         void Update( const sf::Time& dt );
@@ -27,8 +29,10 @@ namespace Betomnita::GamePlay
         }
 
         void LoadFromSVGNode( const std::string& filename, pugi::xml_document& doc, pugi::xml_node& node, float scale );
-
+        
+        void SetTransform( const sf::Transform& transform );
     private:
+        const World* m_world;
         float m_friction = 0.0f;
         std::vector< Game::Graphics::Polygon > m_shape;
     };

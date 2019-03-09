@@ -113,4 +113,10 @@ namespace Betomnita
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::Dispatch< const sf::Vector2f& >( position );
         GenericGame::OnMouseMoved( position );
     }
+
+    void BetomnitaGame::OnMouseWheelScrolled( float delta )
+    {
+        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::Dispatch< float >( delta );
+        GenericGame::OnMouseWheelScrolled( delta );
+    }
 }

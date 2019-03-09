@@ -1,8 +1,10 @@
 #include "betomnita/gameplay/Vehicle.hpp"
 
+#include "betomnita/gameplay/World.hpp"
+
 namespace Betomnita::GamePlay
 {
-    Vehicle::Vehicle()
+    Vehicle::Vehicle( const World* world ) : m_world( world )
     {
     }
 

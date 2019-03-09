@@ -29,6 +29,7 @@ namespace Betomnita::Resources
         OnMouseButtonPressed,
         OnMouseButtonReleased,
         OnMouseMoved,
+        OnMouseWheelScrolled,
         Size,
     };
 
@@ -41,6 +42,10 @@ namespace Betomnita::Resources
         PauseRequest,
         PauseMenuClick,
         PauseMenuHover,
+        ZoomInOutWorld,
+        MoveWorld,
+        StartMoveWorld,
+        StopMoveWorld,
         Size,
     };
 
@@ -56,4 +61,6 @@ namespace Betomnita::Resources
     extern const std::string ScreenshotPath;
     extern const std::string CursorPath;
     extern const std::string World1;
+    extern const sf::Transform ReverseViewTransform;
+    extern const float ZoomInOutFactor;
 }

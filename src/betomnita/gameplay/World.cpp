@@ -1,10 +1,13 @@
 #include "betomnita/gameplay/World.hpp"
 
 #include "app/Debug.hpp"
+#include "betomnita/event/EventRegistration.hpp"
 #include "betomnita/gameplay/GamePlayLogic.hpp"
 #include "betomnita/gameplay/PhysicalBody.hpp"
 #include "betomnita/gameplay/PrototypeDict.hpp"
 #include "betomnita/gameplay/Terrain.hpp"
+#include "betomnita/resources/Resources.hpp"
+#include "game/GenericGame.hpp"
 #include "game/graphics/Polygon.hpp"
 #include "game/graphics/SVGHelper.hpp"
 
@@ -27,10 +30,68 @@ namespace Betomnita::GamePlay
 
     World::~World()
     {
+        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::RemoveListener( Resources::ListenerId::ZoomInOutWorld );
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::RemoveListener( Resources::ListenerId::StartMoveWorld );
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::RemoveListener( Resources::ListenerId::StopMoveWorld );
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::RemoveListener( Resources::ListenerId::MoveWorld );
     }
 
     void World::Init()
     {
+        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::AddListener( { Resources::ListenerId::ZoomInOutWorld, true, [this]( float delta ) {
+                                                                                                float zoom;
+                                                                                                if( delta >= 0.0f )
+                                                                                                {
+                                                                                                    zoom = delta * Resources::ZoomInOutFactor;
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    zoom = -delta / Resources::ZoomInOutFactor;
+                                                                                                }
+                                                                                                m_view.scale( { zoom, zoom }, Game::GenericGame::GetInstance()->GetMousePosition() );
+                                                                                                for( auto& terrain : m_terrainSheets )
+                                                                                                {
+                                                                                                    terrain->SetTransform( m_view );
+                                                                                                }
+                                                                                                for( auto& vehicle : m_vehicles )
+                                                                                                {
+                                                                                                    vehicle.SetTransform( m_view );
+                                                                                                }
+                                                                                            } } );
+
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::AddListener(
+            { Resources::ListenerId::StartMoveWorld, true, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
+                 if( btn == sf::Mouse::Button::Right )
+                 {
+                     m_moving = true;
+                     m_previousPoint = pos;
+                 }
+             } } );
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::AddListener(
+            { Resources::ListenerId::StopMoveWorld, true, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
+                 if( btn == sf::Mouse::Button::Right )
+                 {
+                     m_moving = false;
+                 }
+             } } );
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::AddListener( { Resources::ListenerId::MoveWorld, true, [this]( const sf::Vector2f& pos ) {
+                                                                                        if( m_moving )
+                                                                                        {
+                                                                                            sf::Vector2f worldPoint = pos;
+                                                                                            sf::Vector2f posDiff = m_previousPoint - worldPoint;
+                                                                                            m_previousPoint = worldPoint;
+                                                                                            float scale = m_view.getMatrix()[ 0 ];
+                                                                                            m_view.translate( -posDiff / scale );
+                                                                                            for( auto& terrain : m_terrainSheets )
+                                                                                            {
+                                                                                                terrain->SetTransform( m_view );
+                                                                                            }
+                                                                                            for( auto& vehicle : m_vehicles )
+                                                                                            {
+                                                                                                vehicle.SetTransform( m_view );
+                                                                                            }
+                                                                                        }
+                                                                                    } } );
     }
 
     void World::Render( sf::RenderTarget& target )
@@ -82,7 +143,7 @@ namespace Betomnita::GamePlay
                     auto classes = Game::Graphics::SVGHelper::ParseClass( node.attribute( "class" ).as_string() );
                     if( std::find( classes.begin(), classes.end(), "terrain" ) != classes.end() )
                     {
-                        auto& terrain = m_terrainSheets.emplace_back( std::make_unique< Terrain >() );
+                        auto& terrain = m_terrainSheets.emplace_back( std::make_unique< Terrain >( this ) );
                         terrain->LoadFromSVGNode( filename, def, node, scale );
                     }
                 }
@@ -110,7 +171,7 @@ namespace Betomnita::GamePlay
                     auto it = std::lower_bound( m_vehicles.begin(), m_vehicles.end(), unitId, []( const Vehicle& vehicle, int id ) { return vehicle.GetId() < id; } );
                     if( it == m_vehicles.end() || it->GetId() != unitId )
                     {
-                        it = m_vehicles.emplace( it );
+                        it = m_vehicles.emplace( it, this );
                         it->SetId( unitId );
                     }
                     switch( prototype.GetType() )

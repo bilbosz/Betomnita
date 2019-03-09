@@ -44,6 +44,7 @@ namespace Betomnita
         void OnMouseButtonPressed( const sf::Vector2f& position, sf::Mouse::Button button ) override;
         void OnMouseButtonReleased( const sf::Vector2f& position, sf::Mouse::Button button ) override;
         void OnMouseMoved( const sf::Vector2f& position ) override;
+        void OnMouseWheelScrolled( float delta ) override; 
 
         static BetomnitaGame* s_instance;
         std::unique_ptr< Game::StateMachine< Resources::StateId > > m_stateMachine;

@@ -7,10 +7,12 @@
 
 namespace Betomnita::GamePlay
 {
+    class World;
+
     class Vehicle
     {
     public:
-        Vehicle();
+        explicit Vehicle( const World* world );
         bool operator<( const Vehicle& other ) const
         {
             ASSERT( m_id >= 0 && other.m_id >= 0, L"Id should be positive number" );
@@ -50,10 +52,17 @@ namespace Betomnita::GamePlay
             return m_position;
         }
 
+        void SetTransform( const sf::Transform& transform )
+        {
+            m_chassis.SetTransform( transform );
+            m_gun.SetTransform( transform );
+        }
+
         VehicleChassis& Chassis();
         VehicleGun& Gun();
 
     private:
+        const World* m_world;
         int m_id = -1;
         float m_direction = 0.0f;
         sf::Vector2f m_position;

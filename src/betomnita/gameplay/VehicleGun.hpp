@@ -27,6 +27,14 @@ namespace Betomnita::GamePlay
             return m_position;
         }
 
+        void SetTransform( const sf::Transform& transform )
+        {
+            for( auto& polygon : m_shape )
+            {
+                polygon.Transform() = transform;
+            }
+        }
+
     private:
         float m_direction = 0.0f;
         sf::Vector2f m_position;

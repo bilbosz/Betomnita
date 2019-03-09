@@ -134,6 +134,14 @@ namespace Game
                 OnMouseMoved( m_modelToScreen.getInverse().transformPoint( static_cast< float >( e.mouseMove.x ), static_cast< float >( e.mouseMove.y ) ) );
             }
             break;
+            case sf::Event::EventType::MouseWheelScrolled:
+            {
+                if( e.mouseWheelScroll.wheel == 0 )
+                {
+                    OnMouseWheelScrolled( e.mouseWheelScroll.delta );
+                }
+            }
+            break;
         }
     }
 
@@ -168,6 +176,10 @@ namespace Game
     }
 
     void GenericGame::OnMouseMoved( const sf::Vector2f& position )
+    {
+    }
+
+    void GenericGame::OnMouseWheelScrolled( float delta )
     {
     }
 

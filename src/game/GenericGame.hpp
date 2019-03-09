@@ -42,6 +42,7 @@ namespace Game
         virtual void OnMouseButtonPressed( const sf::Vector2f& position, sf::Mouse::Button button );
         virtual void OnMouseButtonReleased( const sf::Vector2f& position, sf::Mouse::Button button );
         virtual void OnMouseMoved( const sf::Vector2f& position );
+        virtual void OnMouseWheelScrolled( float delta ); 
 
         void OnEvent( const sf::Event& e ) override;
 

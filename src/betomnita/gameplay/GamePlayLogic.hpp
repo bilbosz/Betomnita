@@ -29,7 +29,7 @@ namespace Betomnita::GamePlay
     private:
         sf::Time m_time;
         std::unique_ptr< World > m_world; // mainly physics and world design
-        std::unique_ptr< PrototypeDict > m_prototypeDict; // map from images into cached prototype
+        std::unique_ptr< PrototypeDict > m_prototypeDict; // map from files into cached prototypes
         // std::vector< std::unique_ptr< VechicleChassis > > m_prototypes; // cached vechicle prototypes
         // std::vector< std::unique_ptr< Unit > > m_units; // for executing units commands
     };

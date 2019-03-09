@@ -36,6 +36,7 @@ namespace Game::EventSystem
     REGISTER_EVENT_W_ARGS( OnMouseButtonPressed, const sf::Vector2f&, sf::Mouse::Button );
     REGISTER_EVENT_W_ARGS( OnMouseButtonReleased, const sf::Vector2f&, sf::Mouse::Button );
     REGISTER_EVENT_W_ARGS( OnMouseMoved, const sf::Vector2f& );
+    REGISTER_EVENT_W_ARGS( OnMouseWheelScrolled, float );
 
 #undef REGISTER_EVENT_WO_ARGS
 #undef REGISTER_EVENT_W_ARGS
