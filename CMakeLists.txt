@@ -1,10 +1,12 @@
 ﻿cmake_minimum_required( VERSION 3.12 )
 
 option( Betomnita_DEBUG "Debug mode" ON )
-option( Betomnita_FULLSCREEN "Fullscreen mode" ON )
-option( Betomnita_CONSOLE "Show console" OFF )
-option( Betomnita_CONSOLE_STOP "Waits for key pressed after program execution" ON )
-option( Betomnita_REDIRECT_CONSOLE_OUT "Redirects console out and error stream to stdout.log and stderr.log files" ON )
+option( Betomnita_FULLSCREEN "Fullscreen mode" OFF )
+option( Betomnita_CONSOLE "Show console" ON )
+option( Betomnita_CONSOLE_STOP "Waits for key pressed after program execution" OFF )
+option( Betomnita_REDIRECT_CONSOLE_OUT "Redirects console out and error stream to stdout.log and stderr.log files" OFF )
+option( Betomnita_FIX_POLYGON "Fixes polygons to be parsed by Betomnita without point changes" ON )
+option( Betomnita_SAVE_POLYGON_TRIANGULATION "Saves triangulation in SVG files. Improve performance on big number vertices polygons. Implies FIX_POLYGON" OFF )
 
 set( SFML_REQUIRED_VERSION 2.4.2 )
 set( Boost_REQUIRED_VERSION 1.66 )

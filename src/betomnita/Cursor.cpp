@@ -2,7 +2,6 @@
 
 #include "app/Debug.hpp"
 #include "betomnita/resources/Resources.hpp"
-#include "game/graphics/Polygon.hpp"
 #include "game/graphics/SVGHelper.hpp"
 
 #include <pugixml.hpp>
@@ -25,7 +24,7 @@ namespace Betomnita
 
         auto& node = svgNode.select_node( "//path" ).node();
 
-        m_shape = std::make_unique< Game::Graphics::Polygon >( Game::Graphics::Polygon::LoadManyFromSVGNode( Resources::CursorPath.c_str(), doc, node, scale )[ 0 ] );
+        m_shape = Game::Graphics::Polygon::LoadManyFromSVGNode( Resources::CursorPath.c_str(), doc, node, scale );
     }
 
     Cursor::~Cursor()
@@ -34,12 +33,18 @@ namespace Betomnita
 
     void Cursor::Render( sf::RenderTarget& target )
     {
-        m_shape->Render( target );
+        for( auto& polygon : m_shape )
+        {
+            polygon.Render( target );
+        }
     }
 
     void Cursor::SetPosition( const sf::Vector2f& value )
     {
         m_position = value;
-        m_shape->SetPosition( m_position );
+        for( auto& polygon : m_shape )
+        {
+            polygon.SetPosition( m_position );
+        }
     }
 }

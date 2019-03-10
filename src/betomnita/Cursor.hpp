@@ -1,10 +1,8 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "game/graphics/Polygon.hpp"
 
-namespace Game::Graphics
-{
-    class Polygon;
-}
+#include <SFML/Graphics.hpp>
+#include <vector>
 
 namespace Betomnita
 {
@@ -24,6 +22,6 @@ namespace Betomnita
 
     private:
         sf::Vector2f m_position;
-        std::unique_ptr< Game::Graphics::Polygon > m_shape;
+        std::vector< Game::Graphics::Polygon > m_shape;
     };
 }

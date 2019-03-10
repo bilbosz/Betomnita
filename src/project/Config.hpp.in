@@ -17,3 +17,14 @@
 #ifdef Betomnita_REDIRECT_CONSOLE_OUT
 #   define REDIRECT_CONSOLE_OUT
 #endif
+
+#cmakedefine Betomnita_FIX_POLYGON
+#ifdef Betomnita_FIX_POLYGON
+#   define FIX_POLYGON
+#endif
+
+#cmakedefine Betomnita_SAVE_POLYGON_TRIANGULATION
+#ifdef Betomnita_SAVE_POLYGON_TRIANGULATION
+#   define FIX_POLYGON
+#   define SAVE_POLYGON_TRIANGULATION
+#endif

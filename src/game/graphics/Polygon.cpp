@@ -4,6 +4,7 @@
 #include "game/GameConsts.hpp"
 #include "game/GenericGame.hpp"
 #include "game/graphics/SVGHelper.hpp"
+#include "project/Config.hpp"
 
 #include <pugixml.hpp>
 #include <sstream>
@@ -37,21 +38,23 @@ namespace Game::Graphics
             transform.combine( SVGHelper::ParseTransform( current->attribute( "transform" ).as_string() ) );
             current = &current->parent();
         }
-
+#ifdef FIX_POLYGON
         bool fixNeeded = false;
+#endif
         for( auto& points : desc )
         {
-#ifdef DEBUG
+#ifdef FIX_POLYGON
+            fixNeeded = fixNeeded || points.size() != 3;
             bool samePoints = false;
-#endif
+
             while( !points.empty() && *points.cbegin() == *points.crbegin() )
             {
                 points.pop_back();
-#ifdef DEBUG
                 samePoints = true;
-#endif
             }
-#ifdef DEBUG
+#endif
+            VERIFY( points.size() >= 3 );
+#ifdef FIX_POLYGON
             if( samePoints )
             {
                 fixNeeded = true;
@@ -74,29 +77,22 @@ namespace Game::Graphics
                 }
             }
 #endif
+
+            auto& polygon = result.emplace_back();
+            for( auto& point : points )
+            {
+                point = transform.transformPoint( point );
+            }
+
+#ifdef FIX_POLYGON
             if( !IsRightDirection( points ) )
             {
                 fixNeeded = true;
                 WARNING( L"Verticies for polygon \"" << id << L"\" in file " << filename.c_str() << L" have to be reversed." );
                 std::reverse( points.begin(), points.end() );
             }
-        }
-
-#ifdef DEBUG
-        if( fixNeeded )
-        {
-            node.attribute( "d" ).set_value( SVGHelper::ConstructPathDescriptionString( desc ).c_str() );
-            doc.save_file( filename.c_str() );
-        }
 #endif
 
-        for( auto& points : desc )
-        {
-            auto& polygon = result.emplace_back();
-            for( auto& point : points )
-            {
-                point = transform.transformPoint( point );
-            }
             polygon.SetPoints( points );
 
             auto fillColorStyle = style.find( "fill" );
@@ -116,6 +112,43 @@ namespace Game::Graphics
             }
             polygon.SetColor( sf::Color( fillColor ) );
         }
+#ifdef FIX_POLYGON
+        if( fixNeeded )
+        {
+            sf::Transform inversedTransform = transform.getInverse();
+#    ifdef SAVE_POLYGON_TRIANGULATION
+            std::vector< std::vector< sf::Vector2f > > triangulatedPoints;
+            for( auto& polygon : result )
+            {
+                auto triangles = polygon.GetTriangulatedPoints();
+                for( auto& triangle : triangles )
+                {
+                    if( !IsRightDirection( triangle ) )
+                    {
+                        std::reverse( triangle.begin(), triangle.end() );
+                    }
+                    for( auto& point : triangle )
+                    {
+                        point = inversedTransform.transformPoint( point );
+                    }
+                }
+                std::move( triangles.begin(), triangles.end(), std::back_inserter( triangulatedPoints ) );
+            }
+            node.attribute( "d" ).set_value( SVGHelper::ConstructPathDescriptionString( triangulatedPoints ).c_str() );
+#    else
+            for( auto& points : desc )
+            {
+                for( auto& point : points )
+                {
+                    point = inversedTransform.transformPoint( point );
+                }
+            }
+            node.attribute( "d" ).set_value( SVGHelper::ConstructPathDescriptionString( desc ).c_str() );
+#    endif
+            doc.save_file( filename.c_str() );
+        }
+#endif
+
         return result;
     }
 
@@ -230,7 +263,7 @@ namespace Game::Graphics
     void Polygon::OnPositionChange()
     {
         auto verticesN = m_vertexArray.getVertexCount();
-        for( auto i = 0U; i < verticesN; ++i )
+        for( auto i = 0u; i < verticesN; ++i )
         {
             m_vertexArray[ i ].position = m_vertexArray[ i ].position - m_appliedMove + m_position - m_pivot;
         }
@@ -343,5 +376,16 @@ namespace Game::Graphics
     void Polygon::CalculateAABB()
     {
         m_aabb.Evaluate( m_points );
+    }
+
+    std::vector< std::vector< sf::Vector2f > > Polygon::GetTriangulatedPoints() const
+    {
+        std::vector< std::vector< sf::Vector2f > > result;
+        auto verticesN = m_vertexArray.getVertexCount();
+        for( auto i = 0u; i < verticesN; i += 3 )
+        {
+            result.emplace_back( std::vector< sf::Vector2f >{ m_vertexArray[ i ].position, m_vertexArray[ i + 1 ].position, m_vertexArray[ i + 2 ].position } );
+        }
+        return result;
     }
 }

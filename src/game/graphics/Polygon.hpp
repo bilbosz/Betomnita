@@ -94,6 +94,8 @@ namespace Game::Graphics
         void ReversePoints();
         void CalculateAABB();
 
+        std::vector< std::vector< sf::Vector2f > > GetTriangulatedPoints() const;
+
         PointsVector m_points;
         sf::Color m_color;
 

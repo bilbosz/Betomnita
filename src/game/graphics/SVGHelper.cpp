@@ -3,6 +3,7 @@
 #include "app/Debug.hpp"
 #include "game/GameConsts.hpp"
 
+#include <iomanip>
 #include <sstream>
 
 namespace Game::Graphics
@@ -89,6 +90,7 @@ namespace Game::Graphics
     std::string SVGHelper::ConstructPathDescriptionString( const std::vector< std::vector< sf::Vector2f > >& value )
     {
         std::ostringstream out;
+        out << std::setprecision( 8 );
         for( const auto& points : value )
         {
             auto it = points.cbegin();
@@ -111,9 +113,10 @@ namespace Game::Graphics
                 }
                 prev = it;
             }
-            out << "Z";
+            out << "Z ";
         }
-        return out.str();
+        const auto& str = out.str();
+        return str.empty() ? str : str.substr( 0, str.length() - 1 );
     }
 
     std::unordered_map< std::string, std::string > SVGHelper::ParseStyle( const char* value )
