@@ -24,19 +24,19 @@
          guidetolerance="10"
          inkscape:pageopacity="0"
          inkscape:pageshadow="2"
-         inkscape:window-width="640"
-         inkscape:window-height="480"
+         inkscape:window-width="1920"
+         inkscape:window-height="996"
          id="namedview7"
          showgrid="true"
          inkscape:lockguides="false"
          showguides="false"
          inkscape:current-layer="svg1987"
          inkscape:zoom="3.776"
-         inkscape:cx="60.648632"
-         inkscape:cy="993.30236"
-         inkscape:window-x="831"
-         inkscape:window-y="179"
-         inkscape:window-maximized="0">
+         inkscape:cx="48.827316"
+         inkscape:cy="988.74805"
+         inkscape:window-x="-8"
+         inkscape:window-y="-8"
+         inkscape:window-maximized="1">
         <inkscape:grid
              type="xygrid"
              id="grid9" />
@@ -58,6 +58,6 @@
     <path
          id="path2534"
          d="M 0,0 L 24,40 V 24 H 40 Z"
-         style="opacity:0.75;fill:#00ff00;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="opacity:1;fill:#d40000;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          inkscape:connector-curvature="0" />
 </svg>
