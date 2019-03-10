@@ -15,7 +15,8 @@
      width="1000"
      data-scale="0.001"
      sodipodi:docname="def.svg"
-     inkscape:version="0.92.3 (2405546, 2018-03-11)">
+     inkscape:version="0.92.3 (2405546, 2018-03-11)"
+     data-physical-scale="0.01">
     <sodipodi:namedview
          pagecolor="#ffffff"
          bordercolor="#666666"
@@ -116,20 +117,20 @@
         <image
              sodipodi:absref="C:\repo\betomnita\res\worlds\1\../../vehicles/chassis/t34.svg"
              xlink:href="../../vehicles/chassis/t34.svg"
-             data-unit="1"
-             data-player="1"
-             style="opacity:1"
-             transform="translate(320,280)"
+             id="image59"
              preserveAspectRatio="none"
-             id="image59" />
+             transform="translate(320,280)"
+             style="opacity:1"
+             data-player="1"
+             data-unit="1" />
         <image
              sodipodi:absref="C:\repo\betomnita\res\worlds\1\../../vehicles/guns/single-tank-gun.svg"
              xlink:href="../../vehicles/guns/single-tank-gun.svg"
-             data-unit="1"
-             data-player="1"
-             transform="translate(400.6946,83.91141)"
-             preserveAspectRatio="none"
+             style="display:inline;opacity:1;shape-rendering:crispEdges"
              id="image59-2"
-             style="display:inline;opacity:1;shape-rendering:crispEdges" />
+             preserveAspectRatio="none"
+             transform="translate(400.6946,83.91141)"
+             data-player="1"
+             data-unit="1" />
     </g>
 </svg>

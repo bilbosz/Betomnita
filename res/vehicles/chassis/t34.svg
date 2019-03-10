@@ -14,7 +14,8 @@
      height="1000"
      width="1000"
      sodipodi:docname="t34.svg"
-     inkscape:version="0.92.3 (2405546, 2018-03-11)">
+     inkscape:version="0.92.3 (2405546, 2018-03-11)"
+     data-physical-scale="0.01">
     <sodipodi:namedview
          pagecolor="#ffffff"
          bordercolor="#666666"
@@ -51,7 +52,7 @@
                 <dc:format>image/svg+xml</dc:format>
                 <dc:type
                      rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-                <dc:title></dc:title>
+                <dc:title />
             </cc:Work>
         </rdf:RDF>
     </metadata>

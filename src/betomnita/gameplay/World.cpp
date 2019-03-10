@@ -24,7 +24,7 @@
 
 namespace Betomnita::GamePlay
 {
-    World::World( GamePlayLogic* logic ) : m_currentLogic( logic )
+    World::World( GamePlayLogic* logic ) : m_currentLogic( logic ), m_physicsWorld( b2Vec2( 0.0f, 0.0f ) )
     {
     }
 
@@ -143,6 +143,13 @@ namespace Betomnita::GamePlay
         if( scaleAttr )
         {
             scale = scaleAttr.as_float( scale );
+        }
+
+        auto physicalScale = 1.0f;
+        auto physicalScaleAttr = svgNode.attribute( "data-physical-scale" );
+        if( physicalScaleAttr )
+        {
+            physicalScale = physicalScaleAttr.as_float( physicalScale );
         }
 
         std::map< int, sf::Vector2f > vehiclesPositions;

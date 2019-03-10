@@ -14,7 +14,8 @@
      height="1000"
      width="1000"
      sodipodi:docname="single-tank-gun.svg"
-     inkscape:version="0.92.3 (2405546, 2018-03-11)">
+     inkscape:version="0.92.3 (2405546, 2018-03-11)"
+     data-physical-scale="0.01">
     <sodipodi:namedview
          pagecolor="#ffffff"
          bordercolor="#666666"
@@ -83,7 +84,8 @@
          transform="matrix(0.35499739,0,0,1.6505483,15.33671,-107.62374)"
          style="opacity:1;fill:#808080;fill-opacity:1;stroke:none;stroke-width:1.30639136;stroke-opacity:1"
          d="M 103.23759,65.204842 H 183.84776 V 254.70947 H 103.23759 Z"
-         id="rect4562" />
+         id="rect4562"
+         inkscape:connector-curvature="0" />
     <path
          style="fill:none;stroke:#ff0000;stroke-width:0.98967606px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="M 65,312 V 2.0000042"

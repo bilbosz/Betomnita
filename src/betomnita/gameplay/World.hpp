@@ -37,12 +37,10 @@ namespace Betomnita::GamePlay
         GamePlayLogic* m_currentLogic;
         std::vector< Vehicle > m_vehicles;
 
+        b2World m_physicsWorld;
         sf::Transform m_view;
         sf::Vector2f m_previousPoint;
         bool m_moving = false;
         Game::Utils::AABB m_size;
-        // std::vector< std::unique_ptr< PhysicalBody > > m_physicalBodies;
-        // std::vector< std::unique_ptr< Unit > > m_units;
-        // std::vector< std::unique_ptr< TerrainPlatform > > m_isohypse;
     };
 }
