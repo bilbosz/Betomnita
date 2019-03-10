@@ -33,6 +33,12 @@ namespace Betomnita::GamePlay
     {
         m_shape = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, doc, node, scale );
         m_friction = node.attribute( "data-friction" ).as_float();
+        
+        m_aabb.Init( m_shape[ 0 ].GetAABB() );
+        for( const auto& polygon : m_shape )
+        {
+            m_aabb.Constrain( polygon.GetAABB() );
+        }
     }
 
     void Terrain::SetTransform( const sf::Transform& transform )

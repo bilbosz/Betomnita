@@ -140,6 +140,7 @@ namespace Game::Graphics
         m_points = value;
         OnPointsChange();
         Triangulate();
+        CalculateAABB();
     }
 
     void Polygon::SetColor( const sf::Color& value )
@@ -337,5 +338,10 @@ namespace Game::Graphics
     void Polygon::ReversePoints()
     {
         std::reverse( m_points.begin(), m_points.end() );
+    }
+
+    void Polygon::CalculateAABB()
+    {
+        m_aabb.Evaluate( m_points );
     }
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "game/graphics/Primitive.hpp"
+#include "game/utils/AABB.hpp"
 
 #include <list>
 #include <optional>
@@ -67,6 +68,11 @@ namespace Game::Graphics
             return m_outlineThickness;
         }
 
+        const Utils::AABB& GetAABB() const
+        {
+            return m_aabb;
+        }
+
         static Error GetPointsErrors( const PointsVector& points );
 
         static bool IsRightDirection( const PointsVector& points );
@@ -86,6 +92,7 @@ namespace Game::Graphics
         bool IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const;
 
         void ReversePoints();
+        void CalculateAABB();
 
         PointsVector m_points;
         sf::Color m_color;
@@ -95,5 +102,7 @@ namespace Game::Graphics
 
         sf::Vector2f m_appliedMove;
         sf::VertexArray m_vertexArray;
+
+        Utils::AABB m_aabb;
     };
 }

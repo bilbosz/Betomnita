@@ -38,26 +38,34 @@ namespace Betomnita::GamePlay
 
     void World::Init()
     {
-        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::AddListener( { Resources::ListenerId::ZoomInOutWorld, true, [this]( float delta ) {
-                                                                                                float zoom;
-                                                                                                if( delta >= 0.0f )
-                                                                                                {
-                                                                                                    zoom = delta * Resources::ZoomInOutFactor;
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    zoom = -delta / Resources::ZoomInOutFactor;
-                                                                                                }
-                                                                                                m_view.scale( { zoom, zoom }, Game::GenericGame::GetInstance()->GetMousePosition() );
-                                                                                                for( auto& terrain : m_terrainSheets )
-                                                                                                {
-                                                                                                    terrain->SetTransform( m_view );
-                                                                                                }
-                                                                                                for( auto& vehicle : m_vehicles )
-                                                                                                {
-                                                                                                    vehicle.SetTransform( m_view );
-                                                                                                }
-                                                                                            } } );
+        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::AddListener(
+            { Resources::ListenerId::ZoomInOutWorld, true, [this]( float delta ) {
+                 float zoom;
+                 if( delta >= 0.0f )
+                 {
+                     zoom = delta * Resources::ZoomInOutFactor;
+                 }
+                 else
+                 {
+                     zoom = -delta / Resources::ZoomInOutFactor;
+                 }
+
+                 auto scale = GetViewScale() * zoom;
+                 if( scale > Resources::ZoomInLimit || scale < Resources::ZoomOutLimit )
+                 {
+                     return;
+                 }
+
+                 m_view.scale( { zoom, zoom }, m_view.getInverse().transformPoint( Game::GenericGame::GetInstance()->GetMousePosition() ) );
+                 for( auto& terrain : m_terrainSheets )
+                 {
+                     terrain->SetTransform( m_view );
+                 }
+                 for( auto& vehicle : m_vehicles )
+                 {
+                     vehicle.SetTransform( m_view );
+                 }
+             } } );
 
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::AddListener(
             { Resources::ListenerId::StartMoveWorld, true, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
@@ -74,24 +82,33 @@ namespace Betomnita::GamePlay
                      m_moving = false;
                  }
              } } );
-        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::AddListener( { Resources::ListenerId::MoveWorld, true, [this]( const sf::Vector2f& pos ) {
-                                                                                        if( m_moving )
-                                                                                        {
-                                                                                            sf::Vector2f worldPoint = pos;
-                                                                                            sf::Vector2f posDiff = m_previousPoint - worldPoint;
-                                                                                            m_previousPoint = worldPoint;
-                                                                                            float scale = m_view.getMatrix()[ 0 ];
-                                                                                            m_view.translate( -posDiff / scale );
-                                                                                            for( auto& terrain : m_terrainSheets )
-                                                                                            {
-                                                                                                terrain->SetTransform( m_view );
-                                                                                            }
-                                                                                            for( auto& vehicle : m_vehicles )
-                                                                                            {
-                                                                                                vehicle.SetTransform( m_view );
-                                                                                            }
-                                                                                        }
-                                                                                    } } );
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::AddListener(
+            { Resources::ListenerId::MoveWorld, true, [this]( const sf::Vector2f& pos ) {
+                 if( m_moving )
+                 {
+                     float scale = GetViewScale();
+                     auto center = GetViewCenter();
+                     sf::Vector2f diff = ( m_previousPoint - pos ) / scale;
+                     if( center.x < m_size.MinX && diff.x < 0.0f || center.x > m_size.MaxX && diff.x > 0.0f )
+                     {
+                         diff.x = 0.0f;
+                     }
+                     if( center.y < m_size.MinY && diff.y < 0.0f || center.y > m_size.MaxY && diff.y > 0.0f )
+                     {
+                         diff.y = 0.0f;
+                     }
+                     m_previousPoint = pos;
+                     m_view.translate( -diff );
+                     for( auto& terrain : m_terrainSheets )
+                     {
+                         terrain->SetTransform( m_view );
+                     }
+                     for( auto& vehicle : m_vehicles )
+                     {
+                         vehicle.SetTransform( m_view );
+                     }
+                 }
+             } } );
     }
 
     void World::Render( sf::RenderTarget& target )
@@ -195,5 +212,21 @@ namespace Betomnita::GamePlay
         {
             vehicle.SetPosition( vehiclesPositions[ vehicle.GetId() ] + vehicle.Chassis().GetPivot() );
         }
+        m_size.Init( m_terrainSheets[ 0 ]->GetAABB() );
+        for( const auto& terrain : m_terrainSheets )
+        {
+            m_size.Constrain( terrain->GetAABB() );
+        }
+    }
+
+    sf::Vector2f World::GetViewCenter() const
+    {
+        const auto& matrix = m_view.getMatrix();
+        return { ( -matrix[ 12 ] + 0.5f ) / matrix[ 0 ], ( -matrix[ 13 ] + 0.5f ) / matrix[ 0 ] };
+    }
+
+    float World::GetViewScale() const
+    {
+        return m_view.getMatrix()[ 0 ];
     }
 }

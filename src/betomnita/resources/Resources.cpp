@@ -38,4 +38,6 @@ namespace Betomnita::Resources
     const std::string World1 = "res/worlds/1/def.svg";
 
     const float ZoomInOutFactor = 1.30f;
+    const float ZoomInLimit = 1.0f;
+    const float ZoomOutLimit = 0.075f;
 }

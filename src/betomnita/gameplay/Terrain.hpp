@@ -29,11 +29,18 @@ namespace Betomnita::GamePlay
         }
 
         void LoadFromSVGNode( const std::string& filename, pugi::xml_document& doc, pugi::xml_node& node, float scale );
-        
+
         void SetTransform( const sf::Transform& transform );
+
+        const Game::Utils::AABB& GetAABB() const
+        {
+            return m_aabb;
+        }
+
     private:
         const World* m_world;
         float m_friction = 0.0f;
         std::vector< Game::Graphics::Polygon > m_shape;
+        Game::Utils::AABB m_aabb;
     };
 }
