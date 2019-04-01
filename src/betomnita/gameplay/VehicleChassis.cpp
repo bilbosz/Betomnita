@@ -34,6 +34,7 @@ namespace Betomnita::GamePlay
         m_gunRotatorSlot = vehiclePrototype.m_gunRotatorSlot;
         m_physicalBodyShape = vehiclePrototype.m_physicalBodyShape;
         m_shape = vehiclePrototype.m_shape;
+        m_density = vehiclePrototype.m_density;
     }
 
     void VehicleChassis::SetPosition( const sf::Vector2f& value )

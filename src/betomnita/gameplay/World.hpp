@@ -27,6 +27,9 @@ namespace Betomnita::GamePlay
         void Render( sf::RenderTarget& target );
         void Update( const sf::Time& dt );
 
+        void Pause();
+        void Unpause();
+
         void LoadFromFile( const std::string& filename );
 
         sf::Vector2f GetViewCenter() const;

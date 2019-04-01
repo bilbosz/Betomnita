@@ -30,6 +30,16 @@ namespace Betomnita::GamePlay
         m_time += dt;
     }
 
+    void GamePlayLogic::Pause()
+    {
+        m_world->Pause();
+    }
+
+    void GamePlayLogic::Unpause()
+    {
+        m_world->Unpause();
+    }
+
     const PrototypeDict& GamePlayLogic::GetPrototypeDict() const
     {
         return *m_prototypeDict.get();

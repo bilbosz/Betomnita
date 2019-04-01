@@ -39,7 +39,7 @@ namespace Betomnita::GamePlay
     void World::Init()
     {
         Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::AddListener(
-            { Resources::ListenerId::ZoomInOutWorld, true, [this]( float delta ) {
+            { Resources::ListenerId::ZoomInOutWorld, false, [this]( float delta ) {
                  float zoom;
                  if( delta >= 0.0f )
                  {
@@ -68,7 +68,7 @@ namespace Betomnita::GamePlay
              } } );
 
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::AddListener(
-            { Resources::ListenerId::StartMoveWorld, true, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
+            { Resources::ListenerId::StartMoveWorld, false, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
                  if( btn == sf::Mouse::Button::Right )
                  {
                      m_moving = true;
@@ -76,14 +76,14 @@ namespace Betomnita::GamePlay
                  }
              } } );
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::AddListener(
-            { Resources::ListenerId::StopMoveWorld, true, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
+            { Resources::ListenerId::StopMoveWorld, false, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
                  if( btn == sf::Mouse::Button::Right )
                  {
                      m_moving = false;
                  }
              } } );
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::AddListener(
-            { Resources::ListenerId::MoveWorld, true, [this]( const sf::Vector2f& pos ) {
+            { Resources::ListenerId::MoveWorld, false, [this]( const sf::Vector2f& pos ) {
                  if( m_moving )
                  {
                      float scale = GetViewScale();
@@ -129,6 +129,22 @@ namespace Betomnita::GamePlay
         {
             vehicle.Update( dt );
         }
+    }
+
+    void World::Pause()
+    {
+        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::GetListener( Resources::ListenerId::ZoomInOutWorld ).IsEnabled = false;
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::StartMoveWorld ).IsEnabled = false;
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::GetListener( Resources::ListenerId::StopMoveWorld ).IsEnabled = false;
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::MoveWorld ).IsEnabled = false;
+    }
+
+    void World::Unpause()
+    {
+        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::GetListener( Resources::ListenerId::ZoomInOutWorld ).IsEnabled = true;
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::StartMoveWorld ).IsEnabled = true;
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::GetListener( Resources::ListenerId::StopMoveWorld ).IsEnabled = true;
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::MoveWorld ).IsEnabled = true;
     }
 
     void World::LoadFromFile( const std::string& filename )

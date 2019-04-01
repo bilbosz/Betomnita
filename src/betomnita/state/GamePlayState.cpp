@@ -4,6 +4,7 @@
 #include "betomnita/BetomnitaGame.hpp"
 #include "betomnita/event/EventRegistration.hpp"
 #include "betomnita/gameplay/GamePlayLogic.hpp"
+#include "betomnita/gameplay/World.hpp"
 #include "game/state/StateMachine.hpp"
 
 namespace Betomnita::States
@@ -23,6 +24,7 @@ namespace Betomnita::States
 
     GamePlayState::~GamePlayState()
     {
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::RemoveListener( Resources::ListenerId::PauseRequest );
     }
 
     void GamePlayState::OnRegister()
@@ -50,11 +52,13 @@ namespace Betomnita::States
     void GamePlayState::OnForeground()
     {
         Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::GetListener( Resources::ListenerId::PauseRequest ).IsEnabled = true;
+        m_logic->Unpause();
         State::OnForeground();
     }
 
     void GamePlayState::OnBackground()
     {
+        m_logic->Pause();
         Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::GetListener( Resources::ListenerId::PauseRequest ).IsEnabled = false;
         State::OnBackground();
     }

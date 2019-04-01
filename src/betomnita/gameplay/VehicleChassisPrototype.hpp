@@ -21,5 +21,6 @@ namespace Betomnita::GamePlay
         std::vector< sf::Vector2f > m_physicalBodyShape;
         sf::Vector2f m_pivot;
         sf::Vector2f m_gunRotatorSlot;
+        float m_density;
     };
 }

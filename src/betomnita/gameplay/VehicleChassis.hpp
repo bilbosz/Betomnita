@@ -46,6 +46,7 @@ namespace Betomnita::GamePlay
     private:
         sf::Vector2f m_position;
         float m_direction = 0.0f;
+        float m_density = 0.0f;
         std::vector< Game::Graphics::Polygon > m_shape;
         std::vector< sf::Vector2f > m_physicalBodyShape;
         sf::Vector2f m_pivot;

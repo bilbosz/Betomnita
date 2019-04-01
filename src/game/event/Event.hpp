@@ -77,7 +77,11 @@ namespace Game::EventSystem
         static Listener& GetListener( ListenerId listenerId )
         {
             auto it = std::find_if( m_listeners.begin(), m_listeners.end(), [listenerId]( const auto& item ) { return item.Id == listenerId; } );
-            CHECK( it != m_listeners.end() );
+            if( it == m_listeners.end() )
+            {
+                it = std::find_if( m_toAddListeners.begin(), m_toAddListeners.end(), [listenerId]( const auto& item ) { return item.Id == listenerId; } );
+                CHECK( it != m_toAddListeners.end() );
+            }
             return *it;
         }
 
