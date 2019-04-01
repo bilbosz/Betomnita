@@ -29,6 +29,7 @@ namespace Betomnita::GamePlay
 
         void LoadFromFile( const std::string& filename );
 
+        void UpdateView();
         sf::Vector2f GetViewCenter() const;
         float GetViewScale() const;
 

@@ -62,7 +62,8 @@ namespace Betomnita::Resources
     extern const std::string CursorPath;
     extern const std::string World1;
     extern const sf::Transform ReverseViewTransform;
-    extern const float ZoomInOutFactor;
+    extern const float ZoomDefault;
+    extern const float ZoomFactor;
     extern const float ZoomOutLimit;
     extern const float ZoomInLimit;
 }
