@@ -38,16 +38,18 @@ namespace Betomnita::GamePlay
 
     void World::Init()
     {
+        m_view.scale( { Resources::ZoomDefault, Resources::ZoomDefault } );
+        UpdateView();
         Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::AddListener(
             { Resources::ListenerId::ZoomInOutWorld, false, [this]( float delta ) {
                  float zoom;
                  if( delta >= 0.0f )
                  {
-                     zoom = delta * Resources::ZoomInOutFactor;
+                     zoom = delta * Resources::ZoomFactor;
                  }
                  else
                  {
-                     zoom = -delta / Resources::ZoomInOutFactor;
+                     zoom = -delta / Resources::ZoomFactor;
                  }
 
                  auto scale = GetViewScale() * zoom;
@@ -57,14 +59,7 @@ namespace Betomnita::GamePlay
                  }
 
                  m_view.scale( { zoom, zoom }, m_view.getInverse().transformPoint( Game::GenericGame::GetInstance()->GetMousePosition() ) );
-                 for( auto& terrain : m_terrainSheets )
-                 {
-                     terrain->SetTransform( m_view );
-                 }
-                 for( auto& vehicle : m_vehicles )
-                 {
-                     vehicle.SetTransform( m_view );
-                 }
+                 UpdateView();
              } } );
 
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::AddListener(
@@ -99,14 +94,7 @@ namespace Betomnita::GamePlay
                      }
                      m_previousPoint = pos;
                      m_view.translate( -diff );
-                     for( auto& terrain : m_terrainSheets )
-                     {
-                         terrain->SetTransform( m_view );
-                     }
-                     for( auto& vehicle : m_vehicles )
-                     {
-                         vehicle.SetTransform( m_view );
-                     }
+                     UpdateView();
                  }
              } } );
     }
@@ -239,6 +227,18 @@ namespace Betomnita::GamePlay
         for( const auto& terrain : m_terrainSheets )
         {
             m_size.Constrain( terrain->GetAABB() );
+        }
+    }
+
+    void World::UpdateView()
+    {
+        for( auto& terrain : m_terrainSheets )
+        {
+            terrain->SetTransform( m_view );
+        }
+        for( auto& vehicle : m_vehicles )
+        {
+            vehicle.SetTransform( m_view );
         }
     }
 
