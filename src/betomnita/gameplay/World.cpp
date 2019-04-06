@@ -34,69 +34,13 @@ namespace Betomnita::GamePlay
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::RemoveListener( Resources::ListenerId::StartMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::RemoveListener( Resources::ListenerId::StopMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::RemoveListener( Resources::ListenerId::MoveWorld );
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::RemoveListener( Resources::ListenerId::TankForward );
     }
 
     void World::Init()
     {
-        m_view.scale( { Resources::ZoomDefault, Resources::ZoomDefault } );
-        UpdateView();
-        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::AddListener(
-            { Resources::ListenerId::ZoomInOutWorld, false, [this]( float delta ) {
-                 float zoom;
-                 if( delta >= 0.0f )
-                 {
-                     zoom = delta * Resources::ZoomFactor;
-                 }
-                 else
-                 {
-                     zoom = -delta / Resources::ZoomFactor;
-                 }
-
-                 auto scale = GetViewScale() * zoom;
-                 if( scale > Resources::ZoomInLimit || scale < Resources::ZoomOutLimit )
-                 {
-                     return;
-                 }
-
-                 m_view.scale( { zoom, zoom }, m_view.getInverse().transformPoint( Game::GenericGame::GetInstance()->GetMousePosition() ) );
-                 UpdateView();
-             } } );
-
-        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::AddListener(
-            { Resources::ListenerId::StartMoveWorld, false, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
-                 if( btn == sf::Mouse::Button::Right )
-                 {
-                     m_moving = true;
-                     m_previousPoint = pos;
-                 }
-             } } );
-        Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::AddListener(
-            { Resources::ListenerId::StopMoveWorld, false, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
-                 if( btn == sf::Mouse::Button::Right )
-                 {
-                     m_moving = false;
-                 }
-             } } );
-        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::AddListener(
-            { Resources::ListenerId::MoveWorld, false, [this]( const sf::Vector2f& pos ) {
-                 if( m_moving )
-                 {
-                     float scale = GetViewScale();
-                     auto center = GetViewCenter();
-                     sf::Vector2f diff = ( m_previousPoint - pos ) / scale;
-                     if( center.x < m_size.MinX && diff.x < 0.0f || center.x > m_size.MaxX && diff.x > 0.0f )
-                     {
-                         diff.x = 0.0f;
-                     }
-                     if( center.y < m_size.MinY && diff.y < 0.0f || center.y > m_size.MaxY && diff.y > 0.0f )
-                     {
-                         diff.y = 0.0f;
-                     }
-                     m_previousPoint = pos;
-                     m_view.translate( -diff );
-                     UpdateView();
-                 }
-             } } );
+        InitView();
+        InitPhysics();
     }
 
     void World::Render( sf::RenderTarget& target )
@@ -115,6 +59,14 @@ namespace Betomnita::GamePlay
     {
         for( auto& vehicle : m_vehicles )
         {
+            auto physicalBody = vehicle.GetPhysicalBody();
+            physicalBody->ApplyForce( m_acceleration, physicalBody->GetWorldCenter(), true );
+        }
+        m_physicsWorld.Step( dt.asSeconds(), 8, 3 );
+        for( auto& vehicle : m_vehicles )
+        {
+            auto newPosition = vehicle.GetPhysicalBody()->GetPosition();
+            vehicle.SetPosition( { newPosition.x, newPosition.y } );
             vehicle.Update( dt );
         }
     }
@@ -125,6 +77,7 @@ namespace Betomnita::GamePlay
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::StartMoveWorld ).IsEnabled = false;
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::GetListener( Resources::ListenerId::StopMoveWorld ).IsEnabled = false;
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::MoveWorld ).IsEnabled = false;
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::GetListener( Resources::ListenerId::TankForward ).IsEnabled = false;
     }
 
     void World::Unpause()
@@ -133,6 +86,7 @@ namespace Betomnita::GamePlay
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::StartMoveWorld ).IsEnabled = true;
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::GetListener( Resources::ListenerId::StopMoveWorld ).IsEnabled = true;
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::MoveWorld ).IsEnabled = true;
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::GetListener( Resources::ListenerId::TankForward ).IsEnabled = true;
     }
 
     void World::LoadFromFile( const std::string& filename )
@@ -230,6 +184,69 @@ namespace Betomnita::GamePlay
         }
     }
 
+    void World::InitView()
+    {
+        m_view.scale( { Resources::ZoomDefault, Resources::ZoomDefault } );
+        UpdateView();
+        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::AddListener(
+            { Resources::ListenerId::ZoomInOutWorld, false, [this]( float delta ) {
+                 float zoom;
+                 if( delta >= 0.0f )
+                 {
+                     zoom = delta * Resources::ZoomFactor;
+                 }
+                 else
+                 {
+                     zoom = -delta / Resources::ZoomFactor;
+                 }
+
+                 auto scale = GetViewScale() * zoom;
+                 if( scale > Resources::ZoomInLimit || scale < Resources::ZoomOutLimit )
+                 {
+                     return;
+                 }
+
+                 m_view.scale( { zoom, zoom }, m_view.getInverse().transformPoint( Game::GenericGame::GetInstance()->GetMousePosition() ) );
+                 UpdateView();
+             } } );
+
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::AddListener(
+            { Resources::ListenerId::StartMoveWorld, false, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
+                 if( btn == sf::Mouse::Button::Right )
+                 {
+                     m_moving = true;
+                     m_previousPoint = pos;
+                 }
+             } } );
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::AddListener(
+            { Resources::ListenerId::StopMoveWorld, false, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
+                 if( btn == sf::Mouse::Button::Right )
+                 {
+                     m_moving = false;
+                 }
+             } } );
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::AddListener(
+            { Resources::ListenerId::MoveWorld, false, [this]( const sf::Vector2f& pos ) {
+                 if( m_moving )
+                 {
+                     float scale = GetViewScale();
+                     auto center = GetViewCenter();
+                     sf::Vector2f diff = ( m_previousPoint - pos ) / scale;
+                     if( center.x < m_size.MinX && diff.x < 0.0f || center.x > m_size.MaxX && diff.x > 0.0f )
+                     {
+                         diff.x = 0.0f;
+                     }
+                     if( center.y < m_size.MinY && diff.y < 0.0f || center.y > m_size.MaxY && diff.y > 0.0f )
+                     {
+                         diff.y = 0.0f;
+                     }
+                     m_previousPoint = pos;
+                     m_view.translate( -diff );
+                     UpdateView();
+                 }
+             } } );
+    }
+
     void World::UpdateView()
     {
         for( auto& terrain : m_terrainSheets )
@@ -251,5 +268,53 @@ namespace Betomnita::GamePlay
     float World::GetViewScale() const
     {
         return m_view.getMatrix()[ 0 ];
+    }
+
+    void World::InitPhysics()
+    {
+        for( auto& vehicle : m_vehicles )
+        {
+            const sf::Vector2f position = vehicle.GetPosition();
+            b2BodyDef bodyDef;
+            bodyDef.type = b2_dynamicBody;
+            bodyDef.position.Set( position.x, position.y );
+
+            b2Body* body = m_physicsWorld.CreateBody( &bodyDef );
+            vehicle.SetPhysicalBody( body );
+            b2PolygonShape shape;
+            for( const auto& triangle : Game::Graphics::Polygon::Triangulate( vehicle.Chassis().GetPhysicalBodyShape() ) )
+            {
+                b2Vec2 points[ 3 ] = {
+                    { triangle[ 0 ].x, triangle[ 0 ].y },
+                    { triangle[ 1 ].x, triangle[ 1 ].y },
+                    { triangle[ 2 ].x, triangle[ 2 ].y },
+                };
+                shape.Set( points, 3 );
+                body->CreateFixture( &shape, vehicle.Chassis().GetDensity() );
+            }
+            float mass = body->GetMass();
+            MESSAGE( L"Mass is equal " << mass << L" kg" );
+        }
+        m_acceleration.SetZero();
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::AddListener( { Resources::ListenerId::TankForward, true, [this]( const sf::Event::KeyEvent& key ) {
+                                                                                        switch( key.code )
+                                                                                        {
+                                                                                            case sf::Keyboard::Key::W:
+                                                                                                m_acceleration.y = -370000.0f / 60.0f;
+                                                                                                break;
+                                                                                            case sf::Keyboard::Key::S:
+                                                                                                m_acceleration.y = 370000.0f / 60.0f;
+                                                                                                break;
+                                                                                            case sf::Keyboard::Key::A:
+                                                                                                m_acceleration.x = -370000.0f;
+                                                                                                break;
+                                                                                            case sf::Keyboard::Key::D:
+                                                                                                m_acceleration.x = 370000.0f;
+                                                                                                break;
+                                                                                            case sf::Keyboard::Key::Num0:
+                                                                                                m_acceleration.SetZero();
+                                                                                                break;
+                                                                                        }
+                                                                                    } } );
     }
 }

@@ -35,12 +35,22 @@ namespace Betomnita::GamePlay
             return m_gunRotatorSlot;
         }
 
+        float GetDensity() const
+        {
+            return m_density;
+        }
+
         void SetTransform( const sf::Transform& transform )
         {
             for( auto& polygon : m_shape )
             {
                 polygon.Transform() = transform;
             }
+        }
+
+        const std::vector< sf::Vector2f >& GetPhysicalBodyShape() const
+        {
+            return m_physicalBodyShape;
         }
 
     private:

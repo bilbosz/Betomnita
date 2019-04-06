@@ -255,6 +255,46 @@ namespace Game::Graphics
         return angleSum < pointsN * Game::Consts::Pi;
     }
 
+    std::vector< std::vector< sf::Vector2f > > Polygon::Triangulate( const std::vector< sf::Vector2f >& points )
+    {   
+        std::vector< std::vector< sf::Vector2f > > result;
+        auto error = GetPointsErrors( points );
+        ASSERT( error == Error::NoError, L"There is error in points" );
+        if( points.empty() )
+        {
+            return result;
+        }
+        auto polygonVertices = PointsList( points.cbegin(), points.cend() );
+        auto adv = [&polygonVertices]( PointsListIter& iter ) {
+            std::advance( iter, 1 );
+            if( iter == polygonVertices.cend() )
+            {
+                iter = polygonVertices.cbegin();
+            }
+        };
+
+        auto prev = polygonVertices.cbegin();
+        auto curr = std::next( prev );
+        auto next = std::next( curr );
+        for( ; polygonVertices.size() != 2; )
+        {
+            if( IsEar( polygonVertices, prev, curr, next ) )
+            {
+                result.emplace_back( std::vector< sf::Vector2f >{ *prev, *curr, *next } );
+                polygonVertices.erase( curr );
+                curr = next;
+                adv( next );
+            }
+            else
+            {
+                prev = curr;
+                curr = next;
+                adv( next );
+            }
+        }
+        return result;
+    }
+
     void Polygon::Init()
     {
         Primitive::Init();
@@ -303,7 +343,7 @@ namespace Game::Graphics
         {
             if( IsEar( polygonVertices, prev, curr, next ) )
             {
-                triangles.emplace_back( *prev, *curr, *next );
+                triangles.emplace_back( Triangle( { *prev, *curr, *next } ) );
                 polygonVertices.erase( curr );
                 curr = next;
                 adv( next );
@@ -324,7 +364,22 @@ namespace Game::Graphics
         }
     }
 
-    bool Polygon::IsEar( const PointsList& polygonVertices, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex ) const
+    float Polygon::GetAngle( const Point& previousVertex, const Point& currentVertex, const Point& nextVertex )
+    {
+        auto prev = previousVertex - currentVertex;
+        auto next = nextVertex - currentVertex;
+        return fmodf( atan2f( next.y, next.x ) - atan2f( prev.y, prev.x ) + 2.0f * Game::Consts::Pi, 2.0f * Game::Consts::Pi );
+    }
+
+    bool Polygon::AreLinesOverlapped( const std::pair< const Point&, const Point& >& lineA, const std::pair< const Point&, const Point& >& lineB )
+    {
+        return ( ( GetAngle( lineA.first, lineA.second, lineB.first ) < Game::Consts::Pi ) !=
+                 ( GetAngle( lineA.first, lineA.second, lineB.second ) < Game::Consts::Pi ) ) &&
+               ( ( GetAngle( lineB.first, lineB.second, lineA.first ) < Game::Consts::Pi ) !=
+                 ( GetAngle( lineB.first, lineB.second, lineA.second ) < Game::Consts::Pi ) );
+    }
+
+    bool Polygon::IsEar( const PointsList& polygonVertices, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex )
     {
         auto angle = GetAngle( *previousVertex, *currentVertex, *nextVertex );
         if( angle >= Game::Consts::Pi )
@@ -347,22 +402,7 @@ namespace Game::Graphics
         return true;
     }
 
-    float Polygon::GetAngle( const Point& previousVertex, const Point& currentVertex, const Point& nextVertex )
-    {
-        auto prev = previousVertex - currentVertex;
-        auto next = nextVertex - currentVertex;
-        return fmodf( atan2f( next.y, next.x ) - atan2f( prev.y, prev.x ) + 2.0f * Game::Consts::Pi, 2.0f * Game::Consts::Pi );
-    }
-
-    bool Polygon::AreLinesOverlapped( const std::pair< const Point&, const Point& >& lineA, const std::pair< const Point&, const Point& >& lineB )
-    {
-        return ( ( GetAngle( lineA.first, lineA.second, lineB.first ) < Game::Consts::Pi ) !=
-                 ( GetAngle( lineA.first, lineA.second, lineB.second ) < Game::Consts::Pi ) ) &&
-               ( ( GetAngle( lineB.first, lineB.second, lineA.first ) < Game::Consts::Pi ) !=
-                 ( GetAngle( lineB.first, lineB.second, lineA.second ) < Game::Consts::Pi ) );
-    }
-
-    bool Polygon::IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const
+    bool Polygon::IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c )
     {
         return GetAngle( examinedPoint, a, b ) < Game::Consts::Pi && GetAngle( examinedPoint, b, c ) < Game::Consts::Pi &&
                GetAngle( examinedPoint, c, a ) < Game::Consts::Pi;

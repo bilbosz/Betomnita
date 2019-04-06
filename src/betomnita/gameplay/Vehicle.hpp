@@ -5,6 +5,8 @@
 
 #include <SFML/Graphics.hpp>
 
+class b2Body;
+
 namespace Betomnita::GamePlay
 {
     class World;
@@ -15,7 +17,7 @@ namespace Betomnita::GamePlay
         explicit Vehicle( const World* world );
         bool operator<( const Vehicle& other ) const
         {
-            ASSERT( m_id >= 0 && other.m_id >= 0, L"Id should be positive number" );
+            ASSERT( m_id >= 0 && other.m_id >= 0, L"Id should be non-negative number" );
             return m_id < other.m_id;
         }
 
@@ -24,7 +26,7 @@ namespace Betomnita::GamePlay
 
         int GetId() const
         {
-            ASSERT( m_id >= 0, L"Id should be positive number" );
+            ASSERT( m_id >= 0, L"Id should be non-negative number" );
             return m_id;
         }
         void SetId( int value )
@@ -61,8 +63,18 @@ namespace Betomnita::GamePlay
         VehicleChassis& Chassis();
         VehicleGun& Gun();
 
+        void SetPhysicalBody( b2Body* value )
+        {
+            m_physicalBody = value;
+        }
+        b2Body* GetPhysicalBody() const
+        {
+            return m_physicalBody;
+        }
+
     private:
         const World* m_world;
+        b2Body* m_physicalBody;
         int m_id = -1;
         float m_direction = 0.0f;
         sf::Vector2f m_position;

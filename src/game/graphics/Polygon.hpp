@@ -2,6 +2,7 @@
 #include "game/graphics/Primitive.hpp"
 #include "game/utils/AABB.hpp"
 
+#include <array>
 #include <list>
 #include <optional>
 #include <vector>
@@ -32,7 +33,7 @@ namespace Game::Graphics
 
         using Point = sf::Vector2f;
         using PointsVector = std::vector< Point >;
-        using Triangle = std::tuple< Point, Point, Point >;
+        using Triangle = std::array< Point, 3 >;
         using TriangleVector = std::vector< Triangle >;
         using PointsList = std::list< Point >;
         using PointsListIter = PointsList::const_iterator;
@@ -77,9 +78,14 @@ namespace Game::Graphics
 
         static bool IsRightDirection( const PointsVector& points );
 
+        static std::vector< std::vector< sf::Vector2f > > Triangulate( const std::vector< sf::Vector2f >& points );
+
     private:
         static float GetAngle( const Point& previousVertex, const Point& currentVertex, const Point& nextVertex );
         static bool AreLinesOverlapped( const std::pair< const Point&, const Point& >& lineA, const std::pair< const Point&, const Point& >& lineB );
+
+        static bool IsEar( const PointsList& polygonVertices, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex );
+        static bool IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c );
 
         void Init() override;
 
@@ -88,8 +94,6 @@ namespace Game::Graphics
         void OnPointsChange();
 
         void Triangulate();
-        bool IsEar( const PointsList& polygonVertices, PointsListIter previousVertex, PointsListIter currentVertex, PointsListIter nextVertex ) const;
-        bool IsPointInsideTriangle( const Point& examinedPoint, const Point& a, const Point& b, const Point& c ) const;
 
         void ReversePoints();
         void CalculateAABB();

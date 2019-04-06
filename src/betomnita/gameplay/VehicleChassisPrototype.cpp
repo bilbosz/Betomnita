@@ -60,6 +60,8 @@ namespace Betomnita::GamePlay
                         {
                             point = transform.transformPoint( point );
                         }
+                        m_density = node.attribute( "data-density" ).as_float();
+                        ASSERT( m_density != 0.0f, L"Density cannot be 0" );
                     }
                     else
                     {

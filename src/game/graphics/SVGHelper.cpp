@@ -67,7 +67,7 @@ namespace Game::Graphics
                     case 'Z':
                         break;
                     default:
-                        ASSERT( false, L"'" << toupper( cmd ) << "' is wrong command for polygon description" );
+                        ASSERT( false, L"'" << toupper( cmd ) << L"' is wrong command for polygon description" );
                 }
                 if( !isXLoaded )
                 {
@@ -252,7 +252,7 @@ namespace Game::Graphics
                 }
                 else
                 {
-                    ASSERT( false, L"There is no \"" << fun.c_str() << "\" SVG transformation" );
+                    ASSERT( false, L"There is no \"" << fun.c_str() << L"\" SVG transformation" );
                 }
                 funBegin = nullptr;
                 funEnd = nullptr;

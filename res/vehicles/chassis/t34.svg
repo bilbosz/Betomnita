@@ -15,7 +15,6 @@
      width="1000"
      sodipodi:docname="t34.svg"
      inkscape:version="0.92.3 (2405546, 2018-03-11)">
-     data-density="1322.3552894211577">
     <sodipodi:namedview
          pagecolor="#ffffff"
          bordercolor="#666666"
@@ -106,5 +105,6 @@
          d="M 3.7788113e-7,-2.5478435e-6 L -4.7467588e-6,544.18192 L 58.221669,547.22643 L 62.037453,573.77349 L 204.99418,578.1651 L 210.76161,548.59202 L 253.06178,553.50232 L 289.09101,553.01565 L 293.62724,1.1112498 L 223.72083,-1.0715943e-4 L 222.28171,111.43493 L 63.057692,109.74802 V -1.8150977e-6 Z"
          id="path875"
          inkscape:connector-curvature="0"
-         class="physical-body-shape" />
+         class="physical-body-shape"
+         data-density="1811.7171956333946" />
 </svg>

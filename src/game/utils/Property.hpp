@@ -31,13 +31,13 @@ namespace Game::Utils
         template< class ReturnType = ConstRefType >
         ReturnType Get() const
         {
-            ASSERT( m_initialized, "Reading uninitialized property" );
+            ASSERT( m_initialized, L"Reading uninitialized property" );
             return m_value;
         }
         void Set( ConstRefType value )
         {
 #ifdef DEBUG
-            ASSERT( !m_locked, "Cannot change locked property" );
+            ASSERT( !m_locked, L"Cannot change locked property" );
             for( auto constrain : m_constrains )
             {
                 ASSERT( constrain.first( value ), constrain.second );
