@@ -91,15 +91,6 @@
          ry="25.95339"
          transform="matrix(1.026861,0.01501838,-0.01632481,0.94468404,-2.2700194,-169.04838)"
          class="gun-rotator-slot do-not-draw" />
-    <ellipse
-         style="opacity:0.5;fill:none;fill-opacity:1;stroke:#ff2a2a;stroke-width:1.01518691;stroke-opacity:1;shape-rendering:crispEdges"
-         id="path52-7"
-         cx="152.01271"
-         cy="429.55508"
-         rx="23.834745"
-         ry="25.95339"
-         transform="matrix(1.026861,0.01501838,-0.01632481,0.94468404,-2.2695194,-131.32582)"
-         class="pivot do-not-draw" />
     <path
          style="fill:none;stroke:#00ff00;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="M 3.7788113e-7,-2.5478435e-6 L -4.7467588e-6,544.18192 L 58.221669,547.22643 L 62.037453,573.77349 L 204.99418,578.1651 L 210.76161,548.59202 L 253.06178,553.50232 L 289.09101,553.01565 L 293.62724,1.1112498 L 223.72083,-1.0715943e-4 L 222.28171,111.43493 L 63.057692,109.74802 V -1.8150977e-6 Z"

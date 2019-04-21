@@ -2,6 +2,7 @@
 #include "app/Debug.hpp"
 #include "betomnita/gameplay/VehicleChassis.hpp"
 #include "betomnita/gameplay/VehicleGun.hpp"
+#include "game/GameConsts.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -14,14 +15,16 @@ namespace Betomnita::GamePlay
     class Vehicle
     {
     public:
-        explicit Vehicle( const World* world );
+        explicit Vehicle( World* world );
         bool operator<( const Vehicle& other ) const
         {
             ASSERT( m_id >= 0 && other.m_id >= 0, L"Id should be non-negative number" );
             return m_id < other.m_id;
         }
 
-        void Render( sf::RenderTarget& target );
+        void InitPhysics();
+
+        void Render( sf::RenderTarget& target, const sf::Transform& transform = sf::Transform() );
         void Update( const sf::Time& dt );
 
         int GetId() const
@@ -34,50 +37,13 @@ namespace Betomnita::GamePlay
             m_id = value;
         }
 
-        void SetDirection( float value )
-        {
-            m_direction = value;
-        }
-        float GetDirection() const
-        {
-            return m_direction;
-        }
-
-        void SetPosition( const sf::Vector2f& value )
-        {
-            m_position = value;
-            m_chassis.SetPosition( m_position );
-            m_gun.SetPosition( m_position + m_chassis.GetGunRotatorSlot() );
-        }
-        const sf::Vector2f& GetPosition() const
-        {
-            return m_position;
-        }
-
-        void SetTransform( const sf::Transform& transform )
-        {
-            m_chassis.SetTransform( transform );
-            m_gun.SetTransform( transform );
-        }
-
         VehicleChassis& Chassis();
         VehicleGun& Gun();
-
-        void SetPhysicalBody( b2Body* value )
-        {
-            m_physicalBody = value;
-        }
-        b2Body* GetPhysicalBody() const
-        {
-            return m_physicalBody;
-        }
+        GamePlay::World* World();
 
     private:
-        const World* m_world;
-        b2Body* m_physicalBody;
+        GamePlay::World* m_world;
         int m_id = -1;
-        float m_direction = 0.0f;
-        sf::Vector2f m_position;
         VehicleChassis m_chassis;
         VehicleGun m_gun;
     };

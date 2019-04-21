@@ -152,13 +152,14 @@ namespace Game::Graphics
         return result;
     }
 
-    void Polygon::Render( sf::RenderTarget& target )
+    void Polygon::Render( sf::RenderTarget& target, const sf::Transform& transform )
     {
         if( m_vertexArray.getVertexCount() >= 3 )
         {
-            sf::Transform transform = Game::GenericGame::GetInstance()->GetToScreenTransform();
-            transform.combine( m_transform );
-            target.draw( m_vertexArray, transform );
+            sf::Transform temporary = sf::Transform::Identity;
+            temporary.combine( Game::GenericGame::GetInstance()->GetToScreenTransform() );
+            temporary.combine( transform );
+            target.draw( m_vertexArray, temporary );
         }
     }
 

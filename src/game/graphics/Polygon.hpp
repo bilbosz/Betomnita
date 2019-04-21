@@ -43,7 +43,7 @@ namespace Game::Graphics
 
         static std::vector< Polygon > LoadManyFromSVGNode( const std::string& filename, pugi::xml_document& doc, pugi::xml_node& node, float scale );
 
-        void Render( sf::RenderTarget& target ) override;
+        void Render( sf::RenderTarget& target, const sf::Transform& transform = sf::Transform() ) override;
 
         const PointsVector& GetPoints() const
         {

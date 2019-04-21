@@ -11,7 +11,7 @@ namespace Game::Graphics
 
         void Init();
 
-        void Render( sf::RenderTarget& target ) override;
+        void Render( sf::RenderTarget& target, const sf::Transform& transform = sf::Transform() ) override;
 
         const std::wstring& GetString() const
         {

@@ -6,28 +6,28 @@
 #include <memory>
 #include <vector>
 
+class b2Body;
+
 namespace Betomnita::GamePlay
 {
     class Prototype;
+    class Vehicle;
 
     class VehicleChassis : public PhysicalBody
     {
     public:
         VehicleChassis();
         ~VehicleChassis();
-        void Render( sf::RenderTarget& target );
+        void Render( sf::RenderTarget& target, const sf::Transform& transform = sf::Transform() );
         void Update( const sf::Time& dt );
         void LoadFromPrototype( const Prototype& prototype );
+        void InitPhysics();
 
-        void SetPosition( const sf::Vector2f& value );
-        const sf::Vector2f& GetPosition() const
-        {
-            return m_position;
-        }
+        void AssignVehicle( Vehicle* vehicle );
 
-        const sf::Vector2f& GetPivot() const
+        void SetInitialPosition( const sf::Vector2f& value )
         {
-            return m_pivot;
+            m_initialPosition = value;
         }
 
         const sf::Vector2f& GetGunRotatorSlot() const
@@ -40,26 +40,20 @@ namespace Betomnita::GamePlay
             return m_density;
         }
 
-        void SetTransform( const sf::Transform& transform )
+        b2Body* GetPhysicalBody()
         {
-            for( auto& polygon : m_shape )
-            {
-                polygon.Transform() = transform;
-            }
-        }
-
-        const std::vector< sf::Vector2f >& GetPhysicalBodyShape() const
-        {
-            return m_physicalBodyShape;
+            return m_physicalBody;
         }
 
     private:
-        sf::Vector2f m_position;
-        float m_direction = 0.0f;
         float m_density = 0.0f;
         std::vector< Game::Graphics::Polygon > m_shape;
-        std::vector< sf::Vector2f > m_physicalBodyShape;
-        sf::Vector2f m_pivot;
+        std::vector< std::vector< sf::Vector2f > > m_physicalBodyShape;
         sf::Vector2f m_gunRotatorSlot;
+
+        sf::Vector2f m_initialPosition;
+        Vehicle* m_vehicle;
+        b2Body* m_physicalBody;
+        sf::Transform m_transform;
     };
 }

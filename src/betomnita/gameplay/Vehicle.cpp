@@ -4,14 +4,20 @@
 
 namespace Betomnita::GamePlay
 {
-    Vehicle::Vehicle( const World* world ) : m_world( world )
+    Vehicle::Vehicle( GamePlay::World* world ) : m_world( world )
     {
     }
 
-    void Vehicle::Render( sf::RenderTarget& target )
+    void Vehicle::InitPhysics()
     {
-        m_chassis.Render( target );
-        m_gun.Render( target );
+        Chassis().InitPhysics();
+        Gun().InitPhysics();
+    }
+
+    void Vehicle::Render( sf::RenderTarget& target, const sf::Transform& transform )
+    {
+        m_chassis.Render( target, transform );
+        m_gun.Render( target, transform );
     }
 
     void Vehicle::Update( const sf::Time& dt )
@@ -28,5 +34,10 @@ namespace Betomnita::GamePlay
     VehicleGun& Vehicle::Gun()
     {
         return m_gun;
+    }
+
+    GamePlay::World* Vehicle::World()
+    {
+        return m_world;
     }
 }

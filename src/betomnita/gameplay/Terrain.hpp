@@ -21,7 +21,7 @@ namespace Betomnita::GamePlay
         ~Terrain();
 
         void Update( const sf::Time& dt );
-        void Render( sf::RenderTarget& target );
+        void Render( sf::RenderTarget& target, const sf::Transform& transform = sf::Transform() );
 
         float GetFriction() const
         {

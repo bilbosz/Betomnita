@@ -21,11 +21,11 @@ namespace Betomnita::GamePlay
     {
     }
 
-    void Terrain::Render( sf::RenderTarget& target )
+    void Terrain::Render( sf::RenderTarget& target, const sf::Transform& transform )
     {
         for( auto& shape : m_shape )
         {
-            shape.Render( target );
+            shape.Render( target, transform );
         }
     }
 

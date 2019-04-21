@@ -20,16 +20,16 @@ namespace Game::Graphics
         Primitive::Init();
     }
 
-    void Text::Render( sf::RenderTarget& target )
+    void Text::Render( sf::RenderTarget& target, const sf::Transform& transform )
     {
         VERIFY( m_lineHeight >= 0.0f );
         if( m_lineHeight == 0.0f )
         {
-            Primitive::Render( target );
+            Primitive::Render( target, transform );
             return;
         }
-        Primitive::Render( target );
-        target.draw( m_text );
+        Primitive::Render( target, transform );
+        target.draw( m_text, transform );
     }
 
     void Text::OnPositionChange()

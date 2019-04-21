@@ -41,32 +41,57 @@ namespace Betomnita::GamePlay
     {
         InitView();
         InitPhysics();
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::AddListener(
+            { Resources::ListenerId::TankForward, false, [this]( const sf::Event::KeyEvent& key ) {
+                 for( auto& vehicle : m_vehicles )
+                 {
+                     auto physicalBody = vehicle.Chassis().GetPhysicalBody();
+                     float force = 370'000.0f;
+                     auto angle = physicalBody->GetAngle() + Game::Consts::Pi * 0.5f;
+                     auto v = physicalBody->GetLinearVelocity();
+                     MESSAGE( hypotf( v.x, v.y ) * 3.6f );
+                     switch( key.code )
+                     {
+                         case sf::Keyboard::W:
+                             physicalBody->ApplyForceToCenter( b2Vec2( -force * cosf( angle ), -force * sinf( angle ) ), true );
+                             break;
+                         case sf::Keyboard::S:
+                             physicalBody->ApplyForceToCenter( b2Vec2( force * cosf( angle ), force * sinf( angle ) ), true );
+                             break;
+                         case sf::Keyboard::A:
+                             physicalBody->ApplyTorque( -force, true );
+                             break;
+                         case sf::Keyboard::D:
+                             physicalBody->ApplyTorque( force, true );
+                             break;
+                         case sf::Keyboard::Num0:
+                             physicalBody->SetLinearVelocity( b2Vec2( 0.0f, 0.0f ) );
+                             physicalBody->SetAngularVelocity( 0.0f );
+                             break;
+                         default:
+                             break;
+                     }
+                 }
+             } } );
     }
 
     void World::Render( sf::RenderTarget& target )
     {
         for( auto& terrain : m_terrainSheets )
         {
-            terrain->Render( target );
+            terrain->Render( target, m_view );
         }
         for( auto& vehicle : m_vehicles )
         {
-            vehicle.Render( target );
+            vehicle.Render( target, m_view );
         }
     }
 
     void World::Update( const sf::Time& dt )
     {
-        for( auto& vehicle : m_vehicles )
-        {
-            auto physicalBody = vehicle.GetPhysicalBody();
-            physicalBody->ApplyForce( m_acceleration, physicalBody->GetWorldCenter(), true );
-        }
         m_physicsWorld.Step( dt.asSeconds(), 8, 3 );
         for( auto& vehicle : m_vehicles )
         {
-            auto newPosition = vehicle.GetPhysicalBody()->GetPosition();
-            vehicle.SetPosition( { newPosition.x, newPosition.y } );
             vehicle.Update( dt );
         }
     }
@@ -159,10 +184,12 @@ namespace Betomnita::GamePlay
                     switch( prototype.GetType() )
                     {
                         case Prototype::Type::Chassis:
+                            it->Chassis().AssignVehicle( &*it );
                             it->Chassis().LoadFromPrototype( prototype );
                             vehiclesPositions[ unitId ] = transform.transformPoint( 0.0f, 0.0f );
                             break;
                         case Prototype::Type::Gun:
+                            it->Gun().AssignVehicle( &*it );
                             it->Gun().LoadFromPrototype( prototype );
                             break;
                         default:
@@ -175,7 +202,7 @@ namespace Betomnita::GamePlay
         }
         for( auto& vehicle : m_vehicles )
         {
-            vehicle.SetPosition( vehiclesPositions[ vehicle.GetId() ] + vehicle.Chassis().GetPivot() );
+            vehicle.Chassis().SetInitialPosition( vehiclesPositions[ vehicle.GetId() ] );
         }
         m_size.Init( m_terrainSheets[ 0 ]->GetAABB() );
         for( const auto& terrain : m_terrainSheets )
@@ -187,7 +214,6 @@ namespace Betomnita::GamePlay
     void World::InitView()
     {
         m_view.scale( { Resources::ZoomDefault, Resources::ZoomDefault } );
-        UpdateView();
         Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::AddListener(
             { Resources::ListenerId::ZoomInOutWorld, false, [this]( float delta ) {
                  float zoom;
@@ -207,7 +233,6 @@ namespace Betomnita::GamePlay
                  }
 
                  m_view.scale( { zoom, zoom }, m_view.getInverse().transformPoint( Game::GenericGame::GetInstance()->GetMousePosition() ) );
-                 UpdateView();
              } } );
 
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::AddListener(
@@ -242,21 +267,8 @@ namespace Betomnita::GamePlay
                      }
                      m_previousPoint = pos;
                      m_view.translate( -diff );
-                     UpdateView();
                  }
              } } );
-    }
-
-    void World::UpdateView()
-    {
-        for( auto& terrain : m_terrainSheets )
-        {
-            terrain->SetTransform( m_view );
-        }
-        for( auto& vehicle : m_vehicles )
-        {
-            vehicle.SetTransform( m_view );
-        }
     }
 
     sf::Vector2f World::GetViewCenter() const
@@ -274,47 +286,7 @@ namespace Betomnita::GamePlay
     {
         for( auto& vehicle : m_vehicles )
         {
-            const sf::Vector2f position = vehicle.GetPosition();
-            b2BodyDef bodyDef;
-            bodyDef.type = b2_dynamicBody;
-            bodyDef.position.Set( position.x, position.y );
-
-            b2Body* body = m_physicsWorld.CreateBody( &bodyDef );
-            vehicle.SetPhysicalBody( body );
-            b2PolygonShape shape;
-            for( const auto& triangle : Game::Graphics::Polygon::Triangulate( vehicle.Chassis().GetPhysicalBodyShape() ) )
-            {
-                b2Vec2 points[ 3 ] = {
-                    { triangle[ 0 ].x, triangle[ 0 ].y },
-                    { triangle[ 1 ].x, triangle[ 1 ].y },
-                    { triangle[ 2 ].x, triangle[ 2 ].y },
-                };
-                shape.Set( points, 3 );
-                body->CreateFixture( &shape, vehicle.Chassis().GetDensity() );
-            }
-            float mass = body->GetMass();
-            MESSAGE( L"Mass is equal " << mass << L" kg" );
+            vehicle.InitPhysics();
         }
-        m_acceleration.SetZero();
-        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::AddListener( { Resources::ListenerId::TankForward, true, [this]( const sf::Event::KeyEvent& key ) {
-                                                                                        switch( key.code )
-                                                                                        {
-                                                                                            case sf::Keyboard::Key::W:
-                                                                                                m_acceleration.y = -370000.0f / 60.0f;
-                                                                                                break;
-                                                                                            case sf::Keyboard::Key::S:
-                                                                                                m_acceleration.y = 370000.0f / 60.0f;
-                                                                                                break;
-                                                                                            case sf::Keyboard::Key::A:
-                                                                                                m_acceleration.x = -370000.0f;
-                                                                                                break;
-                                                                                            case sf::Keyboard::Key::D:
-                                                                                                m_acceleration.x = 370000.0f;
-                                                                                                break;
-                                                                                            case sf::Keyboard::Key::Num0:
-                                                                                                m_acceleration.SetZero();
-                                                                                                break;
-                                                                                        }
-                                                                                    } } );
     }
 }

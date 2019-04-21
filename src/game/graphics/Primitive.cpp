@@ -14,13 +14,13 @@ namespace Game::Graphics
     {
     }
 
-    void Primitive::Render( sf::RenderTarget& target )
+    void Primitive::Render( sf::RenderTarget& target, const sf::Transform& transform )
     {
 #ifdef DEBUG
         if( m_highlight )
         {
             sf::Transform resultTransform = Game::GenericGame::GetInstance()->GetToScreenTransform();
-            resultTransform.combine( m_transform );
+            resultTransform.combine( m_transform ).combine( transform );
             target.draw( m_debugRect, resultTransform );
         }
 #endif

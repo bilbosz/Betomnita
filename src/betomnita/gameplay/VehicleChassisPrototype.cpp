@@ -42,23 +42,10 @@ namespace Betomnita::GamePlay
                 {
                     if( std::find( classes.begin(), classes.end(), "physical-body-shape" ) != classes.end() )
                     {
-                        auto pathDesc = Game::Graphics::SVGHelper::ParsePathDescriptions( node.attribute( "d" ).as_string() );
-                        ASSERT( pathDesc.size() == 1, L"Physical body shape should be in one piece" );
-
-                        m_physicalBodyShape = pathDesc[ 0 ];
-                        sf::Transform transform;
-                        transform.scale( { scale, scale } );
-                        transform.combine( Game::Graphics::SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() ) );
-
-                        auto current = &node.parent();
-                        while( *current->name() == '\0' )
+                        auto polygons = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, doc, node, scale );
+                        for( auto& polygon : polygons )
                         {
-                            transform.combine( Game::Graphics::SVGHelper::ParseTransform( current->attribute( "transform" ).as_string() ) );
-                            current = &current->parent();
-                        }
-                        for( auto& point : m_physicalBodyShape )
-                        {
-                            point = transform.transformPoint( point );
+                            m_physicalBodyShape.emplace_back( polygon.GetPoints() );
                         }
                         m_density = node.attribute( "data-density" ).as_float();
                         ASSERT( m_density != 0.0f, L"Density cannot be 0" );
@@ -88,10 +75,6 @@ namespace Betomnita::GamePlay
                     }
                     point = transform.transformPoint( point );
 
-                    if( std::find( classes.begin(), classes.end(), "pivot" ) != classes.end() )
-                    {
-                        m_pivot = point;
-                    }
                     if( std::find( classes.begin(), classes.end(), "gun-rotator-slot" ) != classes.end() )
                     {
                         m_gunRotatorSlot = point;
@@ -100,10 +83,5 @@ namespace Betomnita::GamePlay
                 break;
             }
         }
-        for( auto& polygon : m_shape )
-        {
-            polygon.SetPivot( m_pivot );
-        }
-        m_gunRotatorSlot = m_gunRotatorSlot - m_pivot;
     }
 }

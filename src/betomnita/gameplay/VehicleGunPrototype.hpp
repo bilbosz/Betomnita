@@ -19,7 +19,7 @@ namespace Betomnita::GamePlay
 
     private:
         std::vector< Game::Graphics::Polygon > m_shape;
-        std::vector< sf::Vector2f > m_physicalBodyShape;
+        std::vector< std::vector< sf::Vector2f > > m_physicalBodyShape;
         sf::Vector2f m_gunRotator;
         Game::Utils::Direction m_shotDirection;
     };

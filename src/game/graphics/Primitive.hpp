@@ -15,7 +15,7 @@ namespace Game::Graphics
         Primitive();
         virtual ~Primitive();
 
-        virtual void Render( sf::RenderTarget& target );
+        virtual void Render( sf::RenderTarget& target, const sf::Transform& transform );
 
         void SetPosition( const sf::Vector2f& value )
         {

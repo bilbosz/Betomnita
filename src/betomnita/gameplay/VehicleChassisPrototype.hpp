@@ -18,8 +18,7 @@ namespace Betomnita::GamePlay
 
     private:
         std::vector< Game::Graphics::Polygon > m_shape;
-        std::vector< sf::Vector2f > m_physicalBodyShape;
-        sf::Vector2f m_pivot;
+        std::vector< std::vector< sf::Vector2f > > m_physicalBodyShape;
         sf::Vector2f m_gunRotatorSlot;
         float m_density;
     };
