@@ -4,8 +4,10 @@
 #include "betomnita/gameplay/Vehicle.hpp"
 #include "betomnita/gameplay/VehicleChassisPrototype.hpp"
 #include "betomnita/gameplay/World.hpp"
+#include "betomnita/resources/Resources.hpp"
 #include "game/GameConsts.hpp"
 #include "game/graphics/Polygon.hpp"
+#include "game/graphics/Text.hpp"
 
 #include "Box2D/Box2D.h"
 
@@ -28,6 +30,22 @@ namespace Betomnita::GamePlay
         {
             polygon.Render( target, r );
         }
+        static Game::Graphics::Text text;
+        static bool inited = false;
+        if( !inited )
+        {
+            inited = true;
+            text.SetLineHeight( 0.05f );
+            text.SetFont( *Resources::DebugFont );
+            text.SetColor( sf::Color::Red );
+            text.SetPosition( { 0.0f, 0.0f } );
+        }
+        auto& v = m_physicalBody->GetLinearVelocity();
+        std::wostringstream out;
+        out << hypotf( v.x, v.y ) * 3.6f;
+        text.SetString( out.str() );
+        out.clear();
+        text.Render( target );
     }
 
     void VehicleChassis::Update( const sf::Time& dt )
@@ -54,6 +72,7 @@ namespace Betomnita::GamePlay
         b2BodyDef bodyDef;
         bodyDef.type = b2_dynamicBody;
         bodyDef.position.Set( m_initialPosition.x, m_initialPosition.y );
+        bodyDef.allowSleep = false;
 
         auto& physicsWorld = m_vehicle->World()->PhysicsWorld();
         m_physicalBody = physicsWorld.CreateBody( &bodyDef );
@@ -69,8 +88,9 @@ namespace Betomnita::GamePlay
             shape.Set( points, 3 );
             m_physicalBody->CreateFixture( &shape, m_density );
         }
-        m_physicalBody->SetLinearDamping( 0.28f );
-        m_physicalBody->SetAngularDamping( 2.0f );
+
+        m_physicalBody->SetLinearDamping( 0.97f );
+        m_physicalBody->SetAngularDamping( 4.0f );
     }
 
     void VehicleChassis::AssignVehicle( Vehicle* vehicle )

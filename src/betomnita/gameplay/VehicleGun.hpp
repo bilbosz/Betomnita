@@ -24,6 +24,15 @@ namespace Betomnita::GamePlay
         void Update( const sf::Time& dt );
         void LoadFromPrototype( const Prototype& prototype );
 
+        void SetAngle( float value )
+        {
+            m_angle = value;
+        }
+        float GetAngle() const
+        {
+            return m_angle;
+        }
+
         void AssignVehicle( Vehicle* value )
         {
             m_vehicle = value;

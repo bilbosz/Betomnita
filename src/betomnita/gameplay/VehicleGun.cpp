@@ -29,9 +29,9 @@ namespace Betomnita::GamePlay
 
     void VehicleGun::Update( const sf::Time& dt )
     {
-        float angle = m_physicalBody->GetAngle();
         auto pos = m_physicalBody->GetPosition();
-        m_physicalBody->SetTransform( pos, m_vehicle->Chassis().GetPhysicalBody()->GetAngle() );
+        m_physicalBody->SetTransform( pos, m_vehicle->Chassis().GetPhysicalBody()->GetAngle() + m_angle );
+        float angle = m_physicalBody->GetAngle();
         sf::Vector2f position( pos.x, pos.y );
         m_transform = sf::Transform::Identity;
         m_transform.translate( position );

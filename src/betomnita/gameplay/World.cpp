@@ -34,45 +34,12 @@ namespace Betomnita::GamePlay
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::RemoveListener( Resources::ListenerId::StartMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::RemoveListener( Resources::ListenerId::StopMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::RemoveListener( Resources::ListenerId::MoveWorld );
-        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::RemoveListener( Resources::ListenerId::TankForward );
     }
 
     void World::Init()
     {
         InitView();
         InitPhysics();
-        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::AddListener(
-            { Resources::ListenerId::TankForward, false, [this]( const sf::Event::KeyEvent& key ) {
-                 for( auto& vehicle : m_vehicles )
-                 {
-                     auto physicalBody = vehicle.Chassis().GetPhysicalBody();
-                     float force = 370'000.0f;
-                     auto angle = physicalBody->GetAngle() + Game::Consts::Pi * 0.5f;
-                     auto v = physicalBody->GetLinearVelocity();
-                     MESSAGE( hypotf( v.x, v.y ) * 3.6f );
-                     switch( key.code )
-                     {
-                         case sf::Keyboard::W:
-                             physicalBody->ApplyForceToCenter( b2Vec2( -force * cosf( angle ), -force * sinf( angle ) ), true );
-                             break;
-                         case sf::Keyboard::S:
-                             physicalBody->ApplyForceToCenter( b2Vec2( force * cosf( angle ), force * sinf( angle ) ), true );
-                             break;
-                         case sf::Keyboard::A:
-                             physicalBody->ApplyTorque( -force, true );
-                             break;
-                         case sf::Keyboard::D:
-                             physicalBody->ApplyTorque( force, true );
-                             break;
-                         case sf::Keyboard::Num0:
-                             physicalBody->SetLinearVelocity( b2Vec2( 0.0f, 0.0f ) );
-                             physicalBody->SetAngularVelocity( 0.0f );
-                             break;
-                         default:
-                             break;
-                     }
-                 }
-             } } );
     }
 
     void World::Render( sf::RenderTarget& target )
@@ -93,6 +60,42 @@ namespace Betomnita::GamePlay
         for( auto& vehicle : m_vehicles )
         {
             vehicle.Update( dt );
+            auto physicalBody = vehicle.Chassis().GetPhysicalBody();
+            float impulse = 370'000.0f * dt.asSeconds();
+            auto angle = physicalBody->GetAngle() + Game::Consts::Pi * 0.5f;
+            if( sf::Keyboard::isKeyPressed( sf::Keyboard::W ) )
+            {
+                physicalBody->ApplyLinearImpulseToCenter( b2Vec2( -impulse * cosf( angle ), -impulse * sinf( angle ) ), true );
+            }
+            if( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
+            {
+                physicalBody->ApplyLinearImpulseToCenter( b2Vec2( impulse * cosf( angle ), impulse * sinf( angle ) ), true );
+            }
+            if( sf::Keyboard::isKeyPressed( sf::Keyboard::A ) )
+            {
+                physicalBody->ApplyAngularImpulse( -impulse, true );
+            }
+            if( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
+            {
+                physicalBody->ApplyAngularImpulse( impulse, true );
+            }
+            if( sf::Keyboard::isKeyPressed( sf::Keyboard::Num0 ) )
+            {
+                physicalBody->SetAngularVelocity( 0.0f );
+                physicalBody->SetLinearVelocity( b2Vec2( 0.0f, 0.0f ) );
+            }
+            if( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) )
+            {
+                vehicle.Gun().SetAngle( vehicle.Gun().GetAngle() - 0.6f * dt.asSeconds() );
+            }
+            if( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) )
+            {
+                vehicle.Gun().SetAngle( vehicle.Gun().GetAngle() + 0.6f * dt.asSeconds() );
+            }
+            b2MassData data;
+            vehicle.Chassis().GetPhysicalBody()->GetMassData( &data );
+            auto pos = vehicle.Chassis().GetPhysicalBody()->GetWorldPoint( data.center );
+            SetViewCenter( { pos.x, pos.y } );
         }
     }
 
@@ -102,7 +105,6 @@ namespace Betomnita::GamePlay
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::StartMoveWorld ).IsEnabled = false;
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::GetListener( Resources::ListenerId::StopMoveWorld ).IsEnabled = false;
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::MoveWorld ).IsEnabled = false;
-        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::GetListener( Resources::ListenerId::TankForward ).IsEnabled = false;
     }
 
     void World::Unpause()
@@ -111,7 +113,6 @@ namespace Betomnita::GamePlay
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::StartMoveWorld ).IsEnabled = true;
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::GetListener( Resources::ListenerId::StopMoveWorld ).IsEnabled = true;
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::MoveWorld ).IsEnabled = true;
-        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::GetListener( Resources::ListenerId::TankForward ).IsEnabled = true;
     }
 
     void World::LoadFromFile( const std::string& filename )
@@ -280,6 +281,14 @@ namespace Betomnita::GamePlay
     float World::GetViewScale() const
     {
         return m_view.getMatrix()[ 0 ];
+    }
+
+    void World::SetViewCenter( const sf::Vector2f& value )
+    {
+        const auto& scale = GetViewScale();
+        m_view = sf::Transform::Identity;
+        m_view.scale( scale, scale );
+        m_view.translate( 0.5f / scale - value.x, 0.5f / scale - value.y );
     }
 
     void World::InitPhysics()

@@ -36,6 +36,7 @@ namespace Betomnita::GamePlay
         void InitView();
         sf::Vector2f GetViewCenter() const;
         float GetViewScale() const;
+        void SetViewCenter( const sf::Vector2f& value );
 
         void InitPhysics();
         b2World& PhysicsWorld()
