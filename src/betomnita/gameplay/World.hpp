@@ -1,5 +1,6 @@
 #pragma once
 #include "betomnita/gameplay/Vehicle.hpp"
+#include "game/graphics/View.hpp"
 #include "game/utils/AABB.hpp"
 
 #include <Box2D/Box2D.h>
@@ -34,9 +35,6 @@ namespace Betomnita::GamePlay
         void LoadFromFile( const std::string& filename );
 
         void InitView();
-        sf::Vector2f GetViewCenter() const;
-        float GetViewScale() const;
-        void SetViewCenter( const sf::Vector2f& value );
 
         void InitPhysics();
         b2World& PhysicsWorld()
@@ -50,7 +48,7 @@ namespace Betomnita::GamePlay
         std::vector< Vehicle > m_vehicles;
 
         b2World m_physicsWorld;
-        sf::Transform m_view;
+        Game::Graphics::View m_view;
         sf::Vector2f m_previousPoint;
         bool m_moving = false;
         Game::Utils::AABB m_size;

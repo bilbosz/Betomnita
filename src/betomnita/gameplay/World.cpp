@@ -43,42 +43,32 @@ namespace Betomnita::GamePlay
 
     void World::Render( sf::RenderTarget& target )
     {
+        auto transform = m_view.GetTransform();
         for( auto& terrain : m_terrainSheets )
         {
-            terrain->Render( target, m_view );
+            terrain->Render( target, transform );
         }
         for( auto& vehicle : m_vehicles )
         {
-            vehicle.Render( target, m_view );
+            vehicle.Render( target, transform );
         }
     }
 
     void World::Update( const sf::Time& dt )
     {
         {
-            float delta = 0.0f;
+            auto newScale = m_view.Scale;
             if( sf::Keyboard::isKeyPressed( sf::Keyboard::Equal ) )
             {
-                delta = 1.0f;
+                newScale *= Resources::ZoomFactor;
             }
             if( sf::Keyboard::isKeyPressed( sf::Keyboard::Hyphen ) )
             {
-                delta = -1.0f;
+                newScale /= Resources::ZoomFactor;
             }
-            float zoom;
-            if( delta >= 0.0f )
+            if( newScale >= Resources::ZoomOutLimit && newScale <= Resources::ZoomInLimit )
             {
-                zoom = delta * Resources::ZoomFactor;
-            }
-            else
-            {
-                zoom = -delta / Resources::ZoomFactor;
-            }
-
-            auto scale = GetViewScale() * zoom;
-            if( scale <= Resources::ZoomInLimit && scale >= Resources::ZoomOutLimit )
-            {
-                m_view.scale( { zoom, zoom }, m_view.getInverse().transformPoint( Game::GenericGame::GetInstance()->GetMousePosition() ) );
+                m_view.Scale = newScale;
             }
         }
         m_physicsWorld.Step( dt.asSeconds(), 8, 3 );
@@ -120,7 +110,8 @@ namespace Betomnita::GamePlay
             b2MassData data;
             vehicle.Chassis().GetPhysicalBody()->GetMassData( &data );
             auto pos = vehicle.Chassis().GetPhysicalBody()->GetWorldPoint( data.center );
-            SetViewCenter( { pos.x, pos.y } );
+            m_view.Center = { pos.x, pos.y };
+            m_view.Rotation = vehicle.Chassis().GetPhysicalBody()->GetAngle();
         }
     }
 
@@ -237,7 +228,7 @@ namespace Betomnita::GamePlay
 
     void World::InitView()
     {
-        m_view.scale( { Resources::ZoomDefault, Resources::ZoomDefault } );
+        m_view.Scale = Resources::ZoomDefault;
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::AddListener(
             { Resources::ListenerId::StartMoveWorld, false, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
                  if( btn == sf::Mouse::Button::Right )
@@ -253,44 +244,23 @@ namespace Betomnita::GamePlay
                      m_moving = false;
                  }
              } } );
-        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::AddListener(
-            { Resources::ListenerId::MoveWorld, false, [this]( const sf::Vector2f& pos ) {
-                 if( m_moving )
-                 {
-                     float scale = GetViewScale();
-                     auto center = GetViewCenter();
-                     sf::Vector2f diff = ( m_previousPoint - pos ) / scale;
-                     if( center.x < m_size.MinX && diff.x < 0.0f || center.x > m_size.MaxX && diff.x > 0.0f )
-                     {
-                         diff.x = 0.0f;
-                     }
-                     if( center.y < m_size.MinY && diff.y < 0.0f || center.y > m_size.MaxY && diff.y > 0.0f )
-                     {
-                         diff.y = 0.0f;
-                     }
-                     m_previousPoint = pos;
-                     m_view.translate( -diff );
-                 }
-             } } );
-    }
-
-    sf::Vector2f World::GetViewCenter() const
-    {
-        const auto& matrix = m_view.getMatrix();
-        return { ( -matrix[ 12 ] + 0.5f ) / matrix[ 0 ], ( -matrix[ 13 ] + 0.5f ) / matrix[ 0 ] };
-    }
-
-    float World::GetViewScale() const
-    {
-        return m_view.getMatrix()[ 0 ];
-    }
-
-    void World::SetViewCenter( const sf::Vector2f& value )
-    {
-        const auto& scale = GetViewScale();
-        m_view = sf::Transform::Identity;
-        m_view.scale( scale, scale );
-        m_view.translate( 0.5f / scale - value.x, 0.5f / scale - value.y );
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::AddListener( { Resources::ListenerId::MoveWorld, false, [this]( const sf::Vector2f& pos ) {
+                                                                                        if( m_moving )
+                                                                                        {
+                                                                                            sf::Vector2f diff = ( pos - m_previousPoint ) / m_view.Scale;
+                                                                                            m_previousPoint = pos;
+                                                                                            auto newCenter = m_view.Center - diff;
+                                                                                            if( newCenter.x < m_size.MinX || newCenter.x > m_size.MaxX )
+                                                                                            {
+                                                                                                diff.x = 0.0f;
+                                                                                            }
+                                                                                            if( newCenter.y < m_size.MinY || newCenter.y > m_size.MaxY )
+                                                                                            {
+                                                                                                diff.y = 0.0f;
+                                                                                            }
+                                                                                            m_view.Center -= diff;
+                                                                                        }
+                                                                                    } } );
     }
 
     void World::InitPhysics()
