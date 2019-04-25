@@ -30,7 +30,6 @@ namespace Betomnita::GamePlay
 
     World::~World()
     {
-        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::RemoveListener( Resources::ListenerId::ZoomInOutWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::RemoveListener( Resources::ListenerId::StartMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::RemoveListener( Resources::ListenerId::StopMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::RemoveListener( Resources::ListenerId::MoveWorld );
@@ -56,6 +55,32 @@ namespace Betomnita::GamePlay
 
     void World::Update( const sf::Time& dt )
     {
+        {
+            float delta = 0.0f;
+            if( sf::Keyboard::isKeyPressed( sf::Keyboard::Equal ) )
+            {
+                delta = 1.0f;
+            }
+            if( sf::Keyboard::isKeyPressed( sf::Keyboard::Hyphen ) )
+            {
+                delta = -1.0f;
+            }
+            float zoom;
+            if( delta >= 0.0f )
+            {
+                zoom = delta * Resources::ZoomFactor;
+            }
+            else
+            {
+                zoom = -delta / Resources::ZoomFactor;
+            }
+
+            auto scale = GetViewScale() * zoom;
+            if( scale <= Resources::ZoomInLimit && scale >= Resources::ZoomOutLimit )
+            {
+                m_view.scale( { zoom, zoom }, m_view.getInverse().transformPoint( Game::GenericGame::GetInstance()->GetMousePosition() ) );
+            }
+        }
         m_physicsWorld.Step( dt.asSeconds(), 8, 3 );
         for( auto& vehicle : m_vehicles )
         {
@@ -101,7 +126,6 @@ namespace Betomnita::GamePlay
 
     void World::Pause()
     {
-        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::GetListener( Resources::ListenerId::ZoomInOutWorld ).IsEnabled = false;
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::StartMoveWorld ).IsEnabled = false;
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::GetListener( Resources::ListenerId::StopMoveWorld ).IsEnabled = false;
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::MoveWorld ).IsEnabled = false;
@@ -109,7 +133,6 @@ namespace Betomnita::GamePlay
 
     void World::Unpause()
     {
-        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::GetListener( Resources::ListenerId::ZoomInOutWorld ).IsEnabled = true;
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::StartMoveWorld ).IsEnabled = true;
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::GetListener( Resources::ListenerId::StopMoveWorld ).IsEnabled = true;
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::MoveWorld ).IsEnabled = true;
@@ -215,27 +238,6 @@ namespace Betomnita::GamePlay
     void World::InitView()
     {
         m_view.scale( { Resources::ZoomDefault, Resources::ZoomDefault } );
-        Game::EventSystem::Event< Resources::EventId::OnMouseWheelScrolled >::AddListener(
-            { Resources::ListenerId::ZoomInOutWorld, false, [this]( float delta ) {
-                 float zoom;
-                 if( delta >= 0.0f )
-                 {
-                     zoom = delta * Resources::ZoomFactor;
-                 }
-                 else
-                 {
-                     zoom = -delta / Resources::ZoomFactor;
-                 }
-
-                 auto scale = GetViewScale() * zoom;
-                 if( scale > Resources::ZoomInLimit || scale < Resources::ZoomOutLimit )
-                 {
-                     return;
-                 }
-
-                 m_view.scale( { zoom, zoom }, m_view.getInverse().transformPoint( Game::GenericGame::GetInstance()->GetMousePosition() ) );
-             } } );
-
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::AddListener(
             { Resources::ListenerId::StartMoveWorld, false, [this]( const sf::Vector2f& pos, sf::Mouse::Button btn ) {
                  if( btn == sf::Mouse::Button::Right )
