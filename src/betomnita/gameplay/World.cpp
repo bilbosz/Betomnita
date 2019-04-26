@@ -101,17 +101,17 @@ namespace Betomnita::GamePlay
             }
             if( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) )
             {
-                vehicle.Gun().SetAngle( vehicle.Gun().GetAngle() - 0.6f * dt.asSeconds() );
+                vehicle.Gun().SetDirection( vehicle.Gun().GetDirection() - 0.6f * dt.asSeconds() );
             }
             if( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) )
             {
-                vehicle.Gun().SetAngle( vehicle.Gun().GetAngle() + 0.6f * dt.asSeconds() );
+                vehicle.Gun().SetDirection( vehicle.Gun().GetDirection() + 0.6f * dt.asSeconds() );
             }
             b2MassData data;
             vehicle.Chassis().GetPhysicalBody()->GetMassData( &data );
             auto pos = vehicle.Chassis().GetPhysicalBody()->GetWorldPoint( data.center );
             m_view.Center = { pos.x, pos.y };
-            m_view.Rotation = vehicle.Chassis().GetPhysicalBody()->GetAngle();
+            //m_view.Rotation = vehicle.Chassis().GetPhysicalBody()->GetAngle();
         }
     }
 

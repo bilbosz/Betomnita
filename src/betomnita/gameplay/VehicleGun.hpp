@@ -24,13 +24,13 @@ namespace Betomnita::GamePlay
         void Update( const sf::Time& dt );
         void LoadFromPrototype( const Prototype& prototype );
 
-        void SetAngle( float value )
+        void SetDirection( float value )
         {
-            m_angle = value;
+            m_direction = value;
         }
-        float GetAngle() const
+        float GetDirection() const
         {
-            return m_angle;
+            return m_direction;
         }
 
         void AssignVehicle( Vehicle* value )
@@ -41,15 +41,14 @@ namespace Betomnita::GamePlay
         void InitPhysics();
 
     private:
-        float m_direction = 0.0f;
         std::vector< Game::Graphics::Polygon > m_shape;
         std::vector< std::vector< sf::Vector2f > > m_physicalBodyShape;
         sf::Vector2f m_gunRotator;
         Game::Utils::Direction m_shotDirection;
 
+        sf::Vector2f m_position;
+        float m_direction = 0.0f;
         Vehicle* m_vehicle;
-        b2Body* m_physicalBody;
         sf::Transform m_transform;
-        float m_angle = 0.0f;
     };
 }

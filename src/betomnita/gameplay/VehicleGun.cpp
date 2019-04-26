@@ -25,17 +25,30 @@ namespace Betomnita::GamePlay
         {
             polygon.Render( target, r );
         }
+        sf::CircleShape c;
+        c.setFillColor( sf::Color::Red );
+        c.setRadius( 300.0f );
+        c.setPosition( { 0.0f, 0.0f } );
+        target.draw( c, r );
     }
 
     void VehicleGun::Update( const sf::Time& dt )
     {
-        auto pos = m_physicalBody->GetPosition();
-        m_physicalBody->SetTransform( pos, m_vehicle->Chassis().GetPhysicalBody()->GetAngle() + m_angle );
-        float angle = m_physicalBody->GetAngle();
-        sf::Vector2f position( pos.x, pos.y );
         m_transform = sf::Transform::Identity;
-        m_transform.translate( position );
-        m_transform.rotate( angle * 180.0f / Game::Consts::Pi );
+
+        auto& chassis = m_vehicle->Chassis();
+        auto chassisBody = chassis.GetPhysicalBody();
+        auto chassisPosition = chassisBody->GetPosition();
+
+        auto chassisAngle = chassisBody->GetAngle();
+        m_transform.rotate( ( m_direction + chassisAngle ) * 180.0f / Game::Consts::Pi, m_gunRotator );
+
+        sf::Transform chassisTransform;
+        chassisTransform.rotate( chassisAngle );
+
+        m_position = chassis.GetGunRotatorSlot() - m_gunRotator;
+        m_position = chassisTransform.transformPoint( m_position );
+        m_transform.translate( sf::Vector2f{ chassisPosition.x, chassisPosition.y } + m_position );
     }
 
     void VehicleGun::LoadFromPrototype( const Prototype& prototype )
@@ -50,36 +63,9 @@ namespace Betomnita::GamePlay
     void VehicleGun::InitPhysics()
     {
         auto& chassis = m_vehicle->Chassis();
-        auto& gunRotatorPosition = chassis.GetPhysicalBody()->GetWorldPoint( { chassis.GetGunRotatorSlot().x, chassis.GetGunRotatorSlot().y } );
-        b2BodyDef bodyDef;
-        bodyDef.type = b2_dynamicBody;
-        bodyDef.position.Set( gunRotatorPosition.x, gunRotatorPosition.y );
-
-        auto& physicsWorld = m_vehicle->World()->PhysicsWorld();
-        m_physicalBody = physicsWorld.CreateBody( &bodyDef );
-
-        b2PolygonShape shape;
-        b2FixtureDef fixtureDef;
-        fixtureDef.density = 0.0f;
-        fixtureDef.filter.maskBits = 0x0000;
-        for( const auto& triangle : m_physicalBodyShape )
-        {
-            b2Vec2 points[ 3 ] = {
-                { triangle[ 0 ].x, triangle[ 0 ].y },
-                { triangle[ 1 ].x, triangle[ 1 ].y },
-                { triangle[ 2 ].x, triangle[ 2 ].y },
-            };
-            shape.Set( points, 3 );
-            fixtureDef.shape = &shape;
-            m_physicalBody->CreateFixture( &fixtureDef );
-        }
-
-        b2RevoluteJointDef jointDef;
-        jointDef.bodyA = chassis.GetPhysicalBody();
-        jointDef.localAnchorA = { chassis.GetGunRotatorSlot().x, chassis.GetGunRotatorSlot().y };
-        jointDef.bodyB = m_physicalBody;
-        jointDef.localAnchorB = { m_gunRotator.x, m_gunRotator.y };
-        jointDef.collideConnected = false;
-        physicsWorld.CreateJoint( &jointDef );
+        auto chassisBody = chassis.GetPhysicalBody();
+        auto chassisPosition = chassisBody->GetPosition();
+        m_position = sf::Vector2f{ chassisPosition.x, chassisPosition.y } + chassis.GetGunRotatorSlot() - m_gunRotator;
+        m_direction = 0.0f;
     }
 }
