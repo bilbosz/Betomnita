@@ -4,4 +4,5 @@ namespace Game::Consts
 {
     extern const unsigned int DefaultCharacterSize;
     extern const float Pi;
+    extern const float RadToDeg;
 }

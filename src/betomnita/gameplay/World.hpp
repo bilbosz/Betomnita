@@ -9,7 +9,6 @@
 
 namespace Betomnita::GamePlay
 {
-    class View;
     class Cursor;
     class Terrain;
     class PhysicalBody;

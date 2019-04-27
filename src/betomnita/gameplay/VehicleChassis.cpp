@@ -55,7 +55,7 @@ namespace Betomnita::GamePlay
         sf::Vector2f position( pos.x, pos.y );
         m_transform = sf::Transform::Identity;
         m_transform.translate( position );
-        m_transform.rotate( angle * 180.0f / Game::Consts::Pi );
+        m_transform.rotate( angle * Game::Consts::RadToDeg );
     }
 
     void VehicleChassis::LoadFromPrototype( const Prototype& prototype )

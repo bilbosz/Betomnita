@@ -10,6 +10,7 @@
 #include "game/GenericGame.hpp"
 #include "game/graphics/Polygon.hpp"
 #include "game/graphics/SVGHelper.hpp"
+#include "game/utils/Utils.hpp"
 
 #include <algorithm>
 #include <cstring>
@@ -24,6 +25,8 @@
 
 namespace Betomnita::GamePlay
 {
+    using Game::Utils::cast;
+
     World::World( GamePlayLogic* logic ) : m_currentLogic( logic ), m_physicsWorld( b2Vec2( 0.0f, 0.0f ) )
     {
     }
@@ -109,9 +112,8 @@ namespace Betomnita::GamePlay
             }
             b2MassData data;
             vehicle.Chassis().GetPhysicalBody()->GetMassData( &data );
-            auto pos = vehicle.Chassis().GetPhysicalBody()->GetWorldPoint( data.center );
-            m_view.Center = { pos.x, pos.y };
-            //m_view.Rotation = vehicle.Chassis().GetPhysicalBody()->GetAngle();
+            m_view.Center = cast< sf::Vector2f >( vehicle.Chassis().GetPhysicalBody()->GetWorldPoint( data.center ) );
+            m_view.Rotation = vehicle.Chassis().GetPhysicalBody()->GetAngle();
         }
     }
 

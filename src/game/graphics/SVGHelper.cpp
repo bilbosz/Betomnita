@@ -243,12 +243,12 @@ namespace Game::Graphics
                 else if( fun == "skewx" )
                 {
                     CHECK( args.size() == 1 );
-                    result.combine( { 1.0f, tanf( args[ 0 ] * 180.0f / Game::Consts::Pi ), 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f } );
+                    result.combine( { 1.0f, tanf( args[ 0 ] * Game::Consts::RadToDeg ), 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f } );
                 }
                 else if( fun == "skewy" )
                 {
                     CHECK( args.size() == 1 );
-                    result.combine( { 1.0f, 0.0f, 0.0f, tanf( args[ 0 ] * 180.0f / Game::Consts::Pi ), 1.0f, 0.0f, 0.0f, 0.0f, 1.0f } );
+                    result.combine( { 1.0f, 0.0f, 0.0f, tanf( args[ 0 ] * Game::Consts::RadToDeg ), 1.0f, 0.0f, 0.0f, 0.0f, 1.0f } );
                 }
                 else
                 {

@@ -3,11 +3,14 @@
 #include "betomnita/gameplay/Vehicle.hpp"
 #include "betomnita/gameplay/VehicleGunPrototype.hpp"
 #include "betomnita/gameplay/World.hpp"
+#include "game/utils/Utils.hpp"
 
 #include <Box2D/Box2D.h>
 
 namespace Betomnita::GamePlay
 {
+    using Game::Utils::cast;
+
     VehicleGun::VehicleGun()
     {
     }
@@ -25,11 +28,6 @@ namespace Betomnita::GamePlay
         {
             polygon.Render( target, r );
         }
-        sf::CircleShape c;
-        c.setFillColor( sf::Color::Red );
-        c.setRadius( 300.0f );
-        c.setPosition( { 0.0f, 0.0f } );
-        target.draw( c, r );
     }
 
     void VehicleGun::Update( const sf::Time& dt )
@@ -38,17 +36,11 @@ namespace Betomnita::GamePlay
 
         auto& chassis = m_vehicle->Chassis();
         auto chassisBody = chassis.GetPhysicalBody();
-        auto chassisPosition = chassisBody->GetPosition();
-
         auto chassisAngle = chassisBody->GetAngle();
-        m_transform.rotate( ( m_direction + chassisAngle ) * 180.0f / Game::Consts::Pi, m_gunRotator );
 
-        sf::Transform chassisTransform;
-        chassisTransform.rotate( chassisAngle );
-
-        m_position = chassis.GetGunRotatorSlot() - m_gunRotator;
-        m_position = chassisTransform.transformPoint( m_position );
-        m_transform.translate( sf::Vector2f{ chassisPosition.x, chassisPosition.y } + m_position );
+        auto gunRotatorSlot = cast< sf::Vector2f >( chassisBody->GetWorldPoint( cast< b2Vec2 >( chassis.GetGunRotatorSlot() ) ) );
+        m_transform.translate( gunRotatorSlot - m_gunRotator );
+        m_transform.rotate( ( chassisAngle + m_direction ) * Game::Consts::RadToDeg, m_gunRotator );
     }
 
     void VehicleGun::LoadFromPrototype( const Prototype& prototype )
@@ -65,7 +57,7 @@ namespace Betomnita::GamePlay
         auto& chassis = m_vehicle->Chassis();
         auto chassisBody = chassis.GetPhysicalBody();
         auto chassisPosition = chassisBody->GetPosition();
-        m_position = sf::Vector2f{ chassisPosition.x, chassisPosition.y } + chassis.GetGunRotatorSlot() - m_gunRotator;
+        m_position = cast< sf::Vector2f >( chassisPosition ) + chassis.GetGunRotatorSlot() - m_gunRotator;
         m_direction = 0.0f;
     }
 }
