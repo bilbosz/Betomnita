@@ -34,12 +34,8 @@ namespace Betomnita::GamePlay
 
     void VehicleChassis::Update( const sf::Time& dt )
     {
-        float angle = m_physicalBody->GetAngle();
-        auto pos = m_physicalBody->GetPosition();
-        sf::Vector2f position( pos.x, pos.y );
-        m_transform = sf::Transform::Identity;
-        m_transform.translate( position );
-        m_transform.rotate( angle * Game::Consts::RadToDeg );
+        UpdatePhysics();
+        UpdateTransformation();
     }
 
     void VehicleChassis::LoadFromPrototype( const Prototype& prototype )
@@ -75,6 +71,26 @@ namespace Betomnita::GamePlay
 
         m_physicalBody->SetLinearDamping( 0.97f );
         m_physicalBody->SetAngularDamping( 4.0f );
+    }
+
+    void VehicleChassis::UpdatePhysics()
+    {
+        auto velocity = m_physicalBody->GetLinearVelocity();
+        auto velocityAngle = atan2f( velocity.y, velocity.x );
+
+        auto angle = m_physicalBody->GetAngle();
+        auto damping = fabs( fmodf( fabs( fmodf( velocityAngle - angle, Game::Consts::Pi ) / Game::Consts::Pi ) - 0.5f, 0.5f ) ) * 2.0f * 370'000.0f;
+        m_physicalBody->ApplyForceToCenter( { -velocity.x * damping, -velocity.y * damping }, true );
+    }
+
+    void VehicleChassis::UpdateTransformation()
+    {
+        float angle = m_physicalBody->GetAngle();
+        auto pos = m_physicalBody->GetPosition();
+        sf::Vector2f position( pos.x, pos.y );
+        m_transform = sf::Transform::Identity;
+        m_transform.translate( position );
+        m_transform.rotate( angle * Game::Consts::RadToDeg );
     }
 
     void VehicleChassis::AssignVehicle( Vehicle* vehicle )

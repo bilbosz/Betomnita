@@ -22,6 +22,9 @@ namespace Betomnita::GamePlay
         void Update( const sf::Time& dt );
         void LoadFromPrototype( const Prototype& prototype );
         void InitPhysics();
+        void UpdatePhysics();
+        void UpdateTransformation();
+
 
         void AssignVehicle( Vehicle* vehicle );
 
