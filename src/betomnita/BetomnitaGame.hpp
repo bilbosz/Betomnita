@@ -33,6 +33,8 @@ namespace Betomnita
             return m_stateMachine.get();
         }
 
+        std::unique_ptr< Cursor > Cursor;
+
     private:
         void OnStart() override;
         void OnUpdate( const sf::Time& dt ) override;
@@ -44,10 +46,9 @@ namespace Betomnita
         void OnMouseButtonPressed( const sf::Vector2f& position, sf::Mouse::Button button ) override;
         void OnMouseButtonReleased( const sf::Vector2f& position, sf::Mouse::Button button ) override;
         void OnMouseMoved( const sf::Vector2f& position ) override;
-        void OnMouseWheelScrolled( float delta ) override; 
+        void OnMouseWheelScrolled( float delta ) override;
 
         static BetomnitaGame* s_instance;
         std::unique_ptr< Game::StateMachine< Resources::StateId > > m_stateMachine;
-        std::unique_ptr< Cursor > m_cursor;
     };
 }

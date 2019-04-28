@@ -34,6 +34,7 @@ namespace Betomnita::GamePlay
         void LoadFromFile( const std::string& filename );
 
         void InitView();
+        void UpdateView( const sf::Time& dt );
 
         void InitPhysics();
         b2World& PhysicsWorld()

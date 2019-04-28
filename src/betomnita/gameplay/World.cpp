@@ -59,65 +59,12 @@ namespace Betomnita::GamePlay
 
     void World::Update( const sf::Time& dt )
     {
-        {
-            auto newScale = m_view.Scale;
-            auto scaleChanged = false;
-            if( sf::Keyboard::isKeyPressed( sf::Keyboard::Equal ) )
-            {
-                scaleChanged = true;
-                newScale *= powf( Resources::ZoomFactor, dt.asSeconds() );
-            }
-            if( sf::Keyboard::isKeyPressed( sf::Keyboard::Hyphen ) )
-            {
-                scaleChanged = true;
-                newScale /= powf( Resources::ZoomFactor, dt.asSeconds() );
-            }
-            if( scaleChanged && newScale >= Resources::ZoomOutLimit && newScale <= Resources::ZoomInLimit )
-            {
-                m_view.Scale = newScale;
-            }
-        }
-        m_physicsWorld.Step( dt.asSeconds(), 8, 3 );
         for( auto& vehicle : m_vehicles )
         {
             vehicle.Update( dt );
-            auto physicalBody = vehicle.Chassis().GetPhysicalBody();
-            float impulse = 370'000.0f * dt.asSeconds();
-            auto angle = physicalBody->GetAngle() + Game::Consts::Pi * 0.5f;
-            if( sf::Keyboard::isKeyPressed( sf::Keyboard::W ) )
-            {
-                physicalBody->ApplyLinearImpulseToCenter( b2Vec2( -impulse * cosf( angle ), -impulse * sinf( angle ) ), true );
-            }
-            if( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
-            {
-                physicalBody->ApplyLinearImpulseToCenter( b2Vec2( impulse * cosf( angle ), impulse * sinf( angle ) ), true );
-            }
-            if( sf::Keyboard::isKeyPressed( sf::Keyboard::A ) )
-            {
-                physicalBody->ApplyAngularImpulse( -impulse, true );
-            }
-            if( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
-            {
-                physicalBody->ApplyAngularImpulse( impulse, true );
-            }
-            if( sf::Keyboard::isKeyPressed( sf::Keyboard::Num0 ) )
-            {
-                physicalBody->SetAngularVelocity( 0.0f );
-                physicalBody->SetLinearVelocity( b2Vec2( 0.0f, 0.0f ) );
-            }
-            if( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) )
-            {
-                vehicle.Gun().SetDirection( vehicle.Gun().GetDirection() - 1.0f * dt.asSeconds() );
-            }
-            if( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) )
-            {
-                vehicle.Gun().SetDirection( vehicle.Gun().GetDirection() + 1.0f * dt.asSeconds() );
-            }
-            b2MassData data;
-            vehicle.Chassis().GetPhysicalBody()->GetMassData( &data );
-            m_view.Center = cast< sf::Vector2f >( vehicle.Chassis().GetPhysicalBody()->GetWorldPoint( data.center ) );
-            m_view.Rotation = vehicle.Chassis().GetPhysicalBody()->GetAngle();
         }
+        m_physicsWorld.Step( dt.asSeconds(), 8, 3 );
+        UpdateView( dt );
     }
 
     void World::Pause()
@@ -220,6 +167,7 @@ namespace Betomnita::GamePlay
                 break;
             }
         }
+        ASSERT( !m_vehicles.empty(), L"There should be at least one vehicle with id=1 for player to control" );
         for( auto& vehicle : m_vehicles )
         {
             vehicle.Chassis().SetInitialPosition( vehiclesPositions[ vehicle.GetId() ] );
@@ -266,6 +214,32 @@ namespace Betomnita::GamePlay
                                                                                             m_view.Center -= diff;
                                                                                         }
                                                                                     } } );
+    }
+
+    void World::UpdateView( const sf::Time& dt )
+    {
+        auto newScale = m_view.Scale;
+        auto scaleChanged = false;
+        if( sf::Keyboard::isKeyPressed( sf::Keyboard::Equal ) )
+        {
+            scaleChanged = true;
+            newScale *= powf( Resources::ZoomFactor, dt.asSeconds() );
+        }
+        if( sf::Keyboard::isKeyPressed( sf::Keyboard::Hyphen ) )
+        {
+            scaleChanged = true;
+            newScale /= powf( Resources::ZoomFactor, dt.asSeconds() );
+        }
+        if( scaleChanged && newScale >= Resources::ZoomOutLimit && newScale <= Resources::ZoomInLimit )
+        {
+            m_view.Scale = newScale;
+        }
+        {
+            b2MassData data;
+            m_vehicles[ 0 ].Chassis().GetPhysicalBody()->GetMassData( &data );
+            m_view.Center = cast< sf::Vector2f >( m_vehicles[ 0 ].Chassis().GetPhysicalBody()->GetWorldPoint( data.center ) );
+            m_view.Rotation = m_vehicles[ 0 ].Chassis().GetPhysicalBody()->GetAngle();
+        }
     }
 
     void World::InitPhysics()

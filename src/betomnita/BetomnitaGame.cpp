@@ -16,7 +16,7 @@ namespace Betomnita
 {
     BetomnitaGame* BetomnitaGame::s_instance = nullptr;
 
-    BetomnitaGame::BetomnitaGame() : m_stateMachine( std::make_unique< Game::StateMachine< Resources::StateId > >() ), m_cursor( std::make_unique< Cursor >() )
+    BetomnitaGame::BetomnitaGame() : m_stateMachine( std::make_unique< Game::StateMachine< Resources::StateId > >() ), Cursor( std::make_unique< Betomnita::Cursor >() )
     {
         ASSERT( !s_instance, L"There can be only one instance of Betomnita game" );
         s_instance = this;
@@ -48,7 +48,7 @@ namespace Betomnita
     void BetomnitaGame::OnUpdate( const sf::Time& dt )
     {
         const auto& mousePosition = GetMousePosition();
-        m_cursor->SetPosition( mousePosition );
+        Cursor->SetPosition( mousePosition );
         m_stateMachine->OnUpdate( dt );
         Game::EventSystem::Event< Resources::EventId::OnUpdate >::Dispatch< const sf::Time& >( dt );
         GenericGame::OnUpdate( dt );
@@ -57,7 +57,7 @@ namespace Betomnita
     void BetomnitaGame::OnRender( sf::RenderTarget& target )
     {
         m_stateMachine->OnRender( target );
-        m_cursor->Render( target );
+        Cursor->Render( target );
         m_window.display();
 
         Game::EventSystem::Event< Resources::EventId::OnRender >::Dispatch< sf::RenderTarget& >( target );

@@ -1,6 +1,8 @@
 #include "betomnita/gameplay/GamePlayLogic.hpp"
 
 #include "app/Debug.hpp"
+#include "betomnita/BetomnitaGame.hpp"
+#include "betomnita/Cursor.hpp"
 #include "betomnita/gameplay/PrototypeDict.hpp"
 #include "betomnita/gameplay/World.hpp"
 #include "betomnita/resources/Resources.hpp"
@@ -33,11 +35,13 @@ namespace Betomnita::GamePlay
     void GamePlayLogic::Pause()
     {
         m_world->Pause();
+        Betomnita::BetomnitaGame::GetInstance()->Cursor->Show();
     }
 
     void GamePlayLogic::Unpause()
     {
         m_world->Unpause();
+        Betomnita::BetomnitaGame::GetInstance()->Cursor->Hide();
     }
 
     const PrototypeDict& GamePlayLogic::GetPrototypeDict() const

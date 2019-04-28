@@ -20,7 +20,11 @@ namespace Betomnita
             return m_position;
         }
 
+        void Hide();
+        void Show();
+
     private:
+        bool m_shown = true;
         sf::Vector2f m_position;
         std::vector< Game::Graphics::Polygon > m_shape;
     };

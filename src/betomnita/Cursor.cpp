@@ -33,6 +33,11 @@ namespace Betomnita
 
     void Cursor::Render( sf::RenderTarget& target )
     {
+        if( !m_shown )
+        {
+            return;
+        }
+
         for( auto& polygon : m_shape )
         {
             polygon.Render( target );
@@ -41,10 +46,25 @@ namespace Betomnita
 
     void Cursor::SetPosition( const sf::Vector2f& value )
     {
+        if( !m_shown )
+        {
+            return;
+        }
+
         m_position = value;
         for( auto& polygon : m_shape )
         {
             polygon.SetPosition( m_position );
         }
+    }
+
+    void Cursor::Hide()
+    {
+        m_shown = false;
+    }
+
+    void Cursor::Show()
+    {
+        m_shown = true;
     }
 }
