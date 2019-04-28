@@ -257,7 +257,7 @@ namespace Game::Graphics
     }
 
     std::vector< std::vector< sf::Vector2f > > Polygon::Triangulate( const std::vector< sf::Vector2f >& points )
-    {   
+    {
         std::vector< std::vector< sf::Vector2f > > result;
         auto error = GetPointsErrors( points );
         ASSERT( error == Error::NoError, L"There is error in points" );

@@ -61,15 +61,18 @@ namespace Betomnita::GamePlay
     {
         {
             auto newScale = m_view.Scale;
+            auto scaleChanged = false;
             if( sf::Keyboard::isKeyPressed( sf::Keyboard::Equal ) )
             {
-                newScale *= Resources::ZoomFactor;
+                scaleChanged = true;
+                newScale *= powf( Resources::ZoomFactor, dt.asSeconds() );
             }
             if( sf::Keyboard::isKeyPressed( sf::Keyboard::Hyphen ) )
             {
-                newScale /= Resources::ZoomFactor;
+                scaleChanged = true;
+                newScale /= powf( Resources::ZoomFactor, dt.asSeconds() );
             }
-            if( newScale >= Resources::ZoomOutLimit && newScale <= Resources::ZoomInLimit )
+            if( scaleChanged && newScale >= Resources::ZoomOutLimit && newScale <= Resources::ZoomInLimit )
             {
                 m_view.Scale = newScale;
             }

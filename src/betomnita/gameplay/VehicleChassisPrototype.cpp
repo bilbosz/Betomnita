@@ -45,7 +45,11 @@ namespace Betomnita::GamePlay
                         auto polygons = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, doc, node, scale );
                         for( auto& polygon : polygons )
                         {
-                            m_physicalBodyShape.emplace_back( polygon.GetPoints() );
+                            const auto& triangulatedPoints = polygon.GetTriangulatedPoints();
+                            for( const auto& triangle : triangulatedPoints )
+                            {
+                                m_physicalBodyShape.emplace_back( triangle );
+                            }
                         }
                         m_density = node.attribute( "data-density" ).as_float();
                         ASSERT( m_density > 0.0f, L"Density has to be greater than 0" );

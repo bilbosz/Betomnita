@@ -93,10 +93,4 @@
          transform="matrix(1.011875,0,0,1.0089903,0.71412422,-2.022429)"
          data-do-not-draw="true"
          class="shot-direction" />
-    <path
-         style="fill:none;fill-opacity:1;stroke:#00ff00;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="M 51.986328,0 V 312.78711 H 52.003906 L 1.7792969,350.1543 L -0.42773438,531.36133 L 35.837891,545.57617 L 38.443359,574.13672 L 99.894531,574.14844 L 109.99805,545.36914 L 140.37109,524.7207 L 137.55078,359.49219 L 80.601562,312.78711 V 0 H 66.486328 Z"
-         id="path40"
-         inkscape:connector-curvature="0"
-         class="physical-body-shape" />
 </svg>

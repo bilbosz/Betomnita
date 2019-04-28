@@ -38,15 +38,7 @@ namespace Betomnita::GamePlay
             {
                 case 'p':
                 {
-                    if( std::find( classes.begin(), classes.end(), "physical-body-shape" ) != classes.end() )
-                    {
-                        auto polygons = Game::Graphics::Polygon::LoadManyFromSVGNode( filename, doc, node, scale );
-                        for( auto& polygon : polygons )
-                        {
-                            m_physicalBodyShape.emplace_back( polygon.GetPoints() );
-                        }
-                    }
-                    else if( std::find( classes.begin(), classes.end(), "shot-direction" ) != classes.end() )
+                    if( std::find( classes.begin(), classes.end(), "shot-direction" ) != classes.end() )
                     {
                         auto pathDesc = Game::Graphics::SVGHelper::ParsePathDescriptions( node.attribute( "d" ).as_string() );
                         ASSERT( pathDesc.size() == 1 && pathDesc[ 0 ].size() == 2, L"Shot direction should have only 2 points" );

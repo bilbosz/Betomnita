@@ -79,6 +79,7 @@ namespace Game::Graphics
         static bool IsRightDirection( const PointsVector& points );
 
         static std::vector< std::vector< sf::Vector2f > > Triangulate( const std::vector< sf::Vector2f >& points );
+        std::vector< std::vector< sf::Vector2f > > GetTriangulatedPoints() const;
 
     private:
         static float GetAngle( const Point& previousVertex, const Point& currentVertex, const Point& nextVertex );
@@ -98,7 +99,6 @@ namespace Game::Graphics
         void ReversePoints();
         void CalculateAABB();
 
-        std::vector< std::vector< sf::Vector2f > > GetTriangulatedPoints() const;
 
         PointsVector m_points;
         sf::Color m_color;

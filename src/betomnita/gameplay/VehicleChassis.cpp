@@ -30,22 +30,6 @@ namespace Betomnita::GamePlay
         {
             polygon.Render( target, r );
         }
-        static Game::Graphics::Text text;
-        static bool inited = false;
-        if( !inited )
-        {
-            inited = true;
-            text.SetLineHeight( 0.05f );
-            text.SetFont( *Resources::DebugFont );
-            text.SetColor( sf::Color::Red );
-            text.SetPosition( { 0.0f, 0.0f } );
-        }
-        auto& v = m_physicalBody->GetLinearVelocity();
-        std::wostringstream out;
-        out << hypotf( v.x, v.y ) * 3.6f;
-        text.SetString( out.str() );
-        out.clear();
-        text.Render( target );
     }
 
     void VehicleChassis::Update( const sf::Time& dt )

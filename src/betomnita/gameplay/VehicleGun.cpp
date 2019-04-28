@@ -48,7 +48,6 @@ namespace Betomnita::GamePlay
         const auto& gunPrototype = static_cast< const VehicleGunPrototype& >( prototype );
         m_shape = gunPrototype.m_shape;
         m_gunRotator = gunPrototype.m_gunRotator;
-        m_physicalBodyShape = gunPrototype.m_physicalBodyShape;
         m_shotDirection = gunPrototype.m_shotDirection;
     }
 
