@@ -57,14 +57,14 @@
     </metadata>
     <path
          transform="rotate(-0.97740115,-1411.6281,5412.3061)"
-         style="fill:#999999;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="M 138.77951,338.49523 L 87.923729,375 L 82.627119,556.14407 L 118.64407,570.97458 L 120.76271,599.57627 L 182.20339,600.63559 L 192.79661,572.0339 L 223.51695,551.90678 V 386.65254 L 167.37288,338.98305 Z"
          id="path42"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="ccccccccccc" />
     <path
          transform="rotate(-0.97740115,-1411.6281,5412.3061)"
-         style="fill:#c9cecc;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="fill:#383838;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="M 118.64407,570.97458 L 137.71186,556.14407 L 180.08475,558.26271 L 192.79661,572.0339 L 182.20339,600.63559 L 120.76271,599.57627 Z"
          id="path50"
          inkscape:connector-curvature="0"
@@ -81,7 +81,7 @@
          class="gun-rotator" />
     <path
          transform="matrix(0.35499739,0,0,1.6505483,15.33671,-107.62374)"
-         style="opacity:1;fill:#808080;fill-opacity:1;stroke:none;stroke-width:1.30639136;stroke-opacity:1"
+         style="opacity:1;fill:#444444;fill-opacity:1;stroke:none;stroke-width:1.30639136;stroke-opacity:1"
          d="M 103.23759,65.204842 H 183.84776 V 254.70947 H 103.23759 Z"
          id="rect4562"
          inkscape:connector-curvature="0" />
