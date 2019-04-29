@@ -5,6 +5,7 @@
 #include "betomnita/gameplay/GamePlayLogic.hpp"
 #include "betomnita/gameplay/PhysicalBody.hpp"
 #include "betomnita/gameplay/PrototypeDict.hpp"
+#include "betomnita/gameplay/StaticObstacle.hpp"
 #include "betomnita/gameplay/Terrain.hpp"
 #include "betomnita/resources/Resources.hpp"
 #include "game/GenericGame.hpp"
@@ -47,6 +48,10 @@ namespace Betomnita::GamePlay
     void World::Render( sf::RenderTarget& target )
     {
         auto transform = m_view.GetTransform();
+        for( auto& staticObstacle : m_staticObstacles )
+        {
+            staticObstacle->Render( target, transform );
+        }
         for( auto& terrain : m_terrainSheets )
         {
             terrain->Render( target, transform );
@@ -119,6 +124,11 @@ namespace Betomnita::GamePlay
                     {
                         auto& terrain = m_terrainSheets.emplace_back( std::make_unique< Terrain >( this ) );
                         terrain->LoadFromSVGNode( filename, def, node, scale );
+                    }
+                    else if( std::find( classes.begin(), classes.end(), "static-obstacle" ) != classes.end() )
+                    {
+                        auto& staticObstacle = m_staticObstacles.emplace_back( std::make_unique< StaticObstacle >( this ) );
+                        staticObstacle->LoadFromSVGNode( filename, def, node, scale );
                     }
                 }
                 break;

@@ -17,6 +17,7 @@ namespace Betomnita::GamePlay
     class GamePlayLogic;
     class VehicleChassis;
     class Vehicle;
+    class StaticObstacle;
 
     class World final
     {
@@ -46,6 +47,7 @@ namespace Betomnita::GamePlay
         std::vector< std::unique_ptr< Terrain > > m_terrainSheets;
         GamePlayLogic* m_currentLogic;
         std::vector< Vehicle > m_vehicles;
+        std::vector< std::unique_ptr< StaticObstacle > > m_staticObstacles;
 
         b2World m_physicsWorld;
         Game::Graphics::View m_view;

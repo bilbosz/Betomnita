@@ -25,7 +25,6 @@ namespace Betomnita::GamePlay
         void UpdatePhysics();
         void UpdateTransformation();
 
-
         void AssignVehicle( Vehicle* vehicle );
 
         void SetInitialPosition( const sf::Vector2f& value )
