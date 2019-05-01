@@ -48,13 +48,13 @@ namespace Betomnita::GamePlay
     void World::Render( sf::RenderTarget& target )
     {
         auto transform = m_view.GetTransform();
-        for( auto& staticObstacle : m_staticObstacles )
-        {
-            staticObstacle->Render( target, transform );
-        }
         for( auto& terrain : m_terrainSheets )
         {
             terrain->Render( target, transform );
+        }
+        for( auto& staticObstacle : m_staticObstacles )
+        {
+            staticObstacle->Render( target, transform );
         }
         for( auto& vehicle : m_vehicles )
         {
@@ -254,6 +254,10 @@ namespace Betomnita::GamePlay
 
     void World::InitPhysics()
     {
+        for( auto& staticObstacle : m_staticObstacles )
+        {
+            staticObstacle->InitPhysics();
+        }
         for( auto& vehicle : m_vehicles )
         {
             vehicle.InitPhysics();
