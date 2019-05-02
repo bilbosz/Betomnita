@@ -74,7 +74,6 @@ namespace Betomnita::States
 
     void GamePlayState::OnRender( sf::RenderTarget& target )
     {
-        target.clear();
         m_logic->Render( target );
         State::OnRender( target );
     }

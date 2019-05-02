@@ -5,6 +5,7 @@
 
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
+#include <optional>
 #include <vector>
 
 namespace Betomnita::GamePlay
@@ -48,6 +49,7 @@ namespace Betomnita::GamePlay
         GamePlayLogic* m_currentLogic;
         std::vector< Vehicle > m_vehicles;
         std::vector< std::unique_ptr< StaticObstacle > > m_staticObstacles;
+        std::optional< sf::Color > m_backgroundColor;
 
         b2World m_physicsWorld;
         Game::Graphics::View m_view;

@@ -47,6 +47,10 @@ namespace Betomnita::GamePlay
 
     void World::Render( sf::RenderTarget& target )
     {
+        if( m_backgroundColor.has_value() )
+        {
+            target.clear( m_backgroundColor.value() );
+        }
         auto transform = m_view.GetTransform();
         for( auto& terrain : m_terrainSheets )
         {
@@ -100,11 +104,14 @@ namespace Betomnita::GamePlay
             scale = scaleAttr.as_float( scale );
         }
 
-        auto physicalScale = 1.0f;
-        auto physicalScaleAttr = svgNode.attribute( "data-physical-scale" );
-        if( physicalScaleAttr )
+        auto backgroundColorAttr = svgNode.attribute( "data-background-color" );
+        if( backgroundColorAttr )
         {
-            physicalScale = physicalScaleAttr.as_float( physicalScale );
+            sf::Uint32 color;
+            std::stringstream formatter;
+            formatter << backgroundColorAttr.as_string();
+            formatter >> std::hex >> color;
+            m_backgroundColor = sf::Color( color );
         }
 
         std::map< int, sf::Vector2f > vehiclesPositions;
