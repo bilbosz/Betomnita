@@ -2,6 +2,7 @@
 
 #include "app/Debug.hpp"
 #include "betomnita/event/EventRegistration.hpp"
+#include "betomnita/gameplay/DynamicObstacle.hpp"
 #include "betomnita/gameplay/GamePlayLogic.hpp"
 #include "betomnita/gameplay/PhysicalBody.hpp"
 #include "betomnita/gameplay/PrototypeDict.hpp"
@@ -60,6 +61,10 @@ namespace Betomnita::GamePlay
         {
             staticObstacle->Render( target, transform );
         }
+        for( auto& dynamicObstacle : m_dynamicObstacles )
+        {
+            dynamicObstacle->Render( target, transform );
+        }
         for( auto& vehicle : m_vehicles )
         {
             vehicle.second.Render( target, transform );
@@ -68,6 +73,10 @@ namespace Betomnita::GamePlay
 
     void World::Update( const sf::Time& dt )
     {
+        for( auto& dynamicObstacle : m_dynamicObstacles )
+        {
+            dynamicObstacle->Update( dt );
+        }
         for( auto& vehicle : m_vehicles )
         {
             vehicle.second.Update( dt );
@@ -134,6 +143,11 @@ namespace Betomnita::GamePlay
                     {
                         auto& staticObstacle = m_staticObstacles.emplace_back( std::make_unique< StaticObstacle >( this ) );
                         staticObstacle->LoadFromSVGNode( filename, def, node, scale );
+                    }
+                    else if( std::find( classes.begin(), classes.end(), "dynamic-obstacle" ) != classes.end() )
+                    {
+                        auto& dynamicObstacle = m_dynamicObstacles.emplace_back( std::make_unique< DynamicObstacle >( this ) );
+                        dynamicObstacle->LoadFromSVGNode( filename, def, node, scale );
                     }
                 }
                 break;
@@ -256,6 +270,10 @@ namespace Betomnita::GamePlay
         for( auto& staticObstacle : m_staticObstacles )
         {
             staticObstacle->InitPhysics();
+        }
+        for( auto& dynamicObstacle : m_dynamicObstacles )
+        {
+            dynamicObstacle->InitPhysics();
         }
         for( auto& vehicle : m_vehicles )
         {

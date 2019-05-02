@@ -8,6 +8,7 @@
 #include "game/GameConsts.hpp"
 #include "game/graphics/Polygon.hpp"
 #include "game/graphics/Text.hpp"
+#include "game/utils/Utils.hpp"
 
 #include "Box2D/Box2D.h"
 
@@ -85,12 +86,9 @@ namespace Betomnita::GamePlay
 
     void VehicleChassis::UpdateTransformation()
     {
-        float angle = m_physicalBody->GetAngle();
-        auto pos = m_physicalBody->GetPosition();
-        sf::Vector2f position( pos.x, pos.y );
         m_transform = sf::Transform::Identity;
-        m_transform.translate( position );
-        m_transform.rotate( angle * Game::Consts::RadToDeg );
+        m_transform.translate( Game::Utils::cast< sf::Vector2f >( m_physicalBody->GetPosition() ) );
+        m_transform.rotate( m_physicalBody->GetAngle() * Game::Consts::RadToDeg );
     }
 
     void VehicleChassis::AssignVehicle( Vehicle* vehicle )

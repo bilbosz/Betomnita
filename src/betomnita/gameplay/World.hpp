@@ -19,6 +19,7 @@ namespace Betomnita::GamePlay
     class VehicleChassis;
     class Vehicle;
     class StaticObstacle;
+    class DynamicObstacle;
 
     class World final
     {
@@ -49,6 +50,7 @@ namespace Betomnita::GamePlay
         GamePlayLogic* m_currentLogic;
         std::map< int, Vehicle > m_vehicles;
         std::vector< std::unique_ptr< StaticObstacle > > m_staticObstacles;
+        std::vector< std::unique_ptr< DynamicObstacle > > m_dynamicObstacles;
         std::optional< sf::Color > m_backgroundColor;
 
         b2World m_physicsWorld;
