@@ -47,7 +47,7 @@ namespace Betomnita::GamePlay
     private:
         std::vector< std::unique_ptr< Terrain > > m_terrainSheets;
         GamePlayLogic* m_currentLogic;
-        std::vector< Vehicle > m_vehicles;
+        std::map< int, Vehicle > m_vehicles;
         std::vector< std::unique_ptr< StaticObstacle > > m_staticObstacles;
         std::optional< sf::Color > m_backgroundColor;
 

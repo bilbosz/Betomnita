@@ -54,7 +54,7 @@ namespace Betomnita::GamePlay
         bodyDef.position.Set( m_initialPosition.x, m_initialPosition.y );
         bodyDef.allowSleep = false;
 
-        auto& physicsWorld = m_vehicle->World()->PhysicsWorld();
+        auto& physicsWorld = m_vehicle->World->PhysicsWorld();
         m_physicalBody = physicsWorld.CreateBody( &bodyDef );
 
         b2PolygonShape shape;

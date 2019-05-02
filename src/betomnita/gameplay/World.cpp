@@ -62,7 +62,7 @@ namespace Betomnita::GamePlay
         }
         for( auto& vehicle : m_vehicles )
         {
-            vehicle.Render( target, transform );
+            vehicle.second.Render( target, transform );
         }
     }
 
@@ -70,7 +70,7 @@ namespace Betomnita::GamePlay
     {
         for( auto& vehicle : m_vehicles )
         {
-            vehicle.Update( dt );
+            vehicle.second.Update( dt );
         }
         m_physicsWorld.Step( dt.asSeconds(), 8, 3 );
         UpdateView( dt );
@@ -113,8 +113,6 @@ namespace Betomnita::GamePlay
             formatter >> std::hex >> color;
             m_backgroundColor = sf::Color( color );
         }
-
-        std::map< int, sf::Vector2f > vehiclesPositions;
 
         auto& elems = svgNode.select_nodes( "//path | //image" );
         for( auto& elem : elems )
@@ -159,22 +157,20 @@ namespace Betomnita::GamePlay
 
                     const auto& prototype = m_currentLogic->GetPrototypeDict().GetPrototypeByName( normalizedHref );
 
-                    auto it = std::lower_bound( m_vehicles.begin(), m_vehicles.end(), unitId, []( const Vehicle& vehicle, int id ) { return vehicle.GetId() < id; } );
-                    if( it == m_vehicles.end() || it->GetId() != unitId )
-                    {
-                        it = m_vehicles.emplace( it, this );
-                        it->SetId( unitId );
-                    }
+                    auto it = m_vehicles.emplace( unitId, Vehicle{} );
+                    auto& vehicle = it.first->second;
+                    vehicle.SetId( unitId );
+                    vehicle.World = this;
                     switch( prototype.GetType() )
                     {
                         case Prototype::Type::Chassis:
-                            it->Chassis().AssignVehicle( &*it );
-                            it->Chassis().LoadFromPrototype( prototype );
-                            vehiclesPositions[ unitId ] = transform.transformPoint( 0.0f, 0.0f );
+                            vehicle.Chassis.AssignVehicle( &vehicle );
+                            vehicle.Chassis.LoadFromPrototype( prototype );
+                            vehicle.Chassis.SetInitialPosition( transform.transformPoint( 0.0f, 0.0f ) );
                             break;
                         case Prototype::Type::Gun:
-                            it->Gun().AssignVehicle( &*it );
-                            it->Gun().LoadFromPrototype( prototype );
+                            vehicle.Gun.AssignVehicle( &vehicle );
+                            vehicle.Gun.LoadFromPrototype( prototype );
                             break;
                         default:
                             ASSERT( false, L"Wrong prototype type" );
@@ -185,10 +181,6 @@ namespace Betomnita::GamePlay
             }
         }
         ASSERT( !m_vehicles.empty(), L"There should be at least one vehicle with id=1 for player to control" );
-        for( auto& vehicle : m_vehicles )
-        {
-            vehicle.Chassis().SetInitialPosition( vehiclesPositions[ vehicle.GetId() ] );
-        }
         m_size.Init( m_terrainSheets[ 0 ]->GetAABB() );
         for( const auto& terrain : m_terrainSheets )
         {
@@ -253,9 +245,9 @@ namespace Betomnita::GamePlay
         }
         {
             b2MassData data;
-            m_vehicles[ 0 ].Chassis().GetPhysicalBody()->GetMassData( &data );
-            m_view.Center = cast< sf::Vector2f >( m_vehicles[ 0 ].Chassis().GetPhysicalBody()->GetWorldPoint( data.center ) );
-            m_view.Rotation = m_vehicles[ 0 ].Chassis().GetPhysicalBody()->GetAngle();
+            m_vehicles[ 1 ].Chassis.GetPhysicalBody()->GetMassData( &data );
+            m_view.Center = cast< sf::Vector2f >( m_vehicles[ 1 ].Chassis.GetPhysicalBody()->GetWorldPoint( data.center ) );
+            m_view.Rotation = m_vehicles[ 1 ].Chassis.GetPhysicalBody()->GetAngle();
         }
     }
 
@@ -267,7 +259,7 @@ namespace Betomnita::GamePlay
         }
         for( auto& vehicle : m_vehicles )
         {
-            vehicle.InitPhysics();
+            vehicle.second.InitPhysics();
         }
     }
 }

@@ -15,10 +15,9 @@ namespace Betomnita::GamePlay
     class Vehicle
     {
     public:
-        explicit Vehicle( World* world );
+        Vehicle();
         bool operator<( const Vehicle& other ) const
         {
-            ASSERT( m_id >= 0 && other.m_id >= 0, L"Id should be non-negative number" );
             return m_id < other.m_id;
         }
 
@@ -29,22 +28,19 @@ namespace Betomnita::GamePlay
 
         int GetId() const
         {
-            ASSERT( m_id >= 0, L"Id should be non-negative number" );
             return m_id;
         }
         void SetId( int value )
         {
             m_id = value;
+            ASSERT( m_id >= 0, L"Id should be non-negative number" );
         }
 
-        VehicleChassis& Chassis();
-        VehicleGun& Gun();
-        GamePlay::World* World();
+        VehicleChassis Chassis;
+        VehicleGun Gun;
+        GamePlay::World* World;
 
     private:
-        GamePlay::World* m_world;
         int m_id = -1;
-        VehicleChassis m_chassis;
-        VehicleGun m_gun;
     };
 }

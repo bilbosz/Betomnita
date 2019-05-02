@@ -4,27 +4,27 @@
 
 namespace Betomnita::GamePlay
 {
-    Vehicle::Vehicle( GamePlay::World* world ) : m_world( world )
+    Vehicle::Vehicle()
     {
     }
 
     void Vehicle::InitPhysics()
     {
-        Chassis().InitPhysics();
-        Gun().InitPhysics();
+        Chassis.InitPhysics();
+        Gun.InitPhysics();
     }
 
     void Vehicle::Render( sf::RenderTarget& target, const sf::Transform& transform )
     {
-        m_chassis.Render( target, transform );
-        m_gun.Render( target, transform );
+        Chassis.Render( target, transform );
+        Gun.Render( target, transform );
     }
 
     void Vehicle::Update( const sf::Time& dt )
     {
         if( m_id == 1 )
         {
-            auto physicalBody = m_chassis.GetPhysicalBody();
+            auto physicalBody = Chassis.GetPhysicalBody();
             float impulse = 370'000.0f * dt.asSeconds();
             auto angle = physicalBody->GetAngle() + Game::Consts::Pi * 0.5f;
             if( sf::Keyboard::isKeyPressed( sf::Keyboard::W ) )
@@ -50,29 +50,14 @@ namespace Betomnita::GamePlay
             }
             if( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) )
             {
-                m_gun.SetDirection( m_gun.GetDirection() - 1.0f * dt.asSeconds() );
+                Gun.SetDirection( Gun.GetDirection() - 1.0f * dt.asSeconds() );
             }
             if( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) )
             {
-                m_gun.SetDirection( m_gun.GetDirection() + 1.0f * dt.asSeconds() );
+                Gun.SetDirection( Gun.GetDirection() + 1.0f * dt.asSeconds() );
             }
         }
-        m_chassis.Update( dt );
-        m_gun.Update( dt );
-    }
-
-    VehicleChassis& Vehicle::Chassis()
-    {
-        return m_chassis;
-    }
-
-    VehicleGun& Vehicle::Gun()
-    {
-        return m_gun;
-    }
-
-    GamePlay::World* Vehicle::World()
-    {
-        return m_world;
+        Chassis.Update( dt );
+        Gun.Update( dt );
     }
 }

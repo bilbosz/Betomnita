@@ -34,7 +34,7 @@ namespace Betomnita::GamePlay
     {
         m_transform = sf::Transform::Identity;
 
-        auto& chassis = m_vehicle->Chassis();
+        auto& chassis = m_vehicle->Chassis;
         auto chassisBody = chassis.GetPhysicalBody();
         auto chassisAngle = chassisBody->GetAngle();
 
@@ -53,7 +53,7 @@ namespace Betomnita::GamePlay
 
     void VehicleGun::InitPhysics()
     {
-        auto& chassis = m_vehicle->Chassis();
+        auto& chassis = m_vehicle->Chassis;
         auto chassisBody = chassis.GetPhysicalBody();
         auto chassisPosition = chassisBody->GetPosition();
         m_position = cast< sf::Vector2f >( chassisPosition ) + chassis.GetGunRotatorSlot() - m_gunRotator;
