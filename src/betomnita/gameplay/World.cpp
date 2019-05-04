@@ -87,16 +87,16 @@ namespace Betomnita::GamePlay
 
     void World::Pause()
     {
-        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::StartMoveWorld ).IsEnabled = false;
-        Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::GetListener( Resources::ListenerId::StopMoveWorld ).IsEnabled = false;
-        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::MoveWorld ).IsEnabled = false;
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::DisableListener( Resources::ListenerId::StartMoveWorld );
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::DisableListener( Resources::ListenerId::StopMoveWorld );
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::DisableListener( Resources::ListenerId::MoveWorld );
     }
 
     void World::Unpause()
     {
-        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::StartMoveWorld ).IsEnabled = true;
-        Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::GetListener( Resources::ListenerId::StopMoveWorld ).IsEnabled = true;
-        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::MoveWorld ).IsEnabled = true;
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::EnableListener( Resources::ListenerId::StartMoveWorld );
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::EnableListener( Resources::ListenerId::StopMoveWorld );
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::EnableListener( Resources::ListenerId::MoveWorld );
     }
 
     void World::LoadFromFile( const std::string& filename )

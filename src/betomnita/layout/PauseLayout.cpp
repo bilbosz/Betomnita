@@ -70,6 +70,14 @@ namespace Betomnita::Layouts
                      option.Control->SetColor( aabb.contains( pos ) ? Resources::MenuEntrySelected : Resources::MenuEntryNormal );
                  }
              } } );
+
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::AddListener(
+            { Resources::ListenerId::PauseMenuLeave, false, [this]( const sf::Event::KeyEvent& key ) {
+                 if( key.code == sf::Keyboard::Escape )
+                 {
+                     m_state->OnResumeRequest();
+                 }
+             } } );
     }
 
     PauseLayout::~PauseLayout()
@@ -85,14 +93,16 @@ namespace Betomnita::Layouts
             auto aabb = sf::FloatRect( ctrl->GetPosition(), ctrl->GetSize() );
             option.Control->SetColor( aabb.contains( pos ) ? Resources::MenuEntrySelected : Resources::MenuEntryNormal );
         }
-        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::PauseMenuClick ).IsEnabled = true;
-        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::PauseMenuHover ).IsEnabled = true;
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::EnableListener( Resources::ListenerId::PauseMenuClick );
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::EnableListener( Resources::ListenerId::PauseMenuHover );
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::EnableListener( Resources::ListenerId::PauseMenuLeave );
     }
 
     void PauseLayout::Hide()
     {
-        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::PauseMenuClick ).IsEnabled = false;
-        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::PauseMenuHover ).IsEnabled = false;
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::DisableListener( Resources::ListenerId::PauseMenuClick );
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::DisableListener( Resources::ListenerId::PauseMenuHover );
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::DisableListener( Resources::ListenerId::PauseMenuLeave );
         for( auto& option : m_options )
         {
             option.Control->SetColor( Resources::MenuEntryNormal );

@@ -122,21 +122,21 @@
         <image
              sodipodi:absref="C:\repo\betomnita\res\worlds\1\../../vehicles/chassis/t34.svg"
              xlink:href="../../vehicles/chassis/t34.svg"
-             id="image59"
-             preserveAspectRatio="none"
-             transform="translate(320,280)"
-             style="opacity:1"
+             data-unit="1"
              data-player="1"
-             data-unit="1" />
+             style="opacity:1"
+             transform="translate(320,280)"
+             preserveAspectRatio="none"
+             id="image59" />
         <image
              sodipodi:absref="C:\repo\betomnita\res\worlds\1\../../vehicles/guns/single-tank-gun.svg"
              xlink:href="../../vehicles/guns/single-tank-gun.svg"
-             style="display:inline;opacity:1;shape-rendering:crispEdges"
-             id="image59-2"
-             preserveAspectRatio="none"
-             transform="translate(400.6946,83.91141)"
+             data-unit="1"
              data-player="1"
-             data-unit="1" />
+             transform="translate(400.6946,83.91141)"
+             preserveAspectRatio="none"
+             id="image59-2"
+             style="display:inline;opacity:1;shape-rendering:crispEdges" />
         <path
              style="fill:#4a4a4a;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
              d="M -7141.7773,-8758.0723 V 7929.6484 H 13894.646 V -3755.2402 L 11293.273,-3754.1348 L 11324.998,-3718.75 L 10893.748,-2362.5 L 11012.498,-825 L 10499.998,1575 L 9143.75,2906.25 L 8675,4062.5 L 7062.5,5375 L 6109.375,5456.25 L 5454.1016,5522.6562 L 5238.1602,5552.0508 L 5156.25,5575 L 5095.2891,5524.9023 L 4934.5703,5361.7188 L 4446.875,4843.75 L 3737.5,4075 L 2750,3856.25 L 1768.75,4187.5 L -425,5781.25 L -841.40625,5782.0312 L -1281.25,5768.75 L -1456.418,5774.8711 L -1812.1406,5806.6094 L -2326.541,5859.2051 L -2328.125,5859.375 L -2387.4766,5731.9023 L -2551.7441,5437.1855 L -2956.25,4706.25 L -3631.25,4731.25 L -3831.25,4281.25 L -3787.5,4062.5 L -3975,3843.75 L -4331.25,3487.5 L -4306.25,3125 L -3831.25,2625 L -3975,2406.25 L -4112.5,2000 L -4100,1781.25 L -3806.25,0 L -3975,-468.75 L -3831.25,-375 L -3756.25,-512.5 L -3881.25,-687.5 L -4018.75,-875 L -4112.5,-2762.5 L -4412.5,-4012.5 L -4693.75,-4906.25 L -4331.25,-6437.5 L -3693.75,-6937.5 L -1662.5,-7218.75 L -331.25,-6575 L 618.75,-7012.5 L 1493.75,-7143.75 L 1868.75,-7362.5 L 3725,-7187.5 H 4475 L 5368.75,-6968.75 L 5493.75,-7062.5 L 5931.25,-6968.75 L 8187.5,-6293.75 L 8573.4375,-6314.8438 L 8841.4062,-6322.7539 L 8968.75,-6312.5 L 9190.8203,-6180.1758 L 9667.1855,-5919.5312 L 10356.248,-5550 L 10999.998,-4081.25 L 11292.236,-3755.293 H 13894.646 V -8758.0723 Z"
@@ -144,11 +144,13 @@
              class="static-obstacle"
              inkscape:connector-curvature="0" />
         <path
-             style="opacity:1;fill:#804d00;fill-opacity:1;stroke:none;stroke-opacity:1"
+             style="opacity:0.7;fill:#804d00;fill-opacity:1;stroke:none;stroke-width:2;stroke-opacity:1"
              d="M 2336,-3160 H 2976 V -2520 H 2336 Z"
              id="rect824"
              inkscape:connector-curvature="0"
              class="dynamic-obstacle"
-             data-density="2400" />
+             data-density="500"
+             transform="matrix(0.34210138,-0.36464592,0.36464592,0.34210138,641.13228,-2147.9325)"
+             inkscape:transform-center-y="32" />
     </g>
 </svg>

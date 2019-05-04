@@ -11,15 +11,15 @@ namespace Betomnita::States
 {
     GamePlayState::GamePlayState() : State( Resources::StateId::GamePlay )
     {
-        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::AddListener(
-            { Resources::ListenerId::PauseRequest, false, [this]( const sf::Event::KeyEvent& key ) {
-                 switch( key.code )
-                 {
-                     case sf::Keyboard::Key::Escape:
-                         BetomnitaGame::GetInstance()->GetStateMachine()->PushState( Resources::StateId::Pause );
-                         break;
-                 }
-             } } );
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::AddListener( { Resources::ListenerId::PauseRequest, false, []( const sf::Event::KeyEvent& key ) {
+                                                                                        switch( key.code )
+                                                                                        {
+                                                                                            case sf::Keyboard::Key::Escape:
+                                                                                                BetomnitaGame::GetInstance()->GetStateMachine()->PushState(
+                                                                                                    Resources::StateId::Pause );
+                                                                                                break;
+                                                                                        }
+                                                                                    } } );
     }
 
     GamePlayState::~GamePlayState()
@@ -51,7 +51,7 @@ namespace Betomnita::States
 
     void GamePlayState::OnForeground()
     {
-        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::GetListener( Resources::ListenerId::PauseRequest ).IsEnabled = true;
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::EnableListener( Resources::ListenerId::PauseRequest );
         m_logic->Unpause();
         State::OnForeground();
     }
@@ -59,7 +59,7 @@ namespace Betomnita::States
     void GamePlayState::OnBackground()
     {
         m_logic->Pause();
-        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::GetListener( Resources::ListenerId::PauseRequest ).IsEnabled = false;
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::DisableListener( Resources::ListenerId::PauseRequest );
         State::OnBackground();
     }
 

@@ -65,14 +65,14 @@ namespace Betomnita::Layouts
 
     void MainMenuLayout::Show()
     {
-        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::MainMenuClick ).IsEnabled = true;
-        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::MainMenuHover ).IsEnabled = true;
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::EnableListener( Resources::ListenerId::MainMenuClick );
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::EnableListener( Resources::ListenerId::MainMenuHover );
     }
 
     void MainMenuLayout::Hide()
     {
-        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::GetListener( Resources::ListenerId::MainMenuClick ).IsEnabled = false;
-        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::GetListener( Resources::ListenerId::MainMenuHover ).IsEnabled = false;
+        Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::DisableListener( Resources::ListenerId::MainMenuClick );
+        Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::DisableListener( Resources::ListenerId::MainMenuHover );
         for( auto& option : m_options )
         {
             option.Control->SetColor( Resources::MenuEntryNormal );
