@@ -11,6 +11,7 @@ namespace Betomnita::GamePlay
             Invalid = -1,
             Chassis,
             Gun,
+            Projectile,
             Size,
         };
 

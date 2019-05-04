@@ -1,6 +1,7 @@
 #include "betomnita/gameplay/PrototypeDict.hpp"
 
 #include "app/Debug.hpp"
+#include "betomnita/gameplay/ProjectilePrototype.hpp"
 #include "betomnita/gameplay/VehicleChassisPrototype.hpp"
 #include "betomnita/gameplay/VehicleGunPrototype.hpp"
 
@@ -14,6 +15,7 @@ namespace Betomnita::GamePlay
         std::unordered_map< std::string, Prototype::Type > directoryTypeMap;
         directoryTypeMap[ "vehicles/chassis" ] = Prototype::Type::Chassis;
         directoryTypeMap[ "vehicles/guns" ] = Prototype::Type::Gun;
+        directoryTypeMap[ "vehicles/projectiles" ] = Prototype::Type::Projectile;
 
         std::filesystem::path root( dirPath );
 
@@ -32,6 +34,9 @@ namespace Betomnita::GamePlay
                         break;
                     case Prototype::Type::Gun:
                         prototype = std::make_unique< VehicleGunPrototype >();
+                        break;
+                    case Prototype::Type::Projectile:
+                        prototype = std::make_unique< ProjectilePrototype >();
                         break;
                     default:
                         CHECK( false );
