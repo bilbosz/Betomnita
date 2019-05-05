@@ -41,6 +41,7 @@ namespace Betomnita::GamePlay
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::RemoveListener( Resources::ListenerId::StopMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::RemoveListener( Resources::ListenerId::MoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::RemoveListener( Resources::ListenerId::Shot );
+        m_projectiles.clear();
     }
 
     void World::Init()
@@ -109,11 +110,8 @@ namespace Betomnita::GamePlay
         {
             vehicle.second.Update( dt );
         }
-
-        if( std::find_if( m_projectiles.begin(), m_projectiles.end(), []( auto& projectile ) { return projectile->IsSetToDestroy(); } ) != m_projectiles.end() )
-        {
-            m_projectiles.erase( std::remove_if( m_projectiles.begin(), m_projectiles.end(), []( auto& projectile ) { return projectile->IsSetToDestroy(); } ) );
-        }
+        m_projectiles.erase(
+            std::remove_if( m_projectiles.begin(), m_projectiles.end(), []( auto& projectile ) { return projectile->IsSetToDestroy(); } ), m_projectiles.end() );
         for( auto& projectile : m_projectiles )
         {
             projectile->Update( dt );
