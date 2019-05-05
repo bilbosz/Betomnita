@@ -47,6 +47,7 @@ namespace Betomnita::Resources
         StartMoveWorld,
         StopMoveWorld,
         PauseMenuLeave,
+        Shot,
         Size,
     };
 

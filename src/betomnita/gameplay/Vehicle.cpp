@@ -1,6 +1,11 @@
 #include "betomnita/gameplay/Vehicle.hpp"
 
+#include "betomnita/gameplay/GamePlayLogic.hpp"
+#include "betomnita/gameplay/Projectile.hpp"
+#include "betomnita/gameplay/ProjectilePrototype.hpp"
+#include "betomnita/gameplay/PrototypeDict.hpp"
 #include "betomnita/gameplay/World.hpp"
+#include "game/utils/Utils.hpp"
 
 namespace Betomnita::GamePlay
 {
@@ -59,5 +64,29 @@ namespace Betomnita::GamePlay
         }
         Chassis.Update( dt );
         Gun.Update( dt );
+    }
+
+    void Vehicle::Shot()
+    {
+        auto projectile = World->AddProjectile( std::make_unique< Projectile >() );
+        projectile->LoadFromPrototype( World->GetCurrentLogic()->GetPrototypeDict().GetPrototypeByName( "res/vehicles/projectiles/armor-piercing.svg" ) );
+        projectile->AssignShooter( this );
+        projectile->World = World;
+
+        float angle = Chassis.GetPhysicalBody()->GetAngle() + Gun.GetDirection();
+        float force = 15'000'000.0f;
+
+        sf::Transform t;
+        t.rotate( angle * Game::Consts::RadToDeg );
+        projectile->SetInitialPosition( Gun.GetShotDirection().Destination - t.transformPoint( projectile->GetShotDirection().Source ) );
+
+        projectile->SetInitialAngle( angle );
+
+        projectile->InitPhysics();
+
+        angle += Game::Consts::Pi * 0.5f;
+        projectile->GetPhysicalBody()->ApplyForceToCenter( b2Vec2( -force * cosf( angle ), -force * sinf( angle ) ), true );
+
+        projectile->GetPhysicalBody();
     }
 }

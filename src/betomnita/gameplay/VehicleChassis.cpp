@@ -10,7 +10,7 @@
 #include "game/graphics/Text.hpp"
 #include "game/utils/Utils.hpp"
 
-#include "Box2D/Box2D.h"
+#include <Box2D/Box2D.h>
 
 namespace Betomnita::GamePlay
 {
@@ -87,7 +87,7 @@ namespace Betomnita::GamePlay
     void VehicleChassis::UpdateTransformation()
     {
         m_transform = sf::Transform::Identity;
-        m_transform.translate( Game::Utils::cast< sf::Vector2f >( m_physicalBody->GetPosition() ) );
+        m_transform.translate( Game::Utils::Cast< sf::Vector2f >( m_physicalBody->GetPosition() ) );
         m_transform.rotate( m_physicalBody->GetAngle() * Game::Consts::RadToDeg );
     }
 

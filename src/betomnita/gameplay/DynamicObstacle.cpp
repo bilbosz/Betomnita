@@ -23,7 +23,7 @@ namespace Betomnita::GamePlay
     void DynamicObstacle::Update( const sf::Time& dt )
     {
         m_transform = sf::Transform::Identity;
-        m_transform.translate( Game::Utils::cast< sf::Vector2f >( m_physicalBody->GetPosition() ) );
+        m_transform.translate( Game::Utils::Cast< sf::Vector2f >( m_physicalBody->GetPosition() ) );
         m_transform.rotate( m_physicalBody->GetAngle() * Game::Consts::RadToDeg );
     }
 

@@ -12,7 +12,7 @@ namespace Betomnita::GamePlay
     class World;
     class Prototype;
     class Unit;
-    class VechicleChassis;
+    class VehicleChassis;
     class PrototypeDict;
 
     class GamePlayLogic final

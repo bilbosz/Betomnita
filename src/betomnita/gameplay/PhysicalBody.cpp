@@ -1,7 +1,8 @@
 #include "betomnita/gameplay/PhysicalBody.hpp"
 
-#include "Box2D/Box2D.h"
 #include "game/graphics/Polygon.hpp"
+
+#include <Box2D/Box2D.h>
 
 namespace Betomnita::GamePlay
 {

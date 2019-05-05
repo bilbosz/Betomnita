@@ -38,6 +38,14 @@ namespace Betomnita::GamePlay
             m_vehicle = value;
         }
 
+        Game::Utils::Direction GetShotDirection() const
+        {
+            Game::Utils::Direction res;
+            res.Source = m_transform.transformPoint( m_shotDirection.Source );
+            res.Destination = m_transform.transformPoint( m_shotDirection.Destination );
+            return res;
+        }
+
         void InitPhysics();
 
     private:
@@ -45,7 +53,6 @@ namespace Betomnita::GamePlay
         sf::Vector2f m_gunRotator;
         Game::Utils::Direction m_shotDirection;
 
-        sf::Vector2f m_position;
         float m_direction = 0.0f;
         Vehicle* m_vehicle;
         sf::Transform m_transform;

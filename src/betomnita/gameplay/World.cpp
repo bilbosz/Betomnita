@@ -5,6 +5,7 @@
 #include "betomnita/gameplay/DynamicObstacle.hpp"
 #include "betomnita/gameplay/GamePlayLogic.hpp"
 #include "betomnita/gameplay/PhysicalBody.hpp"
+#include "betomnita/gameplay/Projectile.hpp"
 #include "betomnita/gameplay/PrototypeDict.hpp"
 #include "betomnita/gameplay/StaticObstacle.hpp"
 #include "betomnita/gameplay/Terrain.hpp"
@@ -27,7 +28,7 @@
 
 namespace Betomnita::GamePlay
 {
-    using Game::Utils::cast;
+    using Game::Utils::Cast;
 
     World::World( GamePlayLogic* logic ) : m_currentLogic( logic ), m_physicsWorld( b2Vec2( 0.0f, 0.0f ) )
     {
@@ -38,12 +39,19 @@ namespace Betomnita::GamePlay
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::RemoveListener( Resources::ListenerId::StartMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::RemoveListener( Resources::ListenerId::StopMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::RemoveListener( Resources::ListenerId::MoveWorld );
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::RemoveListener( Resources::ListenerId::Shot );
     }
 
     void World::Init()
     {
         InitView();
         InitPhysics();
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::AddListener( { Resources::ListenerId::Shot, false, [this]( const sf::Event::KeyEvent& key ) {
+                                                                                        if( key.code == sf::Keyboard::Space )
+                                                                                        {
+                                                                                            m_vehicles[ 1 ].Shot();
+                                                                                        }
+                                                                                    } } );
     }
 
     void World::Render( sf::RenderTarget& target )
@@ -69,10 +77,29 @@ namespace Betomnita::GamePlay
         {
             vehicle.second.Render( target, transform );
         }
+        for( auto& projectile : m_projectiles )
+        {
+            projectile->Render( target, transform );
+        }
     }
 
     void World::Update( const sf::Time& dt )
     {
+        m_physicsWorld.Step( dt.asSeconds(), 8, 3 );
+        for( b2Contact* contact = m_physicsWorld.GetContactList(); contact; contact = contact->GetNext() )
+        {
+            if( contact->IsTouching() )
+            {
+                for( auto& projectile : m_projectiles )
+                {
+                    if( projectile->GetPhysicalBody() == contact->GetFixtureA()->GetBody() || projectile->GetPhysicalBody() == contact->GetFixtureB()->GetBody() )
+                    {
+                        projectile->SetToDestroy();
+                    }
+                }
+            }
+        }
+        UpdateView( dt );
         for( auto& dynamicObstacle : m_dynamicObstacles )
         {
             dynamicObstacle->Update( dt );
@@ -81,8 +108,15 @@ namespace Betomnita::GamePlay
         {
             vehicle.second.Update( dt );
         }
-        m_physicsWorld.Step( dt.asSeconds(), 8, 3 );
-        UpdateView( dt );
+
+        if( std::find_if( m_projectiles.begin(), m_projectiles.end(), []( auto& projectile ) { return projectile->IsSetToDestroy(); } ) != m_projectiles.end() )
+        {
+            m_projectiles.erase( std::remove_if( m_projectiles.begin(), m_projectiles.end(), []( auto& projectile ) { return projectile->IsSetToDestroy(); } ) );
+        }
+        for( auto& projectile : m_projectiles )
+        {
+            projectile->Update( dt );
+        }
     }
 
     void World::Pause()
@@ -90,6 +124,7 @@ namespace Betomnita::GamePlay
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::DisableListener( Resources::ListenerId::StartMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::DisableListener( Resources::ListenerId::StopMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::DisableListener( Resources::ListenerId::MoveWorld );
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::DisableListener( Resources::ListenerId::Shot );
     }
 
     void World::Unpause()
@@ -97,6 +132,7 @@ namespace Betomnita::GamePlay
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonPressed >::EnableListener( Resources::ListenerId::StartMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseButtonReleased >::EnableListener( Resources::ListenerId::StopMoveWorld );
         Game::EventSystem::Event< Resources::EventId::OnMouseMoved >::EnableListener( Resources::ListenerId::MoveWorld );
+        Game::EventSystem::Event< Resources::EventId::OnKeyPressed >::EnableListener( Resources::ListenerId::Shot );
     }
 
     void World::LoadFromFile( const std::string& filename )
@@ -260,7 +296,7 @@ namespace Betomnita::GamePlay
         {
             b2MassData data;
             m_vehicles[ 1 ].Chassis.GetPhysicalBody()->GetMassData( &data );
-            m_view.Center = cast< sf::Vector2f >( m_vehicles[ 1 ].Chassis.GetPhysicalBody()->GetWorldPoint( data.center ) );
+            m_view.Center = Cast< sf::Vector2f >( m_vehicles[ 1 ].Chassis.GetPhysicalBody()->GetWorldPoint( data.center ) );
             m_view.Rotation = m_vehicles[ 1 ].Chassis.GetPhysicalBody()->GetAngle();
         }
     }
@@ -279,5 +315,11 @@ namespace Betomnita::GamePlay
         {
             vehicle.second.InitPhysics();
         }
+    }
+
+    Projectile* World::AddProjectile( std::unique_ptr< Projectile > projectile )
+    {
+        m_projectiles.push_back( std::move( projectile ) );
+        return m_projectiles.back().get();
     }
 }

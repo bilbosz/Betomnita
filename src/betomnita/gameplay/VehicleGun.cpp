@@ -9,7 +9,7 @@
 
 namespace Betomnita::GamePlay
 {
-    using Game::Utils::cast;
+    using Game::Utils::Cast;
 
     VehicleGun::VehicleGun()
     {
@@ -38,7 +38,7 @@ namespace Betomnita::GamePlay
         auto chassisBody = chassis.GetPhysicalBody();
         auto chassisAngle = chassisBody->GetAngle();
 
-        auto gunRotatorSlot = cast< sf::Vector2f >( chassisBody->GetWorldPoint( cast< b2Vec2 >( chassis.GetGunRotatorSlot() ) ) );
+        auto gunRotatorSlot = Cast< sf::Vector2f >( chassisBody->GetWorldPoint( Cast< b2Vec2 >( chassis.GetGunRotatorSlot() ) ) );
         m_transform.translate( gunRotatorSlot - m_gunRotator );
         m_transform.rotate( ( chassisAngle + m_direction ) * Game::Consts::RadToDeg, m_gunRotator );
     }
@@ -56,7 +56,6 @@ namespace Betomnita::GamePlay
         auto& chassis = m_vehicle->Chassis;
         auto chassisBody = chassis.GetPhysicalBody();
         auto chassisPosition = chassisBody->GetPosition();
-        m_position = cast< sf::Vector2f >( chassisPosition ) + chassis.GetGunRotatorSlot() - m_gunRotator;
         m_direction = 0.0f;
     }
 }

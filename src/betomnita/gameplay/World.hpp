@@ -20,6 +20,7 @@ namespace Betomnita::GamePlay
     class Vehicle;
     class StaticObstacle;
     class DynamicObstacle;
+    class Projectile;
 
     class World final
     {
@@ -45,12 +46,20 @@ namespace Betomnita::GamePlay
             return m_physicsWorld;
         }
 
+        GamePlayLogic* GetCurrentLogic()
+        {
+            return m_currentLogic;
+        }
+
+        Projectile* AddProjectile( std::unique_ptr< Projectile > projectile );
+
     private:
         std::vector< std::unique_ptr< Terrain > > m_terrainSheets;
         GamePlayLogic* m_currentLogic;
         std::map< int, Vehicle > m_vehicles;
         std::vector< std::unique_ptr< StaticObstacle > > m_staticObstacles;
         std::vector< std::unique_ptr< DynamicObstacle > > m_dynamicObstacles;
+        std::vector< std::unique_ptr< Projectile > > m_projectiles;
         std::optional< sf::Color > m_backgroundColor;
 
         b2World m_physicsWorld;

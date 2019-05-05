@@ -36,6 +36,8 @@ namespace Betomnita::GamePlay
             ASSERT( m_id >= 0, L"Id should be non-negative number" );
         }
 
+        void Shot();
+
         VehicleChassis Chassis;
         VehicleGun Gun;
         GamePlay::World* World;

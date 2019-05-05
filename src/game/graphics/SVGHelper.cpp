@@ -1,4 +1,4 @@
-#include "SVGHelper.hpp"
+#include "game/graphics/SVGHelper.hpp"
 
 #include "app/Debug.hpp"
 #include "game/GameConsts.hpp"
