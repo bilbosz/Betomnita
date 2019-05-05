@@ -20,6 +20,7 @@
 #include <filesystem>
 #include <map>
 #include <pugixml.hpp>
+#include <sstream>
 
 #include "betomnita/gameplay/Vehicle.hpp"
 #include "betomnita/gameplay/VehicleChassis.hpp"
