@@ -74,7 +74,7 @@ namespace Betomnita::GamePlay
         projectile->World = World;
 
         float angle = Chassis.GetPhysicalBody()->GetAngle() + Gun.GetDirection();
-        float force = 15'000'000.0f;
+        float impulse = 4'000.0f;
 
         sf::Transform t;
         t.rotate( angle * Game::Consts::RadToDeg );
@@ -85,8 +85,6 @@ namespace Betomnita::GamePlay
         projectile->InitPhysics();
 
         angle += Game::Consts::Pi * 0.5f;
-        projectile->GetPhysicalBody()->ApplyForceToCenter( b2Vec2( -force * cosf( angle ), -force * sinf( angle ) ), true );
-
-        projectile->GetPhysicalBody();
+        projectile->GetPhysicalBody()->ApplyLinearImpulseToCenter( b2Vec2( -impulse * cosf( angle ), -impulse * sinf( angle ) ), true );
     }
 }
