@@ -39,37 +39,37 @@ namespace Game::Graphics
         using PointsListIter = PointsList::const_iterator;
 
         Polygon();
-        ~Polygon();
+        ~Polygon() final = default;
 
         static std::vector< Polygon > LoadManyFromSVGNode( const std::string& filename, pugi::xml_document& doc, pugi::xml_node& node, float scale );
 
         void Render( sf::RenderTarget& target, const sf::Transform& transform = sf::Transform() ) override;
 
-        const PointsVector& GetPoints() const
+        [[nodiscard]] const PointsVector& GetPoints() const
         {
             return m_points;
         }
         void SetPoints( const PointsVector& value );
 
-        const sf::Color& GetColor() const
+        [[nodiscard]] const sf::Color& GetColor() const
         {
             return m_color;
         }
         void SetColor( const sf::Color& value );
 
         void SetOutlineColor( const sf::Color& value );
-        const sf::Color& GetOutlineColor() const
+        [[nodiscard]] const sf::Color& GetOutlineColor() const
         {
             return m_outlineColor;
         }
 
         void SetOutlineThickness( float value );
-        float GetOutlineThickness() const
+        [[nodiscard]] float GetOutlineThickness() const
         {
             return m_outlineThickness;
         }
 
-        const Utils::AABB& GetAABB() const
+        [[nodiscard]] const Utils::AABB& GetAABB() const
         {
             return m_aabb;
         }
@@ -79,7 +79,7 @@ namespace Game::Graphics
         static bool IsRightDirection( const PointsVector& points );
 
         static std::vector< std::vector< sf::Vector2f > > Triangulate( const std::vector< sf::Vector2f >& points );
-        std::vector< std::vector< sf::Vector2f > > GetTriangulatedPoints() const;
+        [[nodiscard]] std::vector< std::vector< sf::Vector2f > > GetTriangulatedPoints() const;
 
     private:
         static float GetAngle( const Point& previousVertex, const Point& currentVertex, const Point& nextVertex );
@@ -90,8 +90,8 @@ namespace Game::Graphics
 
         void Init() override;
 
-        void OnPositionChange();
-        void OnSizeChange();
+        void OnPositionChange() final;
+        void OnSizeChange() final;
         void OnPointsChange();
 
         void Triangulate();

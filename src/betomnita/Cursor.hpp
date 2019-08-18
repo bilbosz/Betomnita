@@ -10,12 +10,12 @@ namespace Betomnita
     {
     public:
         Cursor();
-        ~Cursor();
+        ~Cursor() = default;
 
         void Render( sf::RenderTarget& target );
 
         void SetPosition( const sf::Vector2f& value );
-        const sf::Vector2f& GetPosition() const
+        [[nodiscard]] const sf::Vector2f& GetPosition() const
         {
             return m_position;
         }

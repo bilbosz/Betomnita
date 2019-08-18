@@ -22,7 +22,7 @@ namespace Game::Graphics
             m_position = value;
             OnPositionChange();
         }
-        const sf::Vector2f& GetPosition() const
+        [[nodiscard]] const sf::Vector2f& GetPosition() const
         {
             return m_position;
         }
@@ -32,7 +32,7 @@ namespace Game::Graphics
             m_size = value;
             OnSizeChange();
         }
-        const sf::Vector2f& GetSize() const
+        [[nodiscard]] const sf::Vector2f& GetSize() const
         {
             return m_size;
         }
@@ -43,6 +43,10 @@ namespace Game::Graphics
             m_highlight = value;
 #endif
         }
+
+#ifndef DEBUG
+        [[noreturn]]
+#endif
         bool GetHightlight() const
         {
 #ifdef DEBUG
@@ -61,7 +65,7 @@ namespace Game::Graphics
             OnPositionChange();
         }
 
-        const sf::Vector2f& GetPivot() const
+        [[nodiscard]] const sf::Vector2f& GetPivot() const
         {
             return m_pivot;
         }

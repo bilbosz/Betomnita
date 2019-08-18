@@ -26,11 +26,11 @@ namespace Betomnita::GamePlay
             scale = scaleAttr.as_float( scale );
         }
 
-        auto& elems = svgNode.select_nodes( "//path | //ellipse" );
+        auto elems = svgNode.select_nodes( "//path | //ellipse" );
 
         for( auto& elem : elems )
         {
-            auto& node = elem.node();
+            auto node = elem.node();
             const auto nodeName = node.name();
             auto classes = Game::Graphics::SVGHelper::ParseClass( node.attribute( "class" ).as_string() );
             CHECK( strcmp( nodeName, "path" ) == 0 || strcmp( nodeName, "ellipse" ) == 0 );
@@ -49,11 +49,11 @@ namespace Betomnita::GamePlay
                         transform.scale( { scale, scale } );
                         transform.combine( Game::Graphics::SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() ) );
 
-                        auto current = &node.parent();
-                        while( *current->name() == '\0' )
+                        auto current = node.parent();
+                        while( *current.name() == '\0' )
                         {
-                            transform.combine( Game::Graphics::SVGHelper::ParseTransform( current->attribute( "transform" ).as_string() ) );
-                            current = &current->parent();
+                            transform.combine( Game::Graphics::SVGHelper::ParseTransform( current.attribute( "transform" ).as_string() ) );
+                            current = current.parent();
                         }
                         m_shotDirection.Source = transform.transformPoint( m_shotDirection.Source );
                         m_shotDirection.Destination = transform.transformPoint( m_shotDirection.Destination );
@@ -75,11 +75,11 @@ namespace Betomnita::GamePlay
                     transform.scale( { scale, scale } );
                     transform.combine( Game::Graphics::SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() ) );
 
-                    auto current = &node.parent();
-                    while( *current->name() == '\0' )
+                    auto current = node.parent();
+                    while( *current.name() == '\0' )
                     {
-                        transform.combine( Game::Graphics::SVGHelper::ParseTransform( current->attribute( "transform" ).as_string() ) );
-                        current = &current->parent();
+                        transform.combine( Game::Graphics::SVGHelper::ParseTransform( current.attribute( "transform" ).as_string() ) );
+                        current = current.parent();
                     }
                     point = transform.transformPoint( point );
 

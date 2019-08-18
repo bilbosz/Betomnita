@@ -31,7 +31,7 @@ namespace Betomnita::GamePlay
 {
     using Game::Utils::Cast;
 
-    World::World( GamePlayLogic* logic ) : m_currentLogic( logic ), m_physicsWorld( b2Vec2( 0.0f, 0.0f ) )
+    World::World( GamePlayLogic* logic ) : m_currentLogic( logic ), m_physicsWorld( b2Vec2( 0.0f, 0.0f ) ), m_size()
     {
     }
 
@@ -158,10 +158,10 @@ namespace Betomnita::GamePlay
             m_backgroundColor = sf::Color( color );
         }
 
-        auto& elems = svgNode.select_nodes( "//path | //image" );
+        auto elems = svgNode.select_nodes( "//path | //image" );
         for( auto& elem : elems )
         {
-            auto& node = elem.node();
+            auto node = elem.node();
             const auto nodeName = node.name();
             CHECK( strcmp( nodeName, "path" ) == 0 || strcmp( nodeName, "image" ) == 0 );
             switch( *nodeName )
@@ -189,7 +189,7 @@ namespace Betomnita::GamePlay
                 case 'i':
                 {
 #ifdef DEBUG
-                    auto id = node.attribute( "id" ).as_string();
+                    [[maybe_unused]] auto id = node.attribute( "id" ).as_string();
 #endif
                     auto href = node.attribute( "href" ).as_string();
                     if( *href == '\0' )

@@ -2,6 +2,8 @@
 #include "betomnita/resources/Resources.hpp"
 #include "game/state/State.hpp"
 
+#include <memory>
+
 namespace Betomnita::Layouts
 {
     class PauseLayout;
@@ -11,11 +13,11 @@ namespace Betomnita::States
 {
     class PauseState final
         : public Game::State< Resources::StateId >
-        , public std::enable_shared_from_this< PauseState >
+        , public std::enable_shared_from_this< class PauseState >
     {
     public:
         PauseState();
-        ~PauseState();
+        ~PauseState() final;
 
         void OnRegister() override;
         void OnUnregister() override;

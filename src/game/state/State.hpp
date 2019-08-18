@@ -9,32 +9,30 @@ namespace Game
     class State
     {
     public:
-        template< class Id >
+        template< class Id_ >
         friend class StateMachine;
 
-        State( Id id ) : m_id( id )
+        explicit State( Id id ) : m_id( id )
         {
         }
-        virtual ~State()
-        {
-        }
+        virtual ~State() = default;
 
         Id GetId() const
         {
             return m_id;
         }
 
-        bool IsRegistered() const
+        [[nodiscard]] bool IsRegistered() const
         {
             return m_isRegistered;
         }
 
-        bool IsActive() const
+        [[nodiscard]] bool IsActive() const
         {
             return m_isActive;
         }
 
-        bool IsForeground() const
+        [[nodiscard]] bool IsForeground() const
         {
             return m_isForeground;
         }

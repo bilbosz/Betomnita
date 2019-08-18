@@ -6,17 +6,15 @@
 #include "game/graphics/SVGHelper.hpp"
 #include "project/Config.hpp"
 
+#include <climits>
+#include <cmath>
 #include <pugixml.hpp>
 #include <sstream>
 #include <unordered_map>
 
 namespace Game::Graphics
 {
-    Polygon::Polygon() : m_vertexArray( sf::PrimitiveType::Triangles )
-    {
-    }
-
-    Polygon::~Polygon()
+    Polygon::Polygon() : m_vertexArray( sf::PrimitiveType::Triangles ), m_outlineThickness(), m_aabb()
     {
     }
 
@@ -32,11 +30,11 @@ namespace Game::Graphics
         transform.scale( { scale, scale } );
         transform.combine( SVGHelper::ParseTransform( node.attribute( "transform" ).as_string() ) );
 
-        auto current = &node.parent();
-        while( *current->name() == '\0' )
+        auto current = node.parent();
+        while( *current.name() == '\0' )
         {
-            transform.combine( SVGHelper::ParseTransform( current->attribute( "transform" ).as_string() ) );
-            current = &current->parent();
+            transform.combine( SVGHelper::ParseTransform( current.attribute( "transform" ).as_string() ) );
+            current = current.parent();
         }
 #ifdef FIX_POLYGON
         bool fixNeeded = false;
@@ -100,15 +98,14 @@ namespace Game::Graphics
             if( fillColorStyle != style.cend() )
             {
                 std::istringstream( fillColorStyle->second.substr( 1 ) ) >> std::hex >> fillColor;
-                fillColor = fillColor << 8 | 0xff;
+                fillColor = fillColor << 8u | 0xff;
             }
 
             const auto& opacityStyle = style.find( "opacity" );
-            float opacity = 1.0f;
             if( opacityStyle != style.cend() )
             {
-                opacity = static_cast< float >( atof( opacityStyle->second.c_str() ) );
-                fillColor &= UINT_MAX << 8 | static_cast< uint32_t >( opacity * 255.0f );
+                auto opacity = atof( opacityStyle->second.c_str() );
+                fillColor &= UINT_MAX << 8u | static_cast< uint32_t >( opacity * 255.0f );
             }
             polygon.SetColor( sf::Color( fillColor ) );
         }
@@ -209,9 +206,9 @@ namespace Game::Graphics
             return Error::NotEnoughVerticies;
         }
 
-        for( auto i = 0; i < pointsN; ++i )
+        for( decltype( pointsN ) i = 0; i < pointsN; ++i )
         {
-            for( auto j = i + 1; j < pointsN; ++j )
+            for( decltype( pointsN ) j = i + 1; j < pointsN; ++j )
             {
                 if( points[ i ] == points[ j ] )
                 {
@@ -220,10 +217,10 @@ namespace Game::Graphics
             }
         }
 
-        for( auto i = 0; i < pointsN; ++i )
+        for( decltype( pointsN ) i = 0; i < pointsN; ++i )
         {
             std::pair< const Point&, const Point& > lineA = { points[ i ], points[ ( i + 1 ) % pointsN ] };
-            for( auto j = 0; j < pointsN; ++j )
+            for( decltype( pointsN ) j = 0; j < pointsN; ++j )
             {
                 if( j == i || j == ( i + 1 ) % pointsN || ( j + 1 ) % pointsN == i || ( j + 1 ) % pointsN == ( i + 1 ) % pointsN )
                 {
@@ -249,7 +246,7 @@ namespace Game::Graphics
     {
         auto pointsN = points.size();
         auto angleSum = 0.0f;
-        for( auto i = 0; i < pointsN; ++i )
+        for( decltype( pointsN ) i = 0; i < pointsN; ++i )
         {
             angleSum += GetAngle( points[ i ], points[ ( i + 1 ) % pointsN ], points[ ( i + 2 ) % pointsN ] );
         }
@@ -304,7 +301,7 @@ namespace Game::Graphics
     void Polygon::OnPositionChange()
     {
         auto verticesN = m_vertexArray.getVertexCount();
-        for( auto i = 0u; i < verticesN; ++i )
+        for( decltype( verticesN ) i = 0; i < verticesN; ++i )
         {
             m_vertexArray[ i ].position = m_vertexArray[ i ].position - m_appliedMove + m_position - m_pivot;
         }
@@ -423,7 +420,7 @@ namespace Game::Graphics
     {
         std::vector< std::vector< sf::Vector2f > > result;
         auto verticesN = m_vertexArray.getVertexCount();
-        for( auto i = 0u; i < verticesN; i += 3 )
+        for( decltype( verticesN ) i = 0; i < verticesN; i += 3 )
         {
             result.emplace_back( std::vector< sf::Vector2f >{ m_vertexArray[ i ].position, m_vertexArray[ i + 1 ].position, m_vertexArray[ i + 2 ].position } );
         }

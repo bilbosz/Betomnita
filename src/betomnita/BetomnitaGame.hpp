@@ -12,11 +12,6 @@ namespace Game
     class StateMachine;
 }
 
-namespace Game::Graphics
-{
-    class Text;
-}
-
 namespace Betomnita
 {
     class Cursor;
@@ -25,7 +20,7 @@ namespace Betomnita
     {
     public:
         BetomnitaGame();
-        ~BetomnitaGame();
+        ~BetomnitaGame() final;
 
         static BetomnitaGame* GetInstance();
         Game::StateMachine< Resources::StateId >* GetStateMachine() const
@@ -33,7 +28,7 @@ namespace Betomnita
             return m_stateMachine.get();
         }
 
-        std::unique_ptr< Cursor > Cursor;
+        std::unique_ptr< Betomnita::Cursor > Cursor;
 
     private:
         void OnStart() override;

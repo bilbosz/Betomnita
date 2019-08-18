@@ -3,6 +3,7 @@
 #include "app/Debug.hpp"
 #include "game/GameConsts.hpp"
 
+#include <cmath>
 #include <iomanip>
 #include <sstream>
 
@@ -16,7 +17,7 @@ namespace Game::Graphics
         auto cmd = '\0';
         auto isNumber = []( char ch ) { return isdigit( ch ) || ch == '-' || ch == '+' || ch == '.' || ch == 'e'; };
         auto alterCoord = [&cmd, &it]( float& coord ) {
-            auto val = static_cast< float >( atof( it ) );
+            auto val = atof( it );
             if( isupper( cmd ) )
             {
                 coord = val;
@@ -154,8 +155,9 @@ namespace Game::Graphics
             {
                 valueBegin = it;
             }
-            else if( !valueEnd )
+            else
             {
+                VERIFY( !valueEnd );
                 while( *it && !isspace( *it ) && *it != ';' )
                 {
                     ++it;
@@ -202,7 +204,7 @@ namespace Game::Graphics
             }
             else if( isNumber( *it ) )
             {
-                args.emplace_back( static_cast< float >( atof( it ) ) );
+                args.emplace_back( atof( it ) );
                 do
                 {
                     ++it;
@@ -264,7 +266,8 @@ namespace Game::Graphics
 
     std::vector< std::string > SVGHelper::ParseClass( const char* value )
     {
-        std::vector< std::string > result( ( std::istream_iterator< std::string >( std::istringstream( value ) ) ), std::istream_iterator< std::string >() );
+        std::istringstream istream( value );
+        std::vector< std::string > result( ( std::istream_iterator< std::string >( istream ) ), std::istream_iterator< std::string >() );
         return result;
     }
 }

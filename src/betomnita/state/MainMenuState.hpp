@@ -2,6 +2,8 @@
 #include "betomnita/resources/Resources.hpp"
 #include "game/state/State.hpp"
 
+#include <memory>
+
 namespace Betomnita::Layouts
 {
     class MainMenuLayout;
@@ -15,7 +17,7 @@ namespace Betomnita::States
     {
     public:
         MainMenuState();
-        ~MainMenuState();
+        ~MainMenuState() final;
 
         void OnRegister() override;
         void OnUnregister() override;

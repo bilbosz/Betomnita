@@ -22,13 +22,9 @@ namespace Betomnita
             scale = scaleAttr.as_float( scale );
         }
 
-        auto& node = svgNode.select_node( "//path" ).node();
+        auto node = svgNode.select_node( "//path" ).node();
 
-        m_shape = Game::Graphics::Polygon::LoadManyFromSVGNode( Resources::CursorPath.c_str(), doc, node, scale );
-    }
-
-    Cursor::~Cursor()
-    {
+        m_shape = Game::Graphics::Polygon::LoadManyFromSVGNode( Resources::CursorPath, doc, node, scale );
     }
 
     void Cursor::Render( sf::RenderTarget& target )

@@ -15,7 +15,7 @@ namespace Game::EventSystem
     struct EventInfoHelper
     {
         using Data = Pack< EventData... >;
-        using Listener = typename Listener< ListenerId_, EventData... >;
+        using Listener = Game::EventSystem::Listener< ListenerId_, EventData... >;
         using ListenerId = typename Listener::ListenerId;
     };
 }
