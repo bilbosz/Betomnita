@@ -2,9 +2,10 @@
 
 !/.clang-format
 !/.gitignore
+!/CMakeLists.txt
 !/LICENSE.txt
 !/README.md
-!/CMakeLists.txt
+!/TODO.md
 
 !/cmake/
 !/cmake/**

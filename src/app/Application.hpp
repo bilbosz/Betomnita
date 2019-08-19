@@ -95,6 +95,10 @@ namespace App
         }
 
         void SetWindowPosition( const sf::Vector2i& value );
+        sf::Vector2i GetWindowPosition() const
+        {
+            return m_windowPosition;
+        }
 
     protected:
         virtual void OnStart() = 0;
