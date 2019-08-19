@@ -99,7 +99,6 @@ namespace Game::Graphics
         void ReversePoints();
         void CalculateAABB();
 
-
         PointsVector m_points;
         sf::Color m_color;
 

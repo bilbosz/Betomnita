@@ -136,6 +136,7 @@ namespace App
         m_window.setMouseCursorVisible( m_cursorShown );
         m_window.setMouseCursorGrabbed( m_cursorGrabbed );
         m_window.setVerticalSyncEnabled( m_verticalSync );
+        m_window.setPosition( m_windowPosition );
         OnVideoSettingsChanged();
     }
 
@@ -175,5 +176,11 @@ namespace App
         texture.update( m_window );
         texture.copyToImage().saveToFile( m_screenshotRequest );
         OnScreenshotTaken( m_screenshotRequest );
+    }
+
+    void Application::SetWindowPosition( const sf::Vector2i& value )
+    {
+        m_windowPosition = value;
+        m_videoSettingsApplyRequested = true;
     }
 }

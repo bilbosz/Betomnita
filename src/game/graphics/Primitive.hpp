@@ -47,7 +47,8 @@ namespace Game::Graphics
 #ifndef DEBUG
         [[noreturn]]
 #endif
-        bool GetHightlight() const
+        bool
+        GetHightlight() const
         {
 #ifdef DEBUG
             return m_highlight;

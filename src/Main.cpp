@@ -17,7 +17,13 @@ int main( int argc, char* argv[] )
 #else
     game.SetBorderedWindow( false, true );
     game.ReleaseCursor();
-    game.SetVideoMode( sf::VideoMode( 1024, 768, 32 ) );
+
+    const auto desktopVideoMode = sf::VideoMode::getDesktopMode();
+    const auto videoMode = sf::VideoMode( 1280, 1024, 32 );
+    game.SetVideoMode( videoMode );
+    sf::Vector2i windowPosition = { static_cast< int >( ( desktopVideoMode.width - videoMode.width ) * 0.5f ),
+                                    static_cast< int >( ( desktopVideoMode.height - videoMode.height ) * 0.5f ) };
+    game.SetWindowPosition( windowPosition );
 #endif
     game.Run();
     Betomnita::Resources::Dispose();

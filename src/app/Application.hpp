@@ -94,6 +94,8 @@ namespace App
             m_screenshotRequest = filename;
         }
 
+        void SetWindowPosition( const sf::Vector2i& value );
+
     protected:
         virtual void OnStart() = 0;
         virtual void OnUpdate( const sf::Time& dt ) = 0;
@@ -130,6 +132,7 @@ namespace App
         bool m_shutdownRequested = false;
         bool m_videoSettingsApplyRequested = false;
         std::string m_screenshotRequest;
+        sf::Vector2i m_windowPosition;
 
         sf::Time m_lastTickTime;
 
