@@ -127,7 +127,7 @@ namespace App
 
     void Application::ApplyVideoSettings()
     {
-        ASSERT( m_videoMode.isValid(), L"Mode is not valid" );
+        ASSERT( !IsFullscreen() || m_videoMode.isValid(), L"Fullscreen mode is not valid" );
         m_videoSettingsApplyRequested = false;
         auto context = sf::ContextSettings();
         context.antialiasingLevel = m_antialiasingLevel;

@@ -19,7 +19,7 @@ int main( int argc, char* argv[] )
     game.ReleaseCursor();
 
     const auto desktopVideoMode = sf::VideoMode::getDesktopMode();
-    const auto videoMode = sf::VideoMode( 1280, 1024, 32 );
+    const auto videoMode = sf::VideoMode( 1280, 800 );
     game.SetVideoMode( videoMode );
     sf::Vector2i windowPosition = { static_cast< int >( ( desktopVideoMode.width - videoMode.width ) * 0.5f ),
                                     static_cast< int >( ( desktopVideoMode.height - videoMode.height ) * 0.5f ) };
